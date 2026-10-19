@@ -24,7 +24,6 @@
 \********************************************************************/
 
 #include <config.h>
-#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -62,16 +61,17 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 extern "C" {
 void gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data);
-void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data);
-void gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer data);
+void gnc_prices_dialog_close_cb (GtkWidget *button, gpointer data);
+void gnc_prices_dialog_help_cb (GtkWidget *button, gpointer data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data);
-static gboolean gnc_prices_dialog_key_press_cb (GtkWidget *widget,
-                                                GdkEventKey *event,
-                                                gpointer data);
+static gboolean gnc_prices_dialog_key_pressed_cb (GtkEventControllerKey *key,
+                                                  guint keyval, guint keycode,
+                                                  GdkModifierType state,
+                                                  gpointer data);
 }
 
 
@@ -88,303 +88,75 @@ struct PricesDialog
     GtkWidget * remove_button;
     GtkWidget * add_button;
 
-    GtkWidget   *remove_dialog;
-    GtkTreeView *remove_view;
-    GtkWidget   *namespace_cbwe;
-    gchar       *target_namespace_name;
-    int          remove_source;
+
 };
 
-static time64 gnc_prices_dialog_load_view (GtkTreeView *, GNCPriceDB *,
-                                           const gchar *);
-static GList *gnc_prices_dialog_get_commodities (GtkTreeView *);
-static GDate get_fiscal_end_date (void);
-static PriceRemoveKeepOptions get_keep_options_value (GtkBuilder *);
+constexpr const char *PRICE_DIALOG_DATA = "gnc-price-edit-dialog";
 
-struct PriceRemovalOperation
+typedef struct _PriceDeleteRequest
 {
-    std::uint32_t refs{1};
-    PricesDialog *owner{};
-    GtkWidget *dialog{};
-    GtkBuilder *builder{};
-    GNCDateEdit *date{};
-    GtkTreeView *remove_view{};
-    gchar *namespace_name{};
-    GWeakRef owner_window;
-    GWeakRef original_book;
-    QofSession *session{};
-    QofBook *book{};
-    GList *commodity_identities{};
-    time64 cutoff{};
-    GDate fiscal_end{};
-    PriceRemoveKeepOptions keep{PRICE_REMOVE_KEEP_LAST_WEEKLY};
-    PriceRemoveSourceFlags source{};
-    std::int32_t requested_response{GTK_RESPONSE_NONE};
-    bool pending{};
-    bool destroyed{};
-};
+    GObject parent;
+    GWeakRef window;
+    GPtrArray *price_guids;
+} PriceDeleteRequest;
 
-struct PriceCommodityIdentity
+typedef struct _PriceDeleteRequestClass
 {
-    GncGUID guid;
-};
+    GObjectClass parent_class;
+} PriceDeleteRequestClass;
+
+G_DEFINE_TYPE (PriceDeleteRequest, price_delete_request, G_TYPE_OBJECT)
 
 static void
-price_commodity_identity_free (gpointer data)
+price_delete_request_finalize (GObject *object)
 {
-    auto identity = static_cast<PriceCommodityIdentity *> (data);
-    g_free (identity);
-}
-
-static PriceRemovalOperation *
-price_removal_ref (PriceRemovalOperation *operation)
-{
-    ++operation->refs;
-    return operation;
+    auto request = PRICE_DELETE_REQUEST (object);
+    g_weak_ref_clear (&request->window);
+    g_ptr_array_unref (request->price_guids);
+    G_OBJECT_CLASS (price_delete_request_parent_class)->finalize (object);
 }
 
 static void
-price_removal_unref (PriceRemovalOperation *operation)
+price_delete_request_class_init (PriceDeleteRequestClass *klass)
 {
-    if (--operation->refs != 0)
-        return;
-    g_list_free_full (operation->commodity_identities,
-                      price_commodity_identity_free);
-    g_free (operation->namespace_name);
-    g_weak_ref_clear (&operation->owner_window);
-    g_weak_ref_clear (&operation->original_book);
-    g_clear_object (&operation->builder);
-    delete operation;
+    G_OBJECT_CLASS (klass)->finalize = price_delete_request_finalize;
 }
 
-static GList *
-price_removal_resolve_commodities (PriceRemovalOperation *operation)
+static void
+price_delete_request_init (PriceDeleteRequest *request)
 {
-    GList *commodities = nullptr;
-    for (auto node = operation->commodity_identities; node;
-         node = g_list_next (node))
+    request->price_guids = g_ptr_array_new_with_free_func (g_free);
+}
+
+static void
+price_delete_finished (gint response, gpointer user_data)
+{
+    auto request = PRICE_DELETE_REQUEST (user_data);
+    auto window = GTK_WIDGET (g_weak_ref_get (&request->window));
+
+    if (response == GTK_RESPONSE_YES && window)
     {
-        auto identity = static_cast<PriceCommodityIdentity *> (node->data);
-        auto commodity = gnc_commodity_find_commodity_by_guid (
-            &identity->guid, operation->book);
-        if (!commodity)
-        {
-            g_list_free (commodities);
-            return nullptr;
-        }
-        commodities = g_list_prepend (commodities, commodity);
-    }
-    return g_list_reverse (commodities);
-}
+        auto pdb_dialog = static_cast<PricesDialog *> (
+            g_object_get_data (G_OBJECT (window), PRICE_DIALOG_DATA));
 
-static bool
-price_removal_context_is_current (PriceRemovalOperation *operation,
-                                  GtkWindow *parent)
-{
-    auto owner = g_weak_ref_get (&operation->owner_window);
-    auto original_book = static_cast<QofBook *>(
-        g_weak_ref_get (&operation->original_book));
-    auto owner_state = owner ? static_cast<PricesDialog *>(
-        g_object_get_data (G_OBJECT (owner), "price-dialog-state")) : nullptr;
-    auto valid = !operation->destroyed && parent &&
-        !gtk_widget_in_destruction (GTK_WIDGET (parent)) && owner &&
-        !gtk_widget_in_destruction (GTK_WIDGET (owner)) &&
-        owner_state && owner_state->price_tree &&
-        gnc_current_session_exist () &&
-        gnc_get_current_session () == operation->session &&
-        original_book && original_book == operation->book &&
-        qof_session_get_book (operation->session) == original_book &&
-        qof_book_is_open (original_book) &&
-        !qof_book_shutting_down (original_book);
-    g_clear_object (&owner);
-    g_clear_object (&original_book);
-    return valid;
-}
-
-static void
-price_removal_confirmed (GtkWindow *parent, gint response, gpointer user_data)
-{
-    auto operation = static_cast<PriceRemovalOperation *> (user_data);
-    auto keep_operation = price_removal_ref (operation);
-
-    if (response == GTK_RESPONSE_YES &&
-        price_removal_context_is_current (operation, parent))
-    {
-        auto owner_window = g_weak_ref_get (&operation->owner_window);
-        auto owner = static_cast<PricesDialog *> (
-            g_object_get_data (G_OBJECT (owner_window), "price-dialog-state"));
-        if (!owner || !owner->price_tree)
+        if (pdb_dialog && pdb_dialog->book == gnc_get_current_book () &&
+            pdb_dialog->price_db && !qof_book_shutting_down (pdb_dialog->book))
         {
-            g_clear_object (&owner_window);
-            goto finished;
-        }
-        auto model = gtk_tree_view_get_model (
-            GTK_TREE_VIEW (owner->price_tree));
-        g_object_ref (model);
-        gtk_tree_view_set_model (GTK_TREE_VIEW (owner->price_tree),
-                                 nullptr);
-
-        if (!price_removal_context_is_current (operation, parent))
-        {
-            g_object_unref (model);
-            g_clear_object (&owner_window);
-            goto finished;
-        }
-        owner = static_cast<PricesDialog *>(g_object_get_data (
-            G_OBJECT (owner_window), "price-dialog-state"));
-        if (!owner || !owner->price_tree)
-        {
-            g_object_unref (model);
-            g_clear_object (&owner_window);
-            goto finished;
-        }
-
-        if (operation->keep != PRICE_REMOVE_KEEP_SCALED)
-        {
-            auto commodities = price_removal_resolve_commodities (operation);
-            if (commodities)
-                gnc_pricedb_remove_old_prices (
-                    gnc_pricedb_get_db (operation->book), commodities,
-                    &operation->fiscal_end, operation->cutoff,
-                    operation->source, operation->keep);
-            g_list_free (commodities);
-        }
-        else
-        {
-            auto commodities = price_removal_resolve_commodities (operation);
-            if (!commodities)
-                goto mutation_complete;
-            auto tmp_date = time64_to_gdate (operation->cutoff);
-            g_date_subtract_months (&tmp_date, 6);
-            auto tmp = gdate_to_time64 (tmp_date);
-            gnc_pricedb_remove_old_prices (
-                gnc_pricedb_get_db (operation->book), commodities,
-                &operation->fiscal_end, tmp, operation->source,
-                PRICE_REMOVE_KEEP_LAST_WEEKLY);
-            g_list_free (commodities);
-
-            if (price_removal_context_is_current (operation, parent))
+            for (guint index = 0; index < request->price_guids->len; index++)
             {
-                commodities = price_removal_resolve_commodities (operation);
-                if (!commodities)
-                    goto mutation_complete;
-                g_date_subtract_months (&tmp_date, 6);
-                tmp = gdate_to_time64 (tmp_date);
-                gnc_pricedb_remove_old_prices (
-                    gnc_pricedb_get_db (operation->book),
-                    commodities, &operation->fiscal_end, tmp,
-                    operation->source, PRICE_REMOVE_KEEP_LAST_MONTHLY);
-                g_list_free (commodities);
+                auto guid = static_cast<GncGUID *> (
+                    g_ptr_array_index (request->price_guids, index));
+                auto price = gnc_price_lookup (guid, pdb_dialog->book);
+
+                if (price)
+                    gnc_pricedb_remove_price (pdb_dialog->price_db, price);
             }
-        }
-
-mutation_complete:
-        auto context_current = price_removal_context_is_current (operation,
-                                                                 parent);
-        if (context_current)
-        {
-            owner = static_cast<PricesDialog *>(g_object_get_data (
-                G_OBJECT (owner_window), "price-dialog-state"));
-            context_current = owner && owner->price_tree;
-        }
-        if (context_current)
-            gtk_tree_view_set_model (GTK_TREE_VIEW (owner->price_tree), model);
-        g_object_unref (model);
-        if (context_current &&
-            price_removal_context_is_current (operation, parent))
             gnc_gui_refresh_all ();
-
-        if (price_removal_context_is_current (operation, parent))
-        {
-            if (operation->requested_response == GTK_RESPONSE_APPLY)
-                gnc_prices_dialog_load_view (
-                    operation->remove_view,
-                    gnc_pricedb_get_db (operation->book),
-                    operation->namespace_name);
-            else
-                gtk_widget_destroy (operation->dialog);
-        }
-        g_clear_object (&owner_window);
-    }
-
-finished:
-    g_list_free_full (operation->commodity_identities,
-                      price_commodity_identity_free);
-    operation->commodity_identities = nullptr;
-    operation->pending = false;
-    price_removal_unref (operation); // async confirmation reference
-    price_removal_unref (keep_operation);
-}
-
-static void
-price_removal_dialog_destroyed (GtkWidget *dialog, gpointer user_data)
-{
-    auto operation = static_cast<PriceRemovalOperation *> (user_data);
-    operation->destroyed = true;
-    g_signal_handlers_disconnect_by_data (dialog, operation);
-    auto widgets = gtk_builder_get_objects (operation->builder);
-    for (auto node = widgets; node; node = node->next)
-        g_signal_handlers_disconnect_by_data (G_OBJECT (node->data),
-                                              operation->owner);
-    g_slist_free (widgets);
-    operation->dialog = nullptr;
-    auto owner_window = g_weak_ref_get (&operation->owner_window);
-    if (owner_window && !gtk_widget_in_destruction (GTK_WIDGET (owner_window)))
-    {
-        auto owner = static_cast<PricesDialog *>(
-            g_object_get_data (G_OBJECT (owner_window), "price-dialog-state"));
-        if (owner)
-        {
-            owner->remove_dialog = nullptr;
-            owner->remove_view = nullptr;
-            owner->namespace_cbwe = nullptr;
-            g_clear_pointer (&owner->target_namespace_name, g_free);
         }
     }
-    g_clear_object (&owner_window);
-    price_removal_unref (operation); // dialog ownership
-}
 
-static void
-price_removal_response (GtkDialog *dialog, gint response, gpointer user_data)
-{
-    auto operation = static_cast<PriceRemovalOperation *> (user_data);
-    if (response == GTK_RESPONSE_CLOSE || response == GTK_RESPONSE_DELETE_EVENT ||
-        response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_NONE)
-    {
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-        return;
-    }
-    if ((response != GTK_RESPONSE_OK && response != GTK_RESPONSE_APPLY) ||
-        operation->pending)
-        return;
-
-    auto commodities = gnc_prices_dialog_get_commodities (operation->remove_view);
-    if (!commodities)
-        return;
-    for (auto node = commodities; node; node = g_list_next (node))
-    {
-        auto commodity = static_cast<gnc_commodity *> (node->data);
-        auto identity = g_new0 (PriceCommodityIdentity, 1);
-        identity->guid = *qof_instance_get_guid (QOF_INSTANCE (commodity));
-        operation->commodity_identities = g_list_prepend (
-            operation->commodity_identities, identity);
-    }
-    g_list_free (commodities);
-    operation->commodity_identities = g_list_reverse (
-        operation->commodity_identities);
-
-    operation->cutoff = gnc_date_edit_get_date (operation->date);
-    operation->fiscal_end = get_fiscal_end_date ();
-    operation->keep = get_keep_options_value (operation->builder);
-    operation->source = static_cast<PriceRemoveSourceFlags> (
-        operation->owner->remove_source);
-    operation->requested_response = response;
-    operation->pending = true;
-    price_removal_ref (operation); // owned by the confirmation callback
-    gnc_verify_dialog_async (GTK_WINDOW (dialog), FALSE,
-                             price_removal_confirmed, operation,
-                             "%s", _("Are you sure you want to delete these prices?"));
+    g_clear_object (&window);
+    g_object_unref (request);
 }
 
 
@@ -394,28 +166,10 @@ gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data)
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
     ENTER(" ");
+    g_object_set_data (G_OBJECT (object), PRICE_DIALOG_DATA, nullptr);
     gnc_unregister_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
 
-    // Model notifications can continue while the view is being torn down.
-    // These callbacks use pdb_dialog, so disconnect them before releasing it.
-    if (pdb_dialog->price_tree)
-    {
-        auto selection = gtk_tree_view_get_selection (
-            GTK_TREE_VIEW (pdb_dialog->price_tree));
-        g_signal_handlers_disconnect_by_data (selection, pdb_dialog);
-        g_signal_handlers_disconnect_by_data (pdb_dialog->price_tree,
-                                              pdb_dialog);
-    }
-
-    if (pdb_dialog->window)
-    {
-        g_object_set_data (G_OBJECT (pdb_dialog->window),
-                           "price-dialog-state", nullptr);
-        gtk_widget_destroy (pdb_dialog->window);
-        pdb_dialog->window = NULL;
-    }
-
-    g_clear_pointer (&pdb_dialog->target_namespace_name, g_free);
+    pdb_dialog->window = nullptr;
 
     g_free (pdb_dialog);
     LEAVE(" ");
@@ -423,23 +177,21 @@ gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data)
 
 
 static gboolean
-gnc_prices_dialog_delete_event_cb (GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data)
+gnc_prices_dialog_close_request_cb (GtkWindow *window, gpointer data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    // this cb allows the window size to be saved on closing with the X
-    gnc_save_window_size (GNC_PREFS_GROUP,
-                          GTK_WINDOW(pdb_dialog->window));
+    // This callback allows the window size to be saved on closing with the X.
+    gnc_save_window_size (GNC_PREFS_GROUP, window);
+    (void)data;
     return FALSE;
 }
 
 
 void
-gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data)
+gnc_prices_dialog_close_cb (GtkWidget *button, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
+    (void)button;
     ENTER(" ");
     gnc_close_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
     LEAVE(" ");
@@ -447,10 +199,11 @@ gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data)
 
 
 void
-gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer data)
+gnc_prices_dialog_help_cb (GtkWidget *button, gpointer data)
 {
     auto pdb_dialog{static_cast<PricesDialog*>(data)};
 
+    (void)button;
     gnc_gnome_help (GTK_WINDOW (pdb_dialog->window), DF_MANUAL, DL_PRICE_DB);
 }
 
@@ -460,6 +213,7 @@ gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
+    (void)widget;
     ENTER(" ");
     auto price_list = gnc_tree_view_price_get_selected_prices (pdb_dialog->price_tree);
     if (!price_list)
@@ -482,70 +236,111 @@ gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data)
 }
 
 
-struct PriceDeleteRequest
-{
-    GWeakRef book;
-    GPtrArray *guids;
-};
-
-static void
-price_delete_decided (GtkWindow *parent, gint response, gpointer user_data)
-{
-    auto request = static_cast<PriceDeleteRequest *> (user_data);
-    auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
-    if (parent && response == GTK_RESPONSE_YES && book && gnc_current_session_exist () &&
-        gnc_get_current_book () == book && !qof_book_is_readonly (book))
-    {
-        auto database = gnc_pricedb_get_db (book);
-        gnc_suspend_gui_refresh ();
-        for (std::uint32_t i = 0; i < request->guids->len; ++i)
-        {
-            auto price = gnc_price_lookup (static_cast<GncGUID *> (
-                g_ptr_array_index (request->guids, i)), book);
-            if (price) gnc_pricedb_remove_price (database, price);
-        }
-        gnc_resume_gui_refresh ();
-    }
-    g_clear_object (&book);
-    g_weak_ref_clear (&request->book);
-    g_ptr_array_unref (request->guids);
-    g_free (request);
-}
-
 void
 gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 {
-    auto owner = static_cast<PricesDialog *> (data);
-    auto prices = gnc_tree_view_price_get_selected_prices (owner->price_tree);
-    if (!prices) return;
-    auto request = g_new0 (PriceDeleteRequest, 1);
-    g_weak_ref_init (&request->book, owner->book);
-    request->guids = g_ptr_array_new_with_free_func (g_free);
-    for (auto node = prices; node; node = node->next)
+    auto pdb_dialog = static_cast<PricesDialog *> (data);
+
+    (void)widget;
+    ENTER(" ");
+    auto price_list = gnc_tree_view_price_get_selected_prices (pdb_dialog->price_tree);
+    if (!price_list)
+    {
+        LEAVE("no price selected");
+        return;
+    }
+
+    auto request = PRICE_DELETE_REQUEST (g_object_new (price_delete_request_get_type (), NULL));
+    auto length = g_list_length (price_list);
+    g_weak_ref_init (&request->window, pdb_dialog->window);
+    for (auto node = price_list; node; node = g_list_next (node))
     {
         auto guid = g_new (GncGUID, 1);
         *guid = *gnc_price_get_guid (static_cast<GNCPrice *> (node->data));
-        g_ptr_array_add (request->guids, guid);
+        g_ptr_array_add (request->price_guids, guid);
     }
-    const auto length = g_list_length (prices);
-    g_list_free (prices);
-    auto message = g_strdup_printf (ngettext (
-        "Are you sure you want to delete the selected price?",
-        "Are you sure you want to delete the %d selected prices?", length), length);
-    auto dialog = gtk_message_dialog_new (GTK_WINDOW (owner->window),
-        GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-        "%s", _("Delete prices?"));
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", message);
+    g_list_free (price_list);
+
+    auto message = g_strdup_printf
+        (/* Translators: %d is the number of prices. This is a ngettext(3) message. */
+         ngettext("Are you sure you want to delete the selected price?",
+                  "Are you sure you want to delete the %d selected prices?", length),
+         length);
+    gnc_warning_dialog_async (GTK_WINDOW (pdb_dialog->window),
+                              GNC_PREF_WARN_PRICE_QUOTES_DEL,
+                              _("Delete prices?"), message, _("_Delete"),
+                              GTK_RESPONSE_YES, TRUE, price_delete_finished, request,
+                              (GDestroyNotify)g_object_unref);
     g_free (message);
-    gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL,
-        _("_Delete"), GTK_RESPONSE_YES, nullptr);
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-    gnc_dialog_run_async (GTK_DIALOG (dialog), GNC_PREF_WARN_PRICE_QUOTES_DEL,
-        price_delete_decided, request);
+    LEAVE(" ");
 }
 
-/** Enumeration for the price delete list-store */
-enum GncPriceColumn {PRICED_NAMESPACE_NAME, PRICED_FULL_NAME, PRICED_COMM, PRICED_DATE, PRICED_COUNT};
+namespace
+{
+constexpr const char *PRICE_REMOVE_MODEL_DATA = "gnc-price-remove-model";
+constexpr const char *PRICE_REMOVE_FULL_NAME_DATA = "gnc-price-remove-full-name";
+constexpr const char *PRICE_REMOVE_COMMODITY_DATA = "gnc-price-remove-commodity";
+constexpr const char *PRICE_REMOVE_DATE_DATA = "gnc-price-remove-date";
+constexpr const char *PRICE_REMOVE_COUNT_DATA = "gnc-price-remove-count";
+
+static GListStore *
+price_remove_model (GtkWidget *view)
+{
+    return G_LIST_STORE (g_object_get_data (G_OBJECT (view), PRICE_REMOVE_MODEL_DATA));
+}
+
+static GObject *
+price_remove_row_new (const char *full_name, gnc_commodity *commodity,
+                      const char *date, const char *count)
+{
+    auto row = G_OBJECT (g_object_new (G_TYPE_OBJECT, nullptr));
+    g_object_set_data_full (row, PRICE_REMOVE_FULL_NAME_DATA, g_strdup (full_name), g_free);
+    g_object_set_data (row, PRICE_REMOVE_COMMODITY_DATA, commodity);
+    g_object_set_data_full (row, PRICE_REMOVE_DATE_DATA, g_strdup (date), g_free);
+    g_object_set_data_full (row, PRICE_REMOVE_COUNT_DATA, g_strdup (count), g_free);
+    return row;
+}
+
+static void
+price_remove_item_setup (GtkSignalListItemFactory *, GtkListItem *list_item, gpointer)
+{
+    auto label = gtk_label_new (nullptr);
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (list_item, label);
+}
+
+static void
+price_remove_item_bind (GtkSignalListItemFactory *, GtkListItem *list_item, gpointer user_data)
+{
+    auto row = G_OBJECT (gtk_list_item_get_item (list_item));
+    auto label = GTK_LABEL (gtk_list_item_get_child (list_item));
+    auto key = static_cast<const char *> (user_data);
+    auto value = static_cast<const char *> (g_object_get_data (row, key));
+
+    gtk_label_set_text (label, value ? value : "");
+    gtk_label_set_xalign (label,
+                          key == PRICE_REMOVE_COUNT_DATA ? 0.5 : 0.0);
+}
+
+static GtkColumnViewColumn *
+price_remove_column_new (const char *title, const char *data_key)
+{
+    auto factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (factory, "setup", G_CALLBACK (price_remove_item_setup), nullptr);
+    g_signal_connect (factory, "bind", G_CALLBACK (price_remove_item_bind),
+                      const_cast<char *> (data_key));
+    return gtk_column_view_column_new (title, GTK_LIST_ITEM_FACTORY (factory));
+}
+
+static void
+price_remove_append_column (GtkColumnView *view, const char *title, const char *data_key)
+{
+    auto column = price_remove_column_new (title, data_key);
+    gtk_column_view_append_column (view, column);
+    g_object_unref (column);
+}
+}
 
 static bool
 continue_namespace_check (const gchar *target_namespace_name, const gchar *namespace_name)
@@ -567,21 +362,14 @@ continue_namespace_check (const gchar *target_namespace_name, const gchar *names
 }
 
 static time64
-gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb, const gchar *target_namespace_name)
+gnc_prices_dialog_load_view (GtkWidget *view, GNCPriceDB *pdb, const gchar *target_namespace_name)
 {
     auto oldest = gnc_time (nullptr);
-    auto model = gtk_tree_view_get_model (view);
-    /* The view and price DB belong to the dialog's book, even if the active
-     * session changes while an asynchronous response is pending. */
-    auto book = qof_instance_get_book (QOF_INSTANCE (pdb));
-    const auto commodity_table = gnc_commodity_table_get_table (book);
+    auto model = price_remove_model (view);
+    const auto commodity_table = gnc_get_current_commodities ();
     auto namespace_list = gnc_commodity_table_get_namespaces_list (commodity_table);
 
-    // disconnect the model to the price treeview
-    g_object_ref (G_OBJECT(model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(view), nullptr);
-
-    gtk_list_store_clear (GTK_LIST_STORE(model));
+    g_list_store_remove_all (model);
 
     for (auto node_n = namespace_list; node_n; node_n = g_list_next (node_n))
     {
@@ -606,23 +394,14 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb, const gchar *ta
                 auto price = static_cast<GNCPrice*> (node->data);
                 auto price_time = gnc_price_get_time64 (price);
                 auto name_str = gnc_commodity_get_printname (tmp_commodity);
-                auto tmp_namespace_gui_str = gnc_commodity_namespace_get_gui_name (tmp_namespace);
-
                 if (oldest > price_time)
                     oldest = price_time;
 
                 auto date_str = qof_print_date (price_time);
                 auto num_str = g_strdup_printf ("%d", num);
-
-                GtkTreeIter iter;
-                gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-                gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-                                                   PRICED_NAMESPACE_NAME, tmp_namespace_gui_str,
-                                                   PRICED_FULL_NAME, name_str,
-                                                   PRICED_COMM, tmp_commodity,
-                                                   PRICED_DATE, date_str,
-                                                   PRICED_COUNT, num_str,
-                                                   -1);
+                auto row = price_remove_row_new (name_str, tmp_commodity, date_str, num_str);
+                g_list_store_append (model, row);
+                g_object_unref (row);
 
                 g_free (date_str);
                 g_free (num_str);
@@ -633,97 +412,230 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb, const gchar *ta
     }
     g_list_free (namespace_list);
 
-    // reconnect the model to the price treeview
-    gtk_tree_view_set_model (GTK_TREE_VIEW(view), model);
-    g_object_unref (G_OBJECT(model));
-
     return oldest;
 }
 
 static GList *
-gnc_prices_dialog_get_commodities (GtkTreeView *view)
+gnc_prices_dialog_get_commodities (GtkWidget *view)
 {
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
-    auto selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
-    auto list = gtk_tree_selection_get_selected_rows (selection, &model);
+    auto model = price_remove_model (view);
+    auto selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW (view));
+    auto selection = gtk_selection_model_get_selection (selection_model);
+    GtkBitsetIter iter;
+    guint position;
     GList *comm_list = nullptr;
 
-    // Walk the list
-    for (auto row = g_list_first (list); row; row = g_list_next (row))
+    for (auto valid = gtk_bitset_iter_init_first (&iter, selection, &position);
+         valid; valid = gtk_bitset_iter_next (&iter, &position))
     {
-        auto path = static_cast<GtkTreePath *> (row->data);
-        GtkTreeIter iter;
-        if (gtk_tree_model_get_iter (model, &iter, path))
-        {
-            gnc_commodity *comm;
-            gtk_tree_model_get (model, &iter, PRICED_COMM, &comm, -1);
-            comm_list = g_list_prepend (comm_list, comm);
-        }
+        auto row = G_OBJECT (g_list_model_get_item (G_LIST_MODEL (model), position));
+        auto commodity = static_cast<gnc_commodity *> (
+            g_object_get_data (row, PRICE_REMOVE_COMMODITY_DATA));
+        comm_list = g_list_prepend (comm_list, commodity);
+        g_object_unref (row);
     }
-    g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
+    gtk_bitset_unref (selection);
 
     return g_list_reverse (comm_list);
 }
 
-static void
-change_source_flag (PriceRemoveSourceFlags source, gboolean set, gpointer data)
+struct PriceOldRemoveRequest
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    auto widget_ok = gtk_dialog_get_widget_for_response (GTK_DIALOG(pdb_dialog->remove_dialog),
-                                                         GTK_RESPONSE_OK);
-    auto widget_apply = gtk_dialog_get_widget_for_response (GTK_DIALOG(pdb_dialog->remove_dialog),
-                                                            GTK_RESPONSE_APPLY);
+    gatomicrefcount ref_count;
+    GWeakRef price_window;
+    GtkWindow *dialog;
+    GtkWidget *date;
+    GtkWidget *remove_view;
+    GtkWidget *namespace_picker;
+    GtkWidget *ok_button;
+    GtkWidget *keep_none;
+    GtkWidget *keep_last_month;
+    GtkWidget *keep_last_quarter;
+    GtkWidget *keep_last_period;
+    GtkWidget *keep_scaled;
+    gchar *target_namespace_name;
+    gint remove_source;
+    gboolean completed;
+    gboolean waiting_for_confirmation;
+    gulong parent_destroy_handler;
+    gulong dialog_destroy_handler;
+};
 
-    if (set)
-        pdb_dialog->remove_source = pdb_dialog->remove_source | source;
+static PriceOldRemoveRequest *
+price_old_remove_request_ref (PriceOldRemoveRequest *request)
+{
+    g_atomic_ref_count_inc (&request->ref_count);
+    return request;
+}
+
+static void
+price_old_remove_request_free (PriceOldRemoveRequest *request)
+{
+    auto window = GTK_WIDGET (g_weak_ref_get (&request->price_window));
+
+    if (window && request->parent_destroy_handler)
+        g_signal_handler_disconnect (window, request->parent_destroy_handler);
+    g_clear_object (&window);
+    g_clear_object (&request->dialog);
+    g_weak_ref_clear (&request->price_window);
+    g_free (request->target_namespace_name);
+    g_free (request);
+}
+
+static void
+price_old_remove_request_unref (PriceOldRemoveRequest *request)
+{
+    if (request && g_atomic_ref_count_dec (&request->ref_count))
+        price_old_remove_request_free (request);
+}
+
+static PricesDialog *
+price_old_remove_get_prices_dialog (PriceOldRemoveRequest *request,
+                                    GtkWidget **window_out)
+{
+    auto window = GTK_WIDGET (g_weak_ref_get (&request->price_window));
+    PricesDialog *pdb_dialog = nullptr;
+
+    if (window)
+    {
+        pdb_dialog = static_cast<PricesDialog *> (
+            g_object_get_data (G_OBJECT (window), PRICE_DIALOG_DATA));
+        if (!pdb_dialog || pdb_dialog->window != window ||
+            pdb_dialog->book != gnc_get_current_book () ||
+            qof_book_shutting_down (pdb_dialog->book))
+            pdb_dialog = nullptr;
+    }
+
+    if (window_out)
+        *window_out = window;
     else
-        pdb_dialog->remove_source = pdb_dialog->remove_source & (~source);
-
-    // Check if we have the required options to enable OK and Apply buttons
-    gboolean enable_button = (pdb_dialog->remove_source > 8 ? TRUE : FALSE); // commodities flag is 8
-    gtk_widget_set_sensitive (widget_ok, enable_button);
-    gtk_widget_set_sensitive (widget_apply, enable_button);
-
-    DEBUG("Source is: %d, remove_source is %d", source, pdb_dialog->remove_source);
+        g_clear_object (&window);
+    return pdb_dialog;
 }
 
 static void
-check_event_fq_cb (GtkWidget *widget, gpointer data)
+price_old_remove_request_complete (PriceOldRemoveRequest *request,
+                                   gboolean refresh_prices)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
+    GtkWidget *window;
 
-    change_source_flag (PRICE_REMOVE_SOURCE_FQ, active, pdb_dialog);
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    window = GTK_WIDGET (g_weak_ref_get (&request->price_window));
+    if (window && request->parent_destroy_handler)
+        g_signal_handler_disconnect (window, request->parent_destroy_handler);
+    request->parent_destroy_handler = 0;
+    g_clear_object (&window);
+
+    if (request->dialog)
+    {
+        if (request->dialog_destroy_handler)
+            g_signal_handler_disconnect (request->dialog,
+                                         request->dialog_destroy_handler);
+        request->dialog_destroy_handler = 0;
+        gtk_window_destroy (request->dialog);
+        g_clear_object (&request->dialog);
+    }
+
+    if (refresh_prices)
+        gnc_gui_refresh_all ();
+    price_old_remove_request_unref (request);
 }
 
 static void
-check_event_user_cb (GtkWidget *widget, gpointer data)
+price_old_remove_dialog_destroyed_cb (GtkWidget *dialog, gpointer user_data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
 
-    change_source_flag (PRICE_REMOVE_SOURCE_USER, active, pdb_dialog);
+    (void)dialog;
+    request->dialog_destroy_handler = 0;
+    g_clear_object (&request->dialog);
+    price_old_remove_request_complete (request, FALSE);
 }
 
 static void
-check_event_app_cb (GtkWidget *widget, gpointer data)
+price_old_remove_parent_destroyed_cb (GtkWidget *window, gpointer user_data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
 
-    change_source_flag (PRICE_REMOVE_SOURCE_APP, active, pdb_dialog);
+    (void)window;
+    request->parent_destroy_handler = 0;
+    price_old_remove_request_complete (request, FALSE);
 }
 
 static void
-selection_changed_cb (GtkTreeSelection *selection, gpointer data)
+price_old_remove_update_actions (PriceOldRemoveRequest *request)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(pdb_dialog->remove_view));
-    auto rows = gtk_tree_selection_get_selected_rows (selection, &model);
-    gboolean have_rows = (gnc_list_length_cmp (rows, 0));
+    const auto have_commodities =
+        (request->remove_source & PRICE_REMOVE_SOURCE_COMM) != 0;
+    const auto have_sources =
+        (request->remove_source & (PRICE_REMOVE_SOURCE_FQ |
+                                   PRICE_REMOVE_SOURCE_USER |
+                                   PRICE_REMOVE_SOURCE_APP)) != 0;
 
-    change_source_flag (PRICE_REMOVE_SOURCE_COMM, have_rows, pdb_dialog);
-    g_list_free_full (rows, (GDestroyNotify) gtk_tree_path_free);
+    gtk_widget_set_sensitive (request->ok_button,
+                              !request->waiting_for_confirmation &&
+                              have_commodities && have_sources);
+}
+
+static void
+price_old_remove_change_source_flag (PriceOldRemoveRequest *request,
+                                     PriceRemoveSourceFlags source,
+                                     gboolean set)
+{
+    if (set)
+        request->remove_source |= source;
+    else
+        request->remove_source &= ~source;
+
+    price_old_remove_update_actions (request);
+    DEBUG ("Source is: %d, remove_source is %d", source,
+           request->remove_source);
+}
+
+static void
+price_old_remove_check_fq_cb (GtkWidget *widget, gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+
+    price_old_remove_change_source_flag (
+        request, PRICE_REMOVE_SOURCE_FQ,
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)));
+}
+
+static void
+price_old_remove_check_user_cb (GtkWidget *widget, gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+
+    price_old_remove_change_source_flag (
+        request, PRICE_REMOVE_SOURCE_USER,
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)));
+}
+
+static void
+price_old_remove_check_app_cb (GtkWidget *widget, gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+
+    price_old_remove_change_source_flag (
+        request, PRICE_REMOVE_SOURCE_APP,
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)));
+}
+
+static void
+price_old_remove_selection_changed_cb (GtkSelectionModel *selection,
+                                       guint, guint, gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+    auto selected = gtk_selection_model_get_selection (selection);
+
+    price_old_remove_change_source_flag (
+        request, PRICE_REMOVE_SOURCE_COMM,
+        gtk_bitset_get_size (selected) != 0);
+    gtk_bitset_unref (selected);
 }
 
 static GDate
@@ -741,140 +653,300 @@ get_fiscal_end_date (void)
 }
 
 static void
-namespace_changed_cb (GtkComboBox *cbwe, gpointer data)
+price_old_remove_namespace_changed_cb (GtkEditable *, gpointer user_data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *>(data);
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+    GtkWidget *window = nullptr;
+    auto pdb_dialog = price_old_remove_get_prices_dialog (request, &window);
 
-    if (pdb_dialog->target_namespace_name)
-        g_free (pdb_dialog->target_namespace_name);
-    pdb_dialog->target_namespace_name = gnc_ui_namespace_picker_ns (GTK_WIDGET(cbwe));
+    if (!pdb_dialog)
+    {
+        g_clear_object (&window);
+        price_old_remove_request_complete (request, FALSE);
+        return;
+    }
 
-    gnc_prices_dialog_load_view (pdb_dialog->remove_view,
-                                 pdb_dialog->price_db,
-                                 pdb_dialog->target_namespace_name);
+    g_free (request->target_namespace_name);
+    request->target_namespace_name = gnc_ui_namespace_picker_ns (
+        request->namespace_picker);
+    gnc_prices_dialog_load_view (request->remove_view, pdb_dialog->price_db,
+                                 request->target_namespace_name);
+    g_clear_object (&window);
 }
 
 static PriceRemoveKeepOptions
-get_keep_options_value (GtkBuilder *builder)
+price_old_remove_get_keep_option (const PriceOldRemoveRequest *request)
 {
-    if (!builder)
-        return PRICE_REMOVE_KEEP_LAST_WEEKLY;
-
-    auto button = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_none"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (request->keep_none)))
         return PRICE_REMOVE_KEEP_NONE;
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_last_month"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+    if (gtk_check_button_get_active (
+            GTK_CHECK_BUTTON (request->keep_last_month)))
         return PRICE_REMOVE_KEEP_LAST_MONTHLY;
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_last_quarter"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+    if (gtk_check_button_get_active (
+            GTK_CHECK_BUTTON (request->keep_last_quarter)))
         return PRICE_REMOVE_KEEP_LAST_QUARTERLY;
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_last_period"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+    if (gtk_check_button_get_active (
+            GTK_CHECK_BUTTON (request->keep_last_period)))
         return PRICE_REMOVE_KEEP_LAST_PERIOD;
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_scaled"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (request->keep_scaled)))
         return PRICE_REMOVE_KEEP_SCALED;
 
-    // default which is also "radiobutton_last_week"
     return PRICE_REMOVE_KEEP_LAST_WEEKLY;
+}
+
+static gboolean
+price_old_remove_execute (PriceOldRemoveRequest *request)
+{
+    GtkWidget *window = nullptr;
+    auto pdb_dialog = price_old_remove_get_prices_dialog (request, &window);
+    auto comm_list = gnc_prices_dialog_get_commodities (request->remove_view);
+    gboolean deleted = FALSE;
+
+    if (!pdb_dialog || !comm_list)
+    {
+        g_list_free (comm_list);
+        g_clear_object (&window);
+        return FALSE;
+    }
+
+    const auto last = gnc_date_edit_get_date (GNC_DATE_EDIT (request->date));
+    auto fiscal_end_date = get_fiscal_end_date ();
+    const auto keep = price_old_remove_get_keep_option (request);
+    /* Keep the selection model connected while the engine emits one event per deletion. */
+    gnc_tree_view_price_suspend_updates (pdb_dialog->price_tree);
+
+    DEBUG ("deleting prices for keep option %d", keep);
+    if (keep != PRICE_REMOVE_KEEP_SCALED)
+    {
+        gnc_pricedb_remove_old_prices (
+            pdb_dialog->price_db, comm_list, &fiscal_end_date, last,
+            static_cast<PriceRemoveSourceFlags> (request->remove_source), keep);
+    }
+    else
+    {
+        auto tmp_date = time64_to_gdate (last);
+        g_date_subtract_months (&tmp_date, 6);
+        auto tmp = gdate_to_time64 (tmp_date);
+
+        gnc_pricedb_remove_old_prices (
+            pdb_dialog->price_db, comm_list, &fiscal_end_date, tmp,
+            static_cast<PriceRemoveSourceFlags> (request->remove_source),
+            PRICE_REMOVE_KEEP_LAST_WEEKLY);
+        g_date_subtract_months (&tmp_date, 6);
+        tmp = gdate_to_time64 (tmp_date);
+        gnc_pricedb_remove_old_prices (
+            pdb_dialog->price_db, comm_list, &fiscal_end_date, tmp,
+            static_cast<PriceRemoveSourceFlags> (request->remove_source),
+            PRICE_REMOVE_KEEP_LAST_MONTHLY);
+    }
+
+    gnc_tree_view_price_resume_updates (pdb_dialog->price_tree);
+    g_list_free (comm_list);
+    g_clear_object (&window);
+    deleted = TRUE;
+    return deleted;
+}
+
+static void
+price_old_remove_dialog_present (PriceOldRemoveRequest *request);
+
+static void
+price_old_remove_confirmation_finished (GtkWindow *, gint response,
+                                        gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+    const auto deleted = !request->completed && response == GTK_RESPONSE_OK &&
+                         price_old_remove_execute (request);
+
+    if (deleted)
+        price_old_remove_request_complete (request, TRUE);
+    else if (!request->completed)
+    {
+        request->waiting_for_confirmation = FALSE;
+        price_old_remove_update_actions (request);
+        price_old_remove_dialog_present (request);
+    }
+    price_old_remove_request_unref (request);
+}
+
+static void
+price_old_remove_start_confirmation (PriceOldRemoveRequest *request)
+{
+    auto comm_list = gnc_prices_dialog_get_commodities (request->remove_view);
+
+    if (!comm_list)
+        return;
+    g_list_free (comm_list);
+
+    request->waiting_for_confirmation = TRUE;
+    price_old_remove_update_actions (request);
+    price_old_remove_request_ref (request);
+    gnc_action_dialog_async (
+        request->dialog, _("Delete"), FALSE,
+        price_old_remove_confirmation_finished, request,
+        "%s", _("Are you sure you want to delete these prices?"));
+}
+
+static void
+price_old_remove_ok_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    auto request = static_cast<PriceOldRemoveRequest *> (user_data);
+
+    (void)button;
+    if (!request->completed && !request->waiting_for_confirmation)
+        price_old_remove_start_confirmation (request);
+}
+
+static void
+price_old_remove_cancel_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    price_old_remove_request_complete (
+        static_cast<PriceOldRemoveRequest *> (user_data), FALSE);
+}
+
+static gboolean
+price_old_remove_close_request_cb (GtkWindow *dialog, gpointer user_data)
+{
+    (void)dialog;
+    price_old_remove_request_complete (
+        static_cast<PriceOldRemoveRequest *> (user_data), FALSE);
+    return TRUE;
+}
+
+static void
+price_old_remove_dialog_present (PriceOldRemoveRequest *request)
+{
+    if (!request->completed && request->dialog)
+        gtk_window_present (request->dialog);
 }
 
 void
 gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
+    GtkBuilder *builder;
+    GtkWidget *dialog;
+    GtkWidget *box;
+    GtkWidget *label;
+    GtkSelectionModel *selection;
+    PriceOldRemoveRequest *request;
 
-    ENTER(" ");
-    auto builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore3");
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore4");
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "deletion_date_dialog");
+    (void)widget;
+    ENTER (" ");
+    if (!pdb_dialog || pdb_dialog->book != gnc_get_current_book () ||
+        qof_book_shutting_down (pdb_dialog->book))
+        return;
 
-    pdb_dialog->remove_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "deletion_date_dialog"));
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-price.ui", "deletion_date_dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "deletion_date_dialog"));
+    if (!dialog)
+    {
+        g_object_unref (builder);
+        return;
+    }
 
-    auto box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
-    auto date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    request = g_new0 (PriceOldRemoveRequest, 1);
+    g_atomic_ref_count_init (&request->ref_count);
+    g_weak_ref_init (&request->price_window, pdb_dialog->window);
+    request->dialog = GTK_WINDOW (g_object_ref (dialog));
+    request->date = gnc_date_edit_new (time (nullptr), FALSE, FALSE);
+    request->remove_view = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                 "commodity_list"));
+    request->namespace_picker = GTK_WIDGET (gtk_builder_get_object (
+        builder, "namespace_combo_we"));
+    request->ok_button = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                               "ok_button"));
+    request->keep_none = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                               "radiobutton_none"));
+    request->keep_last_month = GTK_WIDGET (gtk_builder_get_object (
+        builder, "radiobutton_last_month"));
+    request->keep_last_quarter = GTK_WIDGET (gtk_builder_get_object (
+        builder, "radiobutton_last_quarter"));
+    request->keep_last_period = GTK_WIDGET (gtk_builder_get_object (
+        builder, "radiobutton_last_period"));
+    request->keep_scaled = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                 "radiobutton_scaled"));
 
-    gtk_box_pack_start (GTK_BOX (box), date, FALSE, FALSE, 0);
-    gtk_widget_show (date);
-    gtk_entry_set_activates_default(GTK_ENTRY(GNC_DATE_EDIT(date)->date_entry), TRUE);
-    auto label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
-    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "date_hbox"));
+    gnc_box_append_full (GTK_BOX (box), request->date, FALSE, FALSE, 0);
+    gtk_widget_set_visible (request->date, TRUE);
+    gtk_entry_set_activates_default (
+        GTK_ENTRY (GNC_DATE_EDIT (request->date)->date_entry), TRUE);
+    label = GTK_WIDGET (gtk_builder_get_object (builder, "date_label"));
+    gnc_date_make_mnemonic_target (GNC_DATE_EDIT (request->date), label);
 
-    // Setup namespace
-    pdb_dialog->namespace_cbwe = GTK_WIDGET(gtk_builder_get_object (builder, "namespace_combo_we"));
-    gnc_ui_update_namespace_picker (pdb_dialog->namespace_cbwe, nullptr, DIAG_COMM_ALL);
-    gnc_cbwe_require_list_item (GTK_COMBO_BOX(pdb_dialog->namespace_cbwe));
-    gtk_combo_box_set_active (GTK_COMBO_BOX(pdb_dialog->namespace_cbwe), 1);
-    g_signal_connect (G_OBJECT(pdb_dialog->namespace_cbwe), "changed",
-                      G_CALLBACK(namespace_changed_cb), pdb_dialog);
+    gnc_ui_commodity_picker_setup (request->namespace_picker);
+    label = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                 "remove_namespace_label"));
+    gtk_label_set_mnemonic_widget (
+        GTK_LABEL (label), GTK_WIDGET (
+            gnc_ui_commodity_picker_get_entry (request->namespace_picker)));
+    gnc_ui_update_namespace_picker (request->namespace_picker,
+                                    GNC_COMMODITY_NS_NONISO_GUI, DIAG_COMM_ALL);
+    request->target_namespace_name = g_strdup (GNC_COMMODITY_NS_NONISO_GUI);
+    g_signal_connect (
+        gnc_ui_commodity_picker_get_entry (request->namespace_picker), "changed",
+        G_CALLBACK (price_old_remove_namespace_changed_cb), request);
 
-    // Setup the commodity view
-    pdb_dialog->remove_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "commodty_treeview"));
-    auto selection = gtk_tree_view_get_selection (pdb_dialog->remove_view);
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+    auto model = g_list_store_new (G_TYPE_OBJECT);
+    g_object_set_data_full (G_OBJECT (request->remove_view),
+                            PRICE_REMOVE_MODEL_DATA, model, g_object_unref);
+    selection = GTK_SELECTION_MODEL (gtk_multi_selection_new (
+        G_LIST_MODEL (g_object_ref (model))));
+    gtk_column_view_set_model (GTK_COLUMN_VIEW (request->remove_view),
+                               selection);
+    price_remove_append_column (GTK_COLUMN_VIEW (request->remove_view),
+                                _("Commodity"), PRICE_REMOVE_FULL_NAME_DATA);
+    price_remove_append_column (GTK_COLUMN_VIEW (request->remove_view),
+                                _("First Date"), PRICE_REMOVE_DATE_DATA);
+    price_remove_append_column (GTK_COLUMN_VIEW (request->remove_view),
+                                _("Entries"), PRICE_REMOVE_COUNT_DATA);
+    gnc_prices_dialog_load_view (request->remove_view, pdb_dialog->price_db,
+                                 request->target_namespace_name);
+    g_signal_connect (selection, "selection-changed",
+                      G_CALLBACK (price_old_remove_selection_changed_cb), request);
+    g_object_unref (selection);
 
-    // Add Entries column this way as align does not seem to work from builder
-    auto tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Entries"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(pdb_dialog->remove_view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    auto cr = gtk_cell_renderer_text_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "text", PRICED_COUNT, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
-
-    // Load the view and get the earliest date
-    pdb_dialog->target_namespace_name = g_strdup (GNC_COMMODITY_NS_NONISO_GUI);
-    gnc_prices_dialog_load_view (pdb_dialog->remove_view,
-                                 pdb_dialog->price_db,
-                                 pdb_dialog->target_namespace_name);
-
-    g_signal_connect (selection, "changed", G_CALLBACK(selection_changed_cb), pdb_dialog);
-
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
-
-    gtk_window_set_transient_for (GTK_WINDOW (pdb_dialog->remove_dialog), GTK_WINDOW (pdb_dialog->window));
-
-    pdb_dialog->remove_source = PRICE_REMOVE_SOURCE_FQ;
-    change_source_flag (PRICE_REMOVE_SOURCE_FQ, TRUE, pdb_dialog);
-
-    auto button = GTK_WIDGET(gtk_builder_get_object (builder, "checkbutton_fq"));
-    g_signal_connect (button, "toggled", G_CALLBACK (check_event_fq_cb), pdb_dialog);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "checkbutton_user"));
-    g_signal_connect (button, "toggled", G_CALLBACK (check_event_user_cb), pdb_dialog);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "checkbutton_app"));
-    g_signal_connect (button, "toggled", G_CALLBACK (check_event_app_cb), pdb_dialog);
-    auto operation = new PriceRemovalOperation{};
-    operation->owner = pdb_dialog;
-    operation->dialog = pdb_dialog->remove_dialog;
-    operation->builder = GTK_BUILDER (g_object_ref (builder));
-    operation->date = GNC_DATE_EDIT (date);
-    operation->remove_view = pdb_dialog->remove_view;
-    operation->namespace_name = g_strdup (pdb_dialog->target_namespace_name);
-    operation->session = pdb_dialog->session;
-    operation->book = pdb_dialog->book;
-    g_weak_ref_init (&operation->owner_window, G_OBJECT (pdb_dialog->window));
-    g_weak_ref_init (&operation->original_book, G_OBJECT (pdb_dialog->book));
-    g_signal_connect (operation->dialog, "response",
-                      G_CALLBACK (price_removal_response), operation);
-    g_signal_connect (operation->dialog, "destroy",
-                      G_CALLBACK (price_removal_dialog_destroyed), operation);
-    gtk_window_set_destroy_with_parent (GTK_WINDOW (operation->dialog), TRUE);
-    gtk_window_set_modal (GTK_WINDOW (operation->dialog), TRUE);
-    gtk_widget_show (operation->dialog);
-    g_object_unref (G_OBJECT (builder));
-    LEAVE(" ");
+    request->remove_source = PRICE_REMOVE_SOURCE_FQ;
+    price_old_remove_change_source_flag (request, PRICE_REMOVE_SOURCE_FQ, TRUE);
+    auto button = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_fq"));
+    g_signal_connect (button, "toggled", G_CALLBACK (price_old_remove_check_fq_cb),
+                      request);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_user"));
+    g_signal_connect (button, "toggled", G_CALLBACK (price_old_remove_check_user_cb),
+                      request);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_app"));
+    g_signal_connect (button, "toggled", G_CALLBACK (price_old_remove_check_app_cb),
+                      request);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "cancel_button"));
+    g_signal_connect (button, "clicked", G_CALLBACK (price_old_remove_cancel_clicked_cb),
+                      request);
+    g_signal_connect (request->ok_button, "clicked",
+                      G_CALLBACK (price_old_remove_ok_clicked_cb), request);
+    gtk_window_set_default_widget (request->dialog, request->ok_button);
+    gtk_window_set_transient_for (request->dialog, GTK_WINDOW (pdb_dialog->window));
+    gtk_window_set_modal (request->dialog, TRUE);
+    request->parent_destroy_handler = g_signal_connect (
+        pdb_dialog->window, "destroy",
+        G_CALLBACK (price_old_remove_parent_destroyed_cb), request);
+    request->dialog_destroy_handler = g_signal_connect (
+        request->dialog, "destroy", G_CALLBACK (price_old_remove_dialog_destroyed_cb),
+        request);
+    g_signal_connect (request->dialog, "close-request",
+                      G_CALLBACK (price_old_remove_close_request_cb), request);
+    g_object_unref (builder);
+    price_old_remove_dialog_present (request);
+    LEAVE (" ");
 }
-
 
 void
 gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
+
+    (void)widget;
     GNCPrice *price = nullptr;
     gboolean unref_price = FALSE;
 
@@ -926,6 +998,8 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
+    (void)widget;
+
     ENTER(" ");
     try {
         GncQuotes quotes;
@@ -952,40 +1026,33 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
 
 
 static void
-gnc_prices_dialog_selection_changed (GtkTreeSelection *treeselection,
+gnc_prices_dialog_selection_changed (GtkSelectionModel *selection,
+                                     guint position, guint n_items,
                                      gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
-
-    ENTER(" ");
     auto price_list = gnc_tree_view_price_get_selected_prices (pdb_dialog->price_tree);
-    auto length = g_list_length (price_list);
+    auto selected_prices = g_list_length (price_list);
+    auto selected_rows = gtk_selection_model_get_selection (selection);
+
     g_list_free (price_list);
+    /* A selected namespace or commodity is not a mutable price row. */
+    if (gtk_bitset_get_size (selected_rows) > selected_prices)
+        selected_prices = 0;
+    gtk_bitset_unref (selected_rows);
 
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(pdb_dialog->price_tree));
-    auto rows = gtk_tree_selection_get_selected_rows (treeselection, &model);
-
-    // if selected rows greater than length, parents must of been selected also
-    if (g_list_length (rows) > length)
-        length = 0;
-
-    g_list_free_full (rows, (GDestroyNotify) gtk_tree_path_free);
-
-    gtk_widget_set_sensitive (pdb_dialog->edit_button,
-                              length == 1);
-    gtk_widget_set_sensitive (pdb_dialog->remove_button,
-                              length >= 1);
-    gtk_widget_set_sensitive (pdb_dialog->add_button,
-                              length <= 1);
-    LEAVE("%d prices selected", length);
+    gtk_widget_set_sensitive (pdb_dialog->edit_button, selected_prices == 1);
+    gtk_widget_set_sensitive (pdb_dialog->remove_button, selected_prices >= 1);
+    gtk_widget_set_sensitive (pdb_dialog->add_button, selected_prices <= 1);
+    (void)position;
+    (void)n_items;
 }
-
 
 static gboolean
 gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
                                  gpointer data)
 {
-    auto price_db = static_cast<GNCPriceDB *> (data);
+    auto pdb_dialog = static_cast<PricesDialog *> (data);
 
     /* Never show the template list */
     auto name = gnc_commodity_namespace_get_name (name_space);
@@ -999,7 +1066,7 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
     {
         /* For each commodity, see if there are prices */
         auto comm = static_cast<gnc_commodity *> (item->data);
-        if (gnc_pricedb_has_prices (price_db, comm, nullptr))
+        if (gnc_pricedb_has_prices (pdb_dialog->price_db, comm, nullptr))
             rv = true;
     }
 
@@ -1012,56 +1079,43 @@ static gboolean
 gnc_price_dialog_filter_cm_func (gnc_commodity *commodity,
                                  gpointer data)
 {
-    auto price_db = static_cast<GNCPriceDB *> (data);
+    auto pdb_dialog = static_cast<PricesDialog *> (data);
 
     /* Show any commodity that has prices */
-    return gnc_pricedb_has_prices(price_db, commodity, NULL);
+    return gnc_pricedb_has_prices(pdb_dialog->price_db, commodity, NULL);
 }
 
 
 static void
-row_activated_cb (GtkTreeView *view, GtkTreePath *path,
-                  GtkTreeViewColumn *column, gpointer data)
+row_activated_cb (GtkColumnView *column_view, guint position, gpointer data)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    auto pdb_dialog = static_cast<PricesDialog *> (data);
 
-    g_return_if_fail(view);
+    /* The activated position, not an unrelated existing cursor, decides the action. */
+    auto selection = gnc_tree_view_price_get_selection_model (pdb_dialog->price_tree);
+    gtk_selection_model_select_item (selection, position, TRUE);
 
-    model = gtk_tree_view_get_model(view);
-    if (gtk_tree_model_get_iter(model, &iter, path))
-    {
-        if (gtk_tree_model_iter_has_child(model, &iter))
-        {
-            /* There are children, so it's not a price.
-             * Just expand or collapse the row. */
-            if (gtk_tree_view_row_expanded(view, path))
-                gtk_tree_view_collapse_row(view, path);
-            else
-                gtk_tree_view_expand_row(view, path, FALSE);
-        }
-        else
-            /* It's a price, so click the Edit button. */
-            gnc_prices_dialog_edit_clicked(GTK_WIDGET(view), data);
-    }
+    if (gnc_tree_view_price_get_cursor_price (pdb_dialog->price_tree))
+        gnc_prices_dialog_edit_clicked (GTK_WIDGET (column_view), data);
+    else
+        gnc_tree_view_price_toggle_expand (pdb_dialog->price_tree, position);
 }
-
 
 static void
 gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 {
     GtkWidget *window, *scrolled_window;
     GtkBuilder *builder;
-    GtkTreeView *view;
-    GtkTreeSelection *selection;
+    GtkWidget *view;
+    GtkSelectionModel *selection;
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "prices_window");
+    gnc_builder_add_from_file (builder, "dialog-price.ui", "prices_window");
 
     window = GTK_WIDGET(gtk_builder_get_object (builder, "prices_window"));
     pdb_dialog->window = window;
-    g_object_set_data (G_OBJECT (window), "price-dialog-state", pdb_dialog);
+    g_object_set_data (G_OBJECT (window), PRICE_DIALOG_DATA, pdb_dialog);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-price-edit");
@@ -1071,11 +1125,13 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     pdb_dialog->book = qof_session_get_book(pdb_dialog->session);
     pdb_dialog->price_db = gnc_pricedb_get_db(pdb_dialog->book);
 
-    g_signal_connect (pdb_dialog->window, "delete-event",
-                      G_CALLBACK(gnc_prices_dialog_delete_event_cb), pdb_dialog);
+    g_signal_connect (pdb_dialog->window, "close-request",
+                      G_CALLBACK(gnc_prices_dialog_close_request_cb), pdb_dialog);
 
-    g_signal_connect (pdb_dialog->window, "key_press_event",
-                      G_CALLBACK (gnc_prices_dialog_key_press_cb), pdb_dialog);
+    GtkEventController *key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (pdb_dialog->window, key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_prices_dialog_key_pressed_cb), pdb_dialog);
 
     /* price tree */
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "price_list_window"));
@@ -1084,20 +1140,19 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
                                    "show-column-menu", TRUE,
                                    NULL);
     pdb_dialog->price_tree = GNC_TREE_VIEW_PRICE(view);
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(view));
     gnc_tree_view_price_set_filter (pdb_dialog->price_tree,
                                     gnc_price_dialog_filter_ns_func,
                                     gnc_price_dialog_filter_cm_func,
                                     NULL,
-                                    pdb_dialog->price_db, NULL);
+                                    pdb_dialog, NULL);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-    gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
-    g_signal_connect (G_OBJECT (selection), "changed",
+    selection = gnc_tree_view_price_get_selection_model (pdb_dialog->price_tree);
+    g_signal_connect (selection, "selection-changed",
                       G_CALLBACK (gnc_prices_dialog_selection_changed), pdb_dialog);
-
-    g_signal_connect (G_OBJECT (view), "row-activated",
-                      G_CALLBACK (row_activated_cb), pdb_dialog);
+    g_signal_connect (gnc_tree_view_price_get_column_view (pdb_dialog->price_tree),
+                      "activate", G_CALLBACK (row_activated_cb), pdb_dialog);
 
     /* buttons */
     {
@@ -1119,7 +1174,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
         }
         /* default to 'close' button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-        gtk_widget_grab_default (button);
+        gtk_window_set_default_widget (GTK_WINDOW (pdb_dialog->window), button);
         gtk_widget_grab_focus (button);
 
     }
@@ -1127,7 +1182,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     g_signal_connect (pdb_dialog->window, "destroy",
                       G_CALLBACK(gnc_prices_dialog_destroy_cb), pdb_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
     g_object_unref(G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->window), GTK_WINDOW (parent));
@@ -1142,7 +1197,7 @@ close_handler (gpointer user_data)
 
     ENTER(" ");
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->window));
-    gtk_widget_destroy (GTK_WIDGET (pdb_dialog->window));
+    gtk_window_destroy (GTK_WINDOW(pdb_dialog->window));
     LEAVE(" ");
 }
 
@@ -1150,6 +1205,8 @@ close_handler (gpointer user_data)
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
+    (void)changes;
+    (void)user_data;
     ENTER(" ");
     LEAVE(" ");
 }
@@ -1161,6 +1218,9 @@ show_handler (const char *klass, gint component_id,
 {
     auto pdb_dialog = static_cast<PricesDialog *> (user_data);
 
+    (void)klass;
+    (void)component_id;
+    (void)iter_data;
     ENTER(" ");
     if (!pdb_dialog)
     {
@@ -1175,12 +1235,16 @@ show_handler (const char *klass, gint component_id,
 
 
 static gboolean
-gnc_prices_dialog_key_press_cb (GtkWidget *widget, GdkEventKey *event,
-                                gpointer data)
+gnc_prices_dialog_key_pressed_cb (GtkEventControllerKey *key,
+                                   guint keyval, guint keycode,
+                                   GdkModifierType state, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
-    if (event->keyval == GDK_KEY_Escape)
+    (void)key;
+    (void)keycode;
+    (void)state;
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (pdb_dialog);
         return TRUE;
@@ -1221,6 +1285,6 @@ gnc_prices_dialog (GtkWidget * parent)
 
     gtk_widget_grab_focus (GTK_WIDGET(pdb_dialog->price_tree));
 
-    gtk_widget_show (pdb_dialog->window);
+    gtk_window_present (GTK_WINDOW (pdb_dialog->window));
     LEAVE(" ");
 }
