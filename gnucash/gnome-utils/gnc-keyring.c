@@ -36,9 +36,6 @@
 #ifdef HAVE_OSX_KEYCHAIN
 #include <Security/Security.h>
 #include <CoreFoundation/CoreFoundation.h>
-#include <Carbon/Carbon.h>
-// SecKeychain* are deprecated
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #endif
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -81,7 +78,110 @@ log_osx_keychain_error (const gchar *context, OSStatus status)
     PWARN ("OS X keychain error in %s (status %d): %s",
            context, (int) status, resultstring);
 }
-#endif
+
+/* Add a UTF-8 string value under key to a keychain query dictionary. */
+static void
+cfdict_set_string_UTF8 (CFMutableDictionaryRef dict, CFStringRef key,
+                   const gchar *value_UTF8)
+{
+    CFStringRef str = CFStringCreateWithCString (NULL, value_UTF8,
+                                                 kCFStringEncodingUTF8);
+    CFDictionarySetValue (dict, key, str);
+    CFRelease (str);
+}
+
+/* Build the dictionary that identifies one internet-password item.  The access
+ * method ("mysql"/"postgres") is stored as the security domain because it is not
+ * a valid keychain protocol.  kSecUseDataProtectionKeychain is deliberately not
+ * set, so the items stay in the file-based login keychain where earlier GnuCash
+ * releases stored them. */
+static CFMutableDictionaryRef
+osx_keychain_query (const gchar *access_method, const gchar *server,
+                    guint32 port, const gchar *service, const gchar *user)
+{
+    CFMutableDictionaryRef query =
+        CFDictionaryCreateMutable (NULL, 0, &kCFTypeDictionaryKeyCallBacks,
+                                   &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue (query, kSecClass, kSecClassInternetPassword);
+    cfdict_set_string_UTF8 (query, kSecAttrServer, server);
+    cfdict_set_string_UTF8 (query, kSecAttrSecurityDomain, access_method);
+    cfdict_set_string_UTF8 (query, kSecAttrAccount, user);
+    cfdict_set_string_UTF8 (query, kSecAttrPath, service);
+    if (port != 0)
+    {
+        CFNumberRef num = CFNumberCreate (NULL, kCFNumberSInt32Type, &port);
+        CFDictionarySetValue (query, kSecAttrPort, num);
+        CFRelease (num);
+    }
+    return query;
+}
+
+/* Return the password stored for these coordinates, or NULL if none; the caller
+ * frees it with g_free().  A clean miss returns NULL silently; a genuine error
+ * is logged. */
+static gchar *
+find_osx_keychain_password (const gchar *access_method, const gchar *server,
+                            guint32 port, const gchar *service,
+                            const gchar *user)
+{
+    gchar *password = NULL;
+    CFDataRef data = NULL;
+    CFMutableDictionaryRef query =
+        osx_keychain_query (access_method, server, port, service, user);
+    OSStatus status;
+
+    CFDictionarySetValue (query, kSecMatchLimit, kSecMatchLimitOne);
+    CFDictionarySetValue (query, kSecReturnData, kCFBooleanTrue);
+    status = SecItemCopyMatching (query, (CFTypeRef *) &data);
+    if (status == errSecSuccess && data)
+    {
+        password = g_strndup ((const gchar *) CFDataGetBytePtr (data),
+                              CFDataGetLength (data));
+    }
+    else if (status != errSecItemNotFound)
+        log_osx_keychain_error ("find_osx_keychain_password", status);
+    if (data)
+        CFRelease (data);
+    CFRelease (query);
+    return password;
+}
+
+/* Store the password for these coordinates, adding a new item or updating the
+ * existing one in place. */
+static OSStatus
+store_osx_keychain_password (const gchar *access_method, const gchar *server,
+                            guint32 port, const gchar *service,
+                            const gchar *user, const gchar *password)
+{
+    CFMutableDictionaryRef query =
+        osx_keychain_query (access_method, server, port, service, user);
+    CFDataRef pw = CFDataCreate (NULL, (const UInt8 *) password,
+                                 strlen (password));
+    OSStatus status = SecItemCopyMatching (query, NULL);
+
+    /* A bare SecItemAdd fails with errSecDuplicateItem
+     * if an item exists. */
+    if (status == errSecItemNotFound)
+    {
+        /* new item path */
+        CFDictionarySetValue (query, kSecValueData, pw);
+        status = SecItemAdd (query, NULL);
+    }
+    else if (status == errSecSuccess)
+    {
+        /* update item path */
+        CFMutableDictionaryRef attrs =
+            CFDictionaryCreateMutable (NULL, 1, &kCFTypeDictionaryKeyCallBacks,
+                                       &kCFTypeDictionaryValueCallBacks);
+        CFDictionarySetValue (attrs, kSecValueData, pw);
+        status = SecItemUpdate (query, attrs);
+        CFRelease (attrs);
+    }
+    CFRelease (pw);
+    CFRelease (query);
+    return status;
+}
+#endif /* HAVE_OSX_KEYCHAIN */
 
 void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *server,
@@ -143,35 +243,16 @@ void gnc_keyring_set_password (const gchar *access_method,
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
     OSStatus status;
-    SecKeychainItemRef *itemRef = NULL;
 
     g_return_if_fail(access_method != NULL && server != NULL &&
                      service != NULL && user != NULL && password != NULL);
-    /* mysql and postgres aren't valid protocols on Mac OS X.
-     * So we use the security domain parameter to allow us to
-     * distinguish between these two.
-     */
-    // FIXME I'm not sure this works if a password was already in the keychain
-    //       I may have to do a lookup first and if it exists, run some
-    //       update function instead
-    status =
-        SecKeychainAddInternetPassword (NULL, /* keychain */
-                                        strlen(server), server, /* servername */
-                                        strlen(access_method),
-                                        access_method,  /* securitydomain */
-                                        strlen(user), user, /* accountname */
-                                        strlen(service), service, /* path */
-                                        port, /* port */
-                                        kSecProtocolTypeAny, /* protocol */
-                                        kSecAuthenticationTypeDefault, /* auth type */
-                                        strlen(password),
-                                        password, /* passworddata */
-                                        itemRef );
 
-    if ( status != noErr )
+    status = store_osx_keychain_password (access_method, server, port,
+                                          service, user, password);
+    if (status != errSecSuccess)
     {
         log_osx_keychain_error ("gnc_keyring_set_password", status);
-        PWARN ( "The user will be prompted for a password again next time." );
+        PWARN ("The user will be prompted for a password again next time.");
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 }
@@ -194,11 +275,6 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     GnomeKeyringResult  gkr_result;
     GList *found_list = NULL;
     GnomeKeyringNetworkPasswordData *found;
-#endif
-#ifdef HAVE_OSX_KEYCHAIN
-    void *password_data;
-    UInt32 password_length;
-    OSStatus status;
 #endif
 
     g_return_val_if_fail (user != NULL, FALSE);
@@ -322,33 +398,12 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
 #endif /* HAVE_LIBSECRET or HAVE_GNOME_KEYRING */
 
 #ifdef HAVE_OSX_KEYCHAIN
-    /* mysql and postgres aren't valid protocols on Mac OS X.
-     * So we use the security domain parameter to allow us to
-     * distinguish between these two.
-     */
     if (*user != NULL)
     {
-        status = SecKeychainFindInternetPassword( NULL,
-                                                  strlen(server), server,
-                                                  strlen(access_method), access_method,
-                                                  strlen(*user), *user,
-                                                  strlen(service), service,
-                                                  port,
-                                                  kSecProtocolTypeAny,
-                                                  kSecAuthenticationTypeDefault,
-                                                  &password_length, &password_data,
-                                                  NULL);
-
-        if ( status == noErr )
-        {
-            *password = g_strndup(password_data, password_length);
-            SecKeychainItemFreeContent(NULL, password_data);
+        *password = find_osx_keychain_password (access_method, server, port,
+                                                service, *user);
+        if (*password != NULL)
             return TRUE;
-        }
-        else
-        {
-            log_osx_keychain_error ("gnc_keyring_get_password", status);
-        }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 
