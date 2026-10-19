@@ -909,7 +909,7 @@ def getTransactions(book, account_guid, date_posted_from, date_posted_to):
 
     for transaction in query.run():
         transactions.append(gnucash_simple.transactionToDict(
-            gnucash.gnucash_business.Transaction(instance=transaction)))
+            gnucash.gnucash_business.Transaction(instance=transaction), ['splits']))
 
     query.destroy()
 
@@ -1775,7 +1775,7 @@ def addTransaction(book, num, description, date_posted, currency_mnumonic, split
     transaction.SetDescription(description)
     transaction.SetNum(num)
 
-    transaction.SetDatePostedTS(date_posted)
+    transaction.SetDatePostedSecs(date_posted)
 
     transaction.CommitEdit()
 
@@ -1855,7 +1855,7 @@ def editTransaction(book, transaction_guid, num, description, date_posted,
     transaction.SetDescription(description)
     transaction.SetNum(num)
 
-    transaction.SetDatePostedTS(date_posted)
+    transaction.SetDatePostedSecs(date_posted)
 
     transaction.CommitEdit()
 
