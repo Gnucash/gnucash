@@ -23,6 +23,10 @@
 #ifndef _GNCSEARCH_PARAM_H
 #define _GNCSEARCH_PARAM_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #define GNC_TYPE_SEARCH_PARAM    (gnc_search_param_get_type ())
 G_DECLARE_DERIVABLE_TYPE (GNCSearchParam, gnc_search_param, GNC, SEARCH_PARAM, GObject)
@@ -132,5 +136,9 @@ gboolean gnc_search_param_has_param_fcn (GNCSearchParamSimple *param);
 /* Compute the value of this parameter for this object */
 gpointer gnc_search_param_compute_value (GNCSearchParamSimple *param,
                                          gpointer object);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _GNCSEARCH_PARAM_H */

@@ -52,6 +52,7 @@ set (gnc_gnome_noinst_HEADERS
   gnc-plugin-page-report.h
   gnc-plugin-page-sx-list.h
   gnc-plugin-page-tracelog.h
+  gnc-plugin-page-invoices-owner.h
   gnc-split-reg.h
   reconcile-view.h
   search-owner.h
@@ -122,6 +123,7 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-report.cpp
   gnc-plugin-page-sx-list.cpp
   gnc-plugin-page-tracelog.cpp
+  gnc-plugin-page-invoices-owner.cpp
   gnc-split-reg.c
   reconcile-view.c
   search-owner.c
