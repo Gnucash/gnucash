@@ -14,15 +14,15 @@
 # bittin1ddc447d824349b2 <bittin@reimu.nl>, 2023, 2024.
 # Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 # Daniel Nylander <yeagersthlm2@users.noreply.hosted.weblate.org>, 2026.
+# Arve Eriksson <arve@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-19 06:51+0000\n"
-"Last-Translator: Daniel Nylander "
-"<yeagersthlm2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-20 03:51+0000\n"
+"Last-Translator: Arve Eriksson <arve@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -29110,7 +29110,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:357
 #: gnucash/ui/gnc-plugin-page-register.ui:469
 msgid "Re_name Page"
-msgstr "Döp o_m sida"
+msgstr "Döp _om sida"
 
 #: gnucash/ui/gnc-main-window.ui:351
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:202
@@ -29477,7 +29477,7 @@ msgstr "Öppna dialogrutan Sök kund"
 
 #: gnucash/ui/gnc-plugin-business.ui:29
 msgid "Find In_voice…"
-msgstr "Sök _faktura…"
+msgstr "S_ök faktura…"
 
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
@@ -29836,7 +29836,7 @@ msgstr "Utöka aktuell bok genom sammanslagning med nya kontotypkategorier"
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:887
 msgid "_Reconcile…"
-msgstr "_Stäm av…"
+msgstr "S_täm av…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
