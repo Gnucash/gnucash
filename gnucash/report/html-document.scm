@@ -30,6 +30,7 @@
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-table))
 (use-modules (gnucash report html-text))
+(use-modules (gnucash report html-sankey))
 (use-modules (gnucash report report-utilities))
 (use-modules (gnucash utilities))
 (use-modules (ice-9 match))
@@ -360,6 +361,9 @@
 
    ((gnc:html-table-cell? obj)
     (gnc:make-html-object-internal gnc:html-table-cell-render obj))
+
+   ((gnc:html-sankey? obj)
+    (gnc:make-html-object-internal gnc:html-sankey-render obj))
 
    ((gnc:html-object? obj)
     obj)
