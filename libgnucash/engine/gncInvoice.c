@@ -1137,6 +1137,12 @@ gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice)
     return invoice->currency;
 }
 
+static const char *
+qofInvoiceGetCurrency (const GncInvoice *invoice)
+{
+    return gnc_commodity_get_mnemonic (gncInvoiceGetCurrency (invoice));
+}
+
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice)
 {
     if (!invoice) return NULL;
@@ -2244,6 +2250,7 @@ gboolean gncInvoiceRegister (void)
         { INVOICE_POSTED,    QOF_TYPE_DATE,    (QofAccessFunc)gncInvoiceGetDatePosted, (QofSetterFunc)gncInvoiceSetDatePosted },
         { INVOICE_IS_POSTED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPosted, NULL },
         { INVOICE_IS_PAID,   QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPaid,    NULL },
+        { INVOICE_CURRENCY,  QOF_TYPE_STRING,  (QofAccessFunc)qofInvoiceGetCurrency, NULL },
         { INVOICE_BILLINGID, QOF_TYPE_NATURAL, (QofAccessFunc)gncInvoiceGetBillingID, (QofSetterFunc)gncInvoiceSetBillingID },
         { INVOICE_NOTES,     QOF_TYPE_STRING,  (QofAccessFunc)gncInvoiceGetNotes,   (QofSetterFunc)gncInvoiceSetNotes },
         { INVOICE_DOCLINK, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetDocLink, (QofSetterFunc)gncInvoiceSetDocLink },
