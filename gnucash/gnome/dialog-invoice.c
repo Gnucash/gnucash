@@ -3544,6 +3544,12 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (inv_params == NULL)
     {
         inv_params = gnc_search_param_prepend (inv_params,
+                                               _("Currency Symbol"), NULL, type,
+                                               INVOICE_CURRENCY, NULL);
+        inv_params = gnc_search_param_prepend (inv_params,
+                                               _("Total Amount"), NULL, type,
+                                               INVOICE_TOTAL, NULL);
+        inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice Owner"), NULL, type,
                                                INVOICE_OWNER, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
@@ -3577,6 +3583,12 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     }
     if (bill_params == NULL)
     {
+        bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Currency Symbol"), NULL, type,
+                                                INVOICE_CURRENCY, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Total Amount"), NULL, type,
+                                                INVOICE_TOTAL, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill Owner"), NULL, type,
                                                 INVOICE_OWNER, NULL);
