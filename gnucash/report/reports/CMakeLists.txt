@@ -29,6 +29,7 @@ set (reports_standard_SCHEME
     standard/budget.scm
     standard/cash-flow.scm
     standard/cashflow-barchart.scm
+    standard/cashflow-sankey.scm
     standard/category-barchart.scm
     standard/dashboard.scm
     standard/equity-statement.scm
