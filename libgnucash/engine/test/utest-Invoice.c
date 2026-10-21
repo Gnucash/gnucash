@@ -25,7 +25,9 @@
 #include <qof.h>
 #include <unittest-support.h>
 #include "../gncInvoice.h"
+#include "../gncInvoiceP.h"
 #include "../Transaction.h"
+#include "../gncTaxTable.h"
 
 static const gchar *suitename = "/engine/gncInvoice";
 void test_suite_gncInvoice ( void );
@@ -333,6 +335,88 @@ static gboolean account_has_one_split (const Account *acc)
 }
 
 static void
+test_invoice_search (Fixture *fixture, gconstpointer pData)
+{
+    const InvoiceData *data = pData;
+    GncEntry *entry = gncEntryCreate (fixture->book);
+    GncTaxTable *tax = gncTaxTableCreate (fixture->book);
+    GncTaxTableEntry *tax_entry = gncTaxTableEntryCreate ();
+    gnc_commodity *other_currency = gnc_commodity_new (
+        fixture->book, "Canadian Dollar", GNC_COMMODITY_NS_CURRENCY,
+        "CAD", "", 100);
+    QofQuery *query = qof_query_create_for (GNC_ID_INVOICE);
+    time64 now = gnc_time (NULL);
+    GList *results;
+
+    gnc_commodity_set_mnemonic (fixture->commodity, "USD");
+    gncInvoiceSetCurrency (fixture->invoice, fixture->commodity);
+    gncInvoiceSetOwner (fixture->invoice, &fixture->owner);
+    gncEntrySetQuantity (entry, gnc_numeric_create (2, 1));
+    gncTaxTableEntrySetAccount (tax_entry, fixture->account);
+    gncTaxTableEntrySetType (tax_entry, GNC_AMT_TYPE_PERCENT);
+    gncTaxTableEntrySetAmount (tax_entry, gnc_numeric_create (10, 1));
+    gncTaxTableAddEntry (tax, tax_entry);
+
+    if (data->is_cust_doc)
+    {
+        gncEntrySetInvAccount (entry, fixture->account);
+        gncEntrySetInvPrice (entry, gnc_numeric_create (10, 1));
+        gncEntrySetInvTaxable (entry, TRUE);
+        gncEntrySetInvTaxTable (entry, tax);
+        gncInvoiceAddEntry (fixture->invoice, entry);
+    }
+    else
+    {
+        gncEntrySetBillAccount (entry, fixture->account);
+        gncEntrySetBillPrice (entry, gnc_numeric_create (10, 1));
+        gncEntrySetBillTaxable (entry, TRUE);
+        gncEntrySetBillTaxTable (entry, tax);
+        gncBillAddEntry (fixture->invoice, entry);
+    }
+
+    qof_query_set_book (query, fixture->book);
+    qof_query_add_term (query, qof_query_build_param_list (INVOICE_TOTAL, NULL),
+                       qof_query_numeric_predicate (QOF_COMPARE_EQUAL,
+                           QOF_NUMERIC_MATCH_ANY, gnc_numeric_create (22, 1)),
+                       QOF_QUERY_AND);
+    qof_query_add_term (query, qof_query_build_param_list (INVOICE_CURRENCY, NULL),
+                       qof_query_string_predicate (QOF_COMPARE_EQUAL, "usd",
+                           QOF_STRING_MATCH_CASEINSENSITIVE, FALSE),
+                       QOF_QUERY_AND);
+    qof_query_add_term (query, qof_query_build_param_list (INVOICE_IS_PAID, NULL),
+                       qof_query_boolean_predicate (QOF_COMPARE_EQUAL, FALSE),
+                       QOF_QUERY_AND);
+
+    /* Match the tax-inclusive document total even before posting. */
+    results = qof_query_run (query);
+    g_assert_cmpuint (g_list_length (results), ==, 1);
+    g_assert_true (results->data == fixture->invoice);
+
+    gncInvoiceSetCurrency (fixture->invoice, other_currency);
+    g_assert_null (qof_query_run (query));
+    gncInvoiceSetCurrency (fixture->invoice, NULL);
+    g_assert_null (qof_query_run (query));
+    gncInvoiceSetCurrency (fixture->invoice, fixture->commodity);
+
+    gncEntrySetQuantity (entry, gnc_numeric_create (3, 1));
+    g_assert_null (qof_query_run (query));
+    gncEntrySetQuantity (entry, gnc_numeric_create (2, 1));
+
+    gncInvoicePostToAccount (fixture->invoice, fixture->account2,
+                            now, now, "memo", TRUE, FALSE);
+    results = qof_query_run (query);
+    g_assert_cmpuint (g_list_length (results), ==, 1);
+    g_assert_true (results->data == fixture->invoice);
+
+    qof_query_destroy (query);
+    gncInvoiceUnpost (fixture->invoice, TRUE);
+    gncInvoiceRemoveEntries (fixture->invoice);
+    gncTaxTableBeginEdit (tax);
+    gncTaxTableDestroy (tax);
+    gnc_commodity_destroy (other_currency);
+}
+
+static void
 test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
 {
     const InvoiceData *data = (InvoiceData*) pData;
@@ -387,7 +471,14 @@ test_xaccTransGetTxnTypeLink (Fixture *fixture, gconstpointer pData)
 void
 test_suite_gncInvoice ( void )
 {
+    static const InvoiceData invoice_search_data = { FALSE, TRUE };
+    static const InvoiceData bill_search_data = { FALSE, FALSE };
     static InvoiceData pData = { FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
+    gncInvoiceRegister ();
+    GNC_TEST_ADD (suitename, "search invoice total and currency", Fixture,
+                  &invoice_search_data, setup, test_invoice_search, teardown);
+    GNC_TEST_ADD (suitename, "search bill total and currency", Fixture,
+                  &bill_search_data, setup, test_invoice_search, teardown);
     GNC_TEST_ADD( suitename, "post/unpost", Fixture, &pData, setup, test_invoice_post, teardown );
 
     GNC_TEST_ADD( suitename, "doclink", Fixture, &pData, setup, test_invoice_doclink, teardown );
