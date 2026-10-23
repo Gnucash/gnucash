@@ -95,7 +95,11 @@ gboolean gnc_uri_is_uri (const gchar *uri);
  *  be used. For local filesystem path this is always 0 as well.
  *  @param username Optional user name found in this uri or NULL if none is found.
  *  @param password Optional password found in this uri or NULL if none is found.
- *  @param path The path found in this uri.
+ *  @param path The path found in this uri. Any query string (the part following
+ *  a '?') is stripped from the path and returned separately via @a query.
+ *  @param query Optional query string found in this uri (the part following the
+ *  first '?', without the '?' itself) or NULL if none is found. May be NULL, in
+ *  which case any query string is stripped from the path and discarded.
  *
  */
 
@@ -105,7 +109,8 @@ void gnc_uri_get_components (const gchar *uri,
                              gint32 *port,
                              gchar **username,
                              gchar **password,
-                             gchar **path);
+                             gchar **path,
+                             gchar **query);
 
 /** Extracts the scheme from a uri
  *
@@ -157,6 +162,9 @@ gchar *gnc_uri_get_path (const gchar *uri);
  *  @param password Optional password to set in the uri or NULL otherwise. This will
  *  be ignored for the 'file' type schemes ('file', 'xml', 'sqlite').
  *  @param path The path to set in the uri.
+ *  @param query Optional query string to append to the uri (without a leading
+ *  '?') or NULL otherwise. This will be ignored for the 'file' type schemes
+ *  ('file', 'xml', 'sqlite').
  *
  *  @return The normalized uri.
  */
@@ -166,7 +174,8 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
                            gint32 port,
                            const gchar *username,
                            const gchar *password,
-                           const gchar *path);
+                           const gchar *path,
+                           const gchar *query);
 
 /** Composes a normalized uri starting from any uri (filename, db spec,...).
  *
