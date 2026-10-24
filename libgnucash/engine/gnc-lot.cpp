@@ -505,6 +505,7 @@ gnc_lot_get_balance (GNCLot *lot)
     for (node = priv->splits; node; node = node->next)
     {
         Split *s = GNC_SPLIT(node->data);
+        if (xaccSplitIsStockSplit(s)) continue;
         gnc_numeric amt = xaccSplitGetAdjustedAmount (s);
         baln = gnc_numeric_add_fixed (baln, amt);
         g_assert (gnc_numeric_check (baln) == GNC_ERROR_OK);
