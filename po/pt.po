@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-13 10:51+0000\n"
+"PO-Revision-Date: 2026-10-26 05:51+0000\n"
 "Last-Translator: Pedro Albuquerque "
 "<pedroalbuquerque@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -25025,7 +25025,7 @@ msgstr "usar quantias acumuladas"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
-msgstr "Gráfico de barras de fluxo de caixa"
+msgstr "Gráfico de fluxo de caixa"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:54
@@ -26707,7 +26707,7 @@ msgstr "Valor líquido"
 
 #: gnucash/report/reports/standard/net-charts.scm:475
 msgid "Net Worth Barchart"
-msgstr "Gráfico de barras de valor líquido"
+msgstr "Gráfico de valor líquido"
 
 #: gnucash/report/reports/standard/net-charts.scm:486
 msgid "Income/Expense Chart"
@@ -26715,7 +26715,7 @@ msgstr "Gráfico de receita/despesa"
 
 #: gnucash/report/reports/standard/net-charts.scm:488
 msgid "Income & Expense Barchart"
-msgstr "Gráfico de barras de receitas e despesas"
+msgstr "Gráfico de receitas e despesas"
 
 #: gnucash/report/reports/standard/net-charts.scm:498
 msgid "Net Worth Linechart"
