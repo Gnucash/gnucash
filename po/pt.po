@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-26 05:51+0000\n"
+"PO-Revision-Date: 2026-10-27 07:51+0000\n"
 "Last-Translator: Pedro Albuquerque "
 "<pedroalbuquerque@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -25565,7 +25565,7 @@ msgstr "Ordem secundária"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:43
 msgid "Income and GST Statement"
-msgstr "Declaração de rendimentos e de IRS/IRC"
+msgstr "Declaração de rendimentos IRS/IVA"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:45
 #: gnucash/report/trep-engine.scm:117
