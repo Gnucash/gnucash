@@ -580,6 +580,12 @@ size_dialog_destroy_cb(GtkWidget *dialog, gpointer data)
     g_object_unref(dialog);
 }
 
+static void
+size_dialog_request_free(gpointer data, GClosure *)
+{
+    delete static_cast<SizeDialogRequest *>(data);
+}
+
 void
 gnc_column_view_edit_size_cb(GtkButton *button, gpointer user_data)
 {
@@ -611,9 +617,7 @@ gnc_column_view_edit_size_cb(GtkButton *button, gpointer user_data)
                                          r->contents_list};
     r->size_dialog_owner->dialog = dlg;
     g_signal_connect_data(dlg, "response", G_CALLBACK(size_dialog_response_cb), request,
-                          +[](gpointer data, GClosure *)
-                          { delete static_cast<SizeDialogRequest *>(data); },
-                          G_CONNECT_DEFAULT);
+                          size_dialog_request_free, G_CONNECT_DEFAULT);
     g_signal_connect(dlg, "destroy", G_CALLBACK(size_dialog_destroy_cb), request);
 
     /* Keep the top-level alive after releasing the builder, but not the builder itself. */
