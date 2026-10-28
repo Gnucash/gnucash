@@ -33,8 +33,11 @@ gnc_add_test (gtest-dialog-object-references-response
   gtest-dialog-object-references-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
 
-gnc_add_test (gtest-dialog-date-range-response
-  gtest-dialog-date-range-response.cpp
+set(DATE_RANGE_GTK_LIBS gtest PkgConfig::GTK3)
+set(DATE_RANGE_GTK_SOURCES gtest-dialog-date-range-response.cpp ../dialog-date-range-warning.c)
+gnc_add_test (gtest-dialog-date-range-response "${DATE_RANGE_GTK_SOURCES}"
+  GNOME_UTILS_GUI_TEST_INCLUDE_DIRS DATE_RANGE_GTK_LIBS)
+gnc_add_test (gtest-date-range-validation gtest-date-range-validation.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
 set_tests_properties(gtest-dialog-date-range-response PROPERTIES TIMEOUT 15)
 
@@ -153,6 +156,7 @@ set_dist_list(test_gnome_utils_DIST
   test-load-gnome-utils-module.scm
   gtest-dialog-object-references-response.cpp
   gtest-dialog-date-range-response.cpp
+  gtest-date-range-validation.cpp
   gtest-gui-query-response.cpp
   gtest-input-lifetime-response.cpp
   gtest-dialog-account-cascade-response.cpp

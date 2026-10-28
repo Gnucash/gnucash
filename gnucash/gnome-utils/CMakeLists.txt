@@ -46,6 +46,7 @@ set (gnome_utils_SOURCES
   dialog-transfer.cpp
   dialog-userpass.c
   dialog-utils.c
+  dialog-date-range-warning.c
   gnc-account-sel.c
   gnc-amount-edit.c
   gnc-autosave.c
@@ -133,6 +134,7 @@ set (gnome_utils_HEADERS
   dialog-totd.h
   dialog-transfer.h
   dialog-utils.h
+  dialog-date-range-warning.h
   gnc-account-sel.h
   gnc-amount-edit.h
   gnc-cell-renderer-label.h

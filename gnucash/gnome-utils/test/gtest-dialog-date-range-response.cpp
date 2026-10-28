@@ -14,8 +14,7 @@
 #include <gtest/gtest.h>
 #include "googletest-glib-log-handler.hpp"
 
-#include "dialog-utils.h"
-#include "gnc-session.h"
+#include "dialog-date-range-warning.h"
 
 namespace
 {
@@ -49,7 +48,6 @@ protected:
             gtk_widget_destroy (dialog);
         if (m_parent)
             gtk_widget_destroy (m_parent);
-        gnc_clear_current_session ();
     }
 
     GtkWidget *m_parent{};
@@ -57,9 +55,7 @@ protected:
 
     GtkWidget *create_warning ()
     {
-        auto date = g_date_new_dmy (1, G_DATE_JANUARY, 1300);
-        EXPECT_FALSE (gnc_gdate_in_valid_range (date, TRUE));
-        g_date_free (date);
+        gnc_date_range_show_warning (nullptr);
         return find_warning ();
     }
 
@@ -78,16 +74,6 @@ protected:
         EXPECT_EQ (find_warning (), nullptr);
     }
 };
-
-TEST_F (DateRangeResponseTest, ValidDateRangeDoesNotShowWarning)
-{
-    auto date = g_date_new_dmy (1, G_DATE_JANUARY, 2026);
-    EXPECT_TRUE (gnc_gdate_in_valid_range (date, FALSE));
-    g_date_set_year (date, 1300);
-    EXPECT_FALSE (gnc_gdate_in_valid_range (date, FALSE));
-    g_date_free (date);
-    EXPECT_EQ (find_warning (), nullptr);
-}
 
 TEST_F (DateRangeResponseTest, WarningClosesAfterResponse)
 {
