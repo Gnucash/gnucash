@@ -52,7 +52,7 @@
     * Example 2 post date = 22-06-2010 (European date format)
       22 is more than the cutoff of 19, so the due date will be in the month
       after next month. Since the due day is set to 20, the due date will be
-      20-02-2010
+      20-08-2010
 
     @note A billing term added to an invoice is immutable, that is it
     can't change any more. To achieve that a billing term is copied when
