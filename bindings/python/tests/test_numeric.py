@@ -85,6 +85,16 @@ class TestGncNumeric(TestCase):
         self.assertEqual(fraction.numerator, 1000)
         self.assertEqual(fraction.denominator, 3)
 
+    def test_reflected_operators(self):
+        # A plain number on the left must stay the left-hand operand.
+        self.assertEqual(10 - GncNumeric(3), GncNumeric(7))
+        self.assertEqual(1.5 - GncNumeric(1, 2), GncNumeric(1))
+        self.assertEqual(10 / GncNumeric(4), GncNumeric(5, 2))
+        self.assertEqual(1 / GncNumeric(3), GncNumeric(1, 3))
+        self.assertEqual(7 // GncNumeric(2), GncNumeric(3))
+        self.assertEqual(10 + GncNumeric(3), GncNumeric(13))
+        self.assertEqual(10 * GncNumeric(3), GncNumeric(30))
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
