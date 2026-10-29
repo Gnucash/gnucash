@@ -863,6 +863,18 @@ struct UpdateScope
     bool valid () const;
 };
 
+void
+update_scope_destroy_cb ([[maybe_unused]] GtkWidget *widget, gpointer data)
+{
+    static_cast<UpdateScope*> (data)->destroyed = true;
+}
+
+gpointer
+copy_namespace_name (gconstpointer name, [[maybe_unused]] gpointer data)
+{
+    return g_strdup (static_cast<const gchar*> (name));
+}
+
 UpdateScope::UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
     : combo (combo), model (model), session (gnc_get_current_session ())
 {
@@ -870,11 +882,7 @@ UpdateScope::UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
     g_object_ref (model);
     commodity_book_set_weak (&book);
     destroy_handler = g_signal_connect (
-        combo, "destroy", G_CALLBACK (+[] ([[maybe_unused]] GtkWidget *widget,
-                                           gpointer data)
-        {
-            static_cast<UpdateScope*> (data)->destroyed = true;
-        }), this);
+        combo, "destroy", G_CALLBACK (update_scope_destroy_cb), this);
 }
 
 UpdateScope::~UpdateScope ()
@@ -956,8 +964,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     /* Namespace names are borrowed from the book. Take a snapshot before the
        first notification so book destruction cannot invalidate those strings. */
     auto owned_namespaces = g_list_copy_deep (
-        namespaces, +[] (gconstpointer name, [[maybe_unused]] gpointer data) -> gpointer
-        { return g_strdup (static_cast<const gchar*> (name)); }, nullptr);
+        namespaces, copy_namespace_name, nullptr);
     g_list_free (namespaces);
     namespaces = g_list_sort (owned_namespaces, collate);
     auto free_namespaces = +[] (GList *list) { g_list_free_full (list, g_free); };
