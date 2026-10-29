@@ -39,8 +39,7 @@ PaymentWindow * gnc_ui_payment_new_with_invoice (GtkWindow *parent,
                                                  const GncOwner *owner,
                                                  QofBook *book,
                                                  GncInvoice *invoice);
-/** Start payment assignment without a nested dialog loop. A live parent
- * window is required. If the transaction
+/** Start payment assignment. A live parent window is required. If the transaction
  * has multiple possible payment splits, its response will continue setup
  * asynchronously. The function returns no PaymentWindow; cancel, parent
  * destruction, or stale engine identities abandon the request. */
