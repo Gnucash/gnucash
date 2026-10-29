@@ -363,8 +363,19 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
     if (n.denom() == 1)
          ss << n.num();
     else if (n.is_decimal())
-        ss << n.num() / n.denom() << dec_pt
-           << (n.num() > 0 ? n.num() : -n.num()) % n.denom();
+    {
+        /* Use the magnitude so that values between -1 and 0 keep their sign,
+         * and write each fractional digit so that leading zeroes are kept. */
+        auto num = n.num();
+        auto mag = num < 0 ? 0 - static_cast<uint64_t>(num)
+                           : static_cast<uint64_t>(num);
+        auto den = static_cast<uint64_t>(n.denom());
+        if (num < 0)
+            ss << static_cast<charT>('-');
+        ss << mag / den << dec_pt;
+        for (auto place = den / 10; place > 0; place /= 10)
+            ss << static_cast<charT>('0' + mag % den / place % 10);
+    }
     else
         ss << n.num() << "/" << n.denom();
     s << ss.str();

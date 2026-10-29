@@ -328,6 +328,29 @@ TEST(gncnumeric_stream, output_stream)
     EXPECT_EQ("123/456", output.str());
 }
 
+TEST(gncnumeric_stream, output_stream_decimal_places)
+{
+    std::ostringstream output;
+    output << GncNumeric(5, 100);
+    EXPECT_EQ("0.05", output.str());
+    output.str("");
+    output << GncNumeric(105, 100);
+    EXPECT_EQ("1.05", output.str());
+    output.str("");
+    output << GncNumeric(-105, 100);
+    EXPECT_EQ("-1.05", output.str());
+    output.str("");
+    output << GncNumeric(-1, 100);
+    EXPECT_EQ("-0.01", output.str());
+    output.str("");
+    output << GncNumeric(-5, 10);
+    EXPECT_EQ("-0.5", output.str());
+    output.str("");
+    output << GncNumeric(INT64_MIN, 1000);
+    EXPECT_EQ("-9223372036854775.808", output.str());
+    EXPECT_EQ("0.007", GncNumeric(7, 1000).to_string());
+}
+
 TEST(gncnumeric_stream, input_stream)
 {
     std::istringstream input("123456");
