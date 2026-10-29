@@ -138,8 +138,7 @@ gnc_style_sheet_options_close_cb (GncOptionsDialog *opt_dialog,
     }
     gtk_tree_row_reference_free (ssi->row_ref);
     delete ssi->odialog;
-    /* The Scheme stylesheet owns this option database. Destroying the
-     * editor releases its UI items; the database remains with the sheet. */
+    /* ssi->odb is borrowed from the Scheme stylesheet; the editor does not own it. */
     scm_gc_unprotect_object (ssi->stylesheet);
     g_free (ssi);
 }
