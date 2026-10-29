@@ -208,6 +208,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, NC_("FQ Source", "Market Watch"), "marketwatch" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Morningstar, JP"), "morningstarjp" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Motley Fool"), "fool" },
+    { false, SOURCE_SINGLE, NC_("FQ Source", "National Pension Scheme, IN"), "npsnav" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "New Zealand stock eXchange, NZ"), "nzx" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "NSE (National Stock Exchange), IN"), "nseindia" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "OnVista, DE"), "onvista"},
@@ -237,6 +238,7 @@ static QuoteSourceList multiple_quote_sources =
 {
     { false, SOURCE_MULTI, NC_("FQ Source", "Canada (Alphavantage, TMX)"), "canada" },
     { false, SOURCE_MULTI, NC_("FQ Source", "Europe (ASEGR, Bourso, …)"), "europe" },
+    { false, SOURCE_MULTI, NC_("FQ Source", "Germany (Comdirect, Consorsbank, …)"), "germany" },
     { false, SOURCE_MULTI, NC_("FQ Source", "India (BSEIndia, NSEIndia)"), "india"},
     { false, SOURCE_MULTI, NC_("FQ Source", "Nasdaq (Alphavantage, FinanceAPI, …)"), "nasdaq" },
     { false, SOURCE_MULTI, NC_("FQ Source", "NYSE (Alphavantage, FinanceAPI, …)"), "nyse" },
