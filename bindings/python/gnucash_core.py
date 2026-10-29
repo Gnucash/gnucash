@@ -625,8 +625,9 @@ class GncNumeric(GnuCashCoreClass):
         forward.__doc__ = monomorphic_operator.__doc__
 
         def reverse(b, a):
+            # b is self, the right-hand operand; a is the left-hand one.
             if isinstance(a, (GncNumeric, int, float)):
-                return forward(b, a)
+                return forward(GncNumeric(a), b)
             else:
                 return NotImplemented
         reverse.__name__ = '__r' + fallback_operator.__name__ + '__'
@@ -647,7 +648,7 @@ class GncNumeric(GnuCashCoreClass):
         return a.div(b, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND)
 
     def _floordiv(a, b):
-        return a.div(b, 1, GNC_HOW_RND_TRUNC)
+        return a.div(b, 1, GNC_HOW_RND_FLOOR)
 
     __add__, __radd__ = _operator_fallbacks(_add, operator.add)
     __iadd__ = __add__
@@ -721,7 +722,7 @@ class GncNumeric(GnuCashCoreClass):
         return self.to_double()
 
     def __int__(self):
-        return int(self.to_double())
+        return int(self.to_fraction())
 
     def __pos__(a):
         """+a"""
@@ -737,6 +738,9 @@ class GncNumeric(GnuCashCoreClass):
 
     def to_fraction(self):
         from fractions import Fraction
+        # A negative denominator multiplies: 3/-100 is 300.
+        if self.denom() < 0:
+            return Fraction(self.num() * -self.denom())
         return Fraction(self.num(), self.denom())
 
     def __str__(self):
