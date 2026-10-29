@@ -301,6 +301,53 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
         }
      }
 }
+
+/* Zones east of UTC change their clocks early on a Sunday morning local time,
+ * which is still Saturday in UTC. The rules must use the local date, or they
+ * pick the wrong Sunday in other years.
+ */
+TEST(gnc_timezone_constructors, test_IANA_Sydney_tz)
+{
+    TimeZoneProvider tzp("Australia/Sydney");
+    // Since 2008 DST starts on the first Sunday in October and ends on
+    // the first Sunday in April.
+    for (int year = 2009; year < 2037; ++year)
+    {
+        auto tz = tzp.get(year);
+        EXPECT_TRUE(tz->has_dst());
+        auto start = tz->dst_local_start_time(year).date();
+        EXPECT_EQ(10, start.month()) << year;
+        EXPECT_EQ(boost::gregorian::Sunday, start.day_of_week()) << year;
+        EXPECT_GE(7, start.day()) << year;
+        auto end = tz->dst_local_end_time(year).date();
+        EXPECT_EQ(4, end.month()) << year;
+        EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+        EXPECT_GE(7, end.day()) << year;
+    }
+}
+
+/* Israel changes its clocks on a Friday, so the week of the month in the rule
+ * must not depend on which weekday the transition falls on.
+ */
+TEST(gnc_timezone_constructors, test_IANA_Jerusalem_tz)
+{
+    TimeZoneProvider tzp("Asia/Jerusalem");
+    // Since 2013 DST starts on the Friday on or after 23 March and ends on
+    // the last Sunday in October.
+    for (int year = 2013; year < 2037; ++year)
+    {
+        auto tz = tzp.get(year);
+        EXPECT_TRUE(tz->has_dst());
+        auto start = tz->dst_local_start_time(year).date();
+        EXPECT_EQ(3, start.month()) << year;
+        EXPECT_EQ(boost::gregorian::Friday, start.day_of_week()) << year;
+        EXPECT_LE(23, start.day()) << year;
+        auto end = tz->dst_local_end_time(year).date();
+        EXPECT_EQ(10, end.month()) << year;
+        EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+        EXPECT_LE(25, end.day()) << year;
+    }
+}
 #endif
 
 TEST(gnc_timezone_constructors, test_bogus_time_constructor)
