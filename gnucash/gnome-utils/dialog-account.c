@@ -2568,7 +2568,6 @@ enable_box_cb (GtkToggleButton *toggle_button, gpointer user_data)
 typedef struct
 {
     guint refs;
-    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *color_button;
     GtkWidget *replace_check;
@@ -2600,8 +2599,6 @@ cascade_dialog_request_unref (CascadeDialogRequest *request)
     if (request->book)
         g_object_remove_weak_pointer (G_OBJECT (request->book),
                                       (gpointer *)&request->book);
-    if (request->builder)
-        g_object_unref (request->builder);
     guid_free (request->account_guid);
     g_free (request->old_color);
     g_free (request);
@@ -2691,11 +2688,6 @@ cascade_dialog_request_destroyed (GtkWidget *dialog, gpointer user_data)
         g_object_remove_weak_pointer (G_OBJECT (request->book),
                                       (gpointer *)&request->book);
         request->book = NULL;
-    }
-    if (request->builder)
-    {
-        g_object_unref (request->builder);
-        request->builder = NULL;
     }
 }
 
@@ -2857,10 +2849,8 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     g_free (string);
     g_free (fullname);
 
-    /* The request owns the builder until the dialog is destroyed. */
     request = g_new0 (CascadeDialogRequest, 1);
     request->refs = 1;
-    request->builder = builder;
     request->dialog = dialog;
     request->color_button = color_button;
     request->replace_check = over_write;
@@ -2883,6 +2873,8 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
     gtk_builder_connect_signals (builder, dialog);
+    /* The toplevel dialog owns its child widgets independently of the builder. */
+    g_object_unref (builder);
     g_signal_connect_data (dialog, "response",
                            G_CALLBACK (cascade_dialog_request_response),
                            cascade_dialog_request_ref (request),
