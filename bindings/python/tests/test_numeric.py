@@ -95,6 +95,28 @@ class TestGncNumeric(TestCase):
         self.assertEqual(10 + GncNumeric(3), GncNumeric(13))
         self.assertEqual(10 * GncNumeric(3), GncNumeric(30))
 
+    def test_to_int(self):
+        # int() truncates towards zero and must not round through a float.
+        self.assertEqual(int(GncNumeric(7, 2)), 3)
+        self.assertEqual(int(GncNumeric(-7, 2)), -3)
+        self.assertEqual(int(GncNumeric(2**53 + 1)), 2**53 + 1)
+        self.assertEqual(int(GncNumeric(-(2**62 + 1), 1)), -(2**62 + 1))
+        self.assertEqual(int(GncNumeric(3, -100)), 300)
+        self.assertEqual(int(GncNumeric(-3, -100)), -300)
+
+    def test_floordiv(self):
+        # // rounds towards negative infinity, as it does for int and Fraction.
+        self.assertEqual(GncNumeric(7, 2) // 1, GncNumeric(3))
+        self.assertEqual(GncNumeric(-7, 2) // 1, GncNumeric(-4))
+        self.assertEqual(GncNumeric(-1, 2) // 1, GncNumeric(-1))
+        self.assertEqual(GncNumeric(-7) // GncNumeric(2), GncNumeric(-4))
+        self.assertEqual(-7 // GncNumeric(2), GncNumeric(-4))
+        self.assertEqual(GncNumeric(-6) // 3, GncNumeric(-2))
+        self.assertEqual(GncNumeric(7) // -2, GncNumeric(-4))
+        self.assertEqual(GncNumeric(-7) // GncNumeric(-2), GncNumeric(3))
+        self.assertEqual(GncNumeric(7) // GncNumeric(3, 2), GncNumeric(4))
+        self.assertEqual(GncNumeric(-7) // GncNumeric(3, 2), GncNumeric(-5))
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
