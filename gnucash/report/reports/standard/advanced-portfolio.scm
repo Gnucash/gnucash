@@ -331,7 +331,7 @@ by preventing negative stock balances.<br/>")
             (if (gnc-commodity-equiv currency (gnc-price-get-commodity p))
                 (set! price (gnc-price-invert p))))
           price-list)
-        (gnc-price-ref price)
+        (gnc:price-ref price)
         (gnc-price-list-destroy price-list)
         price)))
 
@@ -470,7 +470,6 @@ by preventing negative stock balances.<br/>")
                                 (if (not (gnc-numeric-zero-p (gnc:gnc-monetary-amount trans-price)))
                                   ;; We can exchange the price from this transaction into the report currency
                                   (begin
-                                    (if price (gnc-price-unref price))
                                     (set! pricing-txn trans)
                                     (set! price trans-price)
                                     (gnc:debug "Transaction price is " (gnc:monetary->string price))
@@ -942,15 +941,9 @@ by preventing negative stock balances.<br/>")
                row-style
                activecols)
 
-              (if (and (not use-txn) price) (gnc-price-unref price))
               (table-add-stock-rows-internal rest (not odd-row?))
               )
-            (begin
-              (if (and (not use-txn) price) (gnc-price-unref price))
-              (table-add-stock-rows-internal rest odd-row?)
-              )
-            )
-            )))
+            (table-add-stock-rows-internal rest odd-row?)))))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
     (table-add-stock-rows-internal accounts #t)))
