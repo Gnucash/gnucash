@@ -86,6 +86,8 @@ protected:
     GtkWindow *m_owner{};
     Completion m_result{};
     ShowDestroy m_show_destroy{};
+    std::uint32_t m_window_finalized{};
+    std::uint32_t m_request_finalized{};
 };
 
 static void
@@ -95,6 +97,12 @@ completed (GtkWindow *parent, GncTaxTable *table, gpointer user_data)
     ++result->calls;
     result->parent = parent;
     result->table = table;
+}
+
+static void
+finalized (gpointer user_data)
+{
+    ++*static_cast<std::uint32_t *> (user_data);
 }
 
 static gboolean
@@ -235,6 +243,58 @@ TEST_F (TaxTableCreateResponseTest, OwnerDestroyedDuringEditorShowCancels)
     EXPECT_EQ (m_result.parent, nullptr);
     EXPECT_EQ (m_result.table, nullptr);
     EXPECT_EQ (find_named_window ("gnc-id-new-tax-table"), nullptr);
+}
+
+TEST_F (TaxTableCreateResponseTest, WindowFinalizesAfterClose)
+{
+    auto window = gnc_ui_tax_table_window_new (m_owner, m_book);
+    ASSERT_NE (window, nullptr);
+    ASSERT_TRUE (G_IS_OBJECT (window));
+    auto dialog = find_named_window ("gnc-id-new-tax-table");
+    ASSERT_NE (dialog, nullptr);
+    g_object_set_data_full (G_OBJECT (window), "tax-table-test-finalization",
+                            &m_window_finalized, finalized);
+
+    gtk_widget_destroy (dialog);
+    EXPECT_EQ (m_window_finalized, 1u);
+}
+
+TEST_F (TaxTableCreateResponseTest, RequestReleasesClosedWindowOnRepeatedDispose)
+{
+    gnc_ui_tax_table_new_from_name_async (m_owner, m_book, "Async tax",
+                                          completed, &m_result);
+    auto window_dialog = find_named_window ("gnc-id-new-tax-table");
+    ASSERT_NE (window_dialog, nullptr);
+    auto editor = find_named_window ("gnc-id-tax-table", GTK_WINDOW (window_dialog));
+    ASSERT_NE (editor, nullptr);
+    auto window = g_object_get_data (G_OBJECT (window_dialog), "dialog_info");
+    auto request = g_object_get_data (G_OBJECT (window_dialog), "tax-entry-dialog-pending");
+    ASSERT_TRUE (G_IS_OBJECT (window));
+    ASSERT_TRUE (G_IS_OBJECT (request));
+    g_object_set_data_full (G_OBJECT (window), "tax-table-test-finalization",
+                            &m_window_finalized, finalized);
+    g_object_set_data_full (G_OBJECT (request), "tax-entry-test-finalization",
+                            &m_request_finalized, finalized);
+    g_object_ref (request);
+    g_object_ref (editor);
+
+    gtk_widget_destroy (GTK_WIDGET (m_owner));
+    EXPECT_EQ (m_result.calls, 1u);
+    EXPECT_EQ (m_result.table, nullptr);
+    gtk_widget_destroy (window_dialog);
+    EXPECT_EQ (m_window_finalized, 0u);
+    g_object_run_dispose (G_OBJECT (request));
+    EXPECT_EQ (m_window_finalized, 1u);
+    EXPECT_EQ (m_request_finalized, 0u);
+    g_object_run_dispose (G_OBJECT (request));
+    EXPECT_EQ (m_window_finalized, 1u);
+    EXPECT_EQ (m_request_finalized, 0u);
+    g_object_unref (request);
+    EXPECT_EQ (m_request_finalized, 1u);
+
+    gtk_dialog_response (GTK_DIALOG (editor), GTK_RESPONSE_OK);
+    EXPECT_EQ (m_result.calls, 1u);
+    g_object_unref (editor);
 }
 }
 

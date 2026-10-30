@@ -72,6 +72,7 @@ void tax_table_window_destroy_cb (GtkWidget *widget, gpointer data);
 
 struct _taxtable_window
 {
+    GObject parent_instance;
     GtkWidget *dialog;
     GtkWidget *names_view;
     GtkWidget *entries_view;
@@ -81,12 +82,12 @@ struct _taxtable_window
     QofBook          *book;
     gint              component_id;
     QofSession       *session;
-    guint             ref_count;
     gboolean          closing;
 };
 
-typedef struct _new_taxtable
+typedef struct
 {
+    GObject parent_instance;
     GtkWidget *dialog;
     GtkWidget *name_entry;
     GtkWidget *amount_entry;
@@ -98,7 +99,6 @@ typedef struct _new_taxtable
     gint              type;
     gboolean          new_table;
     gboolean          asynchronous;
-    guint             ref_count;
     GWeakRef          parent;
     gboolean          has_parent;
     GWeakRef          owner_parent;
@@ -129,30 +129,63 @@ typedef struct _new_taxtable
 
 static gboolean new_tax_table_resolve_context (NewTaxTable *ntt);
 
-static TaxTableWindow *
-tax_table_window_ref (TaxTableWindow *ttw)
+typedef struct
 {
-    ++ttw->ref_count;
-    return ttw;
+    GObjectClass parent_class;
+} TaxTableWindowClass;
+
+GType tax_table_window_get_type (void);
+#define TAX_TABLE_WINDOW(obj) \
+    (G_TYPE_CHECK_INSTANCE_CAST ((obj), tax_table_window_get_type (), TaxTableWindow))
+
+G_DEFINE_TYPE (TaxTableWindow, tax_table_window, G_TYPE_OBJECT)
+
+static void
+tax_table_window_dispose (GObject *object)
+{
+    TaxTableWindow *ttw = TAX_TABLE_WINDOW (object);
+
+    if (ttw->book)
+        g_object_remove_weak_pointer (G_OBJECT (ttw->book),
+                                      (gpointer *)&ttw->book);
+    ttw->book = NULL;
+    G_OBJECT_CLASS (tax_table_window_parent_class)->dispose (object);
 }
 
 static void
-tax_table_window_unref (TaxTableWindow *ttw)
+tax_table_window_class_init (TaxTableWindowClass *klass)
 {
-    if (--ttw->ref_count == 0)
-        g_free (ttw);
+    G_OBJECT_CLASS (klass)->dispose = tax_table_window_dispose;
 }
 
 static void
-new_tax_table_free (NewTaxTable *ntt)
+tax_table_window_init ([[maybe_unused]] TaxTableWindow *ttw)
 {
-    if (--ntt->ref_count != 0)
-        return;
+}
+
+typedef struct
+{
+    GObjectClass parent_class;
+} NewTaxTableClass;
+
+GType new_tax_table_get_type (void);
+#define NEW_TAX_TABLE(obj) \
+    (G_TYPE_CHECK_INSTANCE_CAST ((obj), new_tax_table_get_type (), NewTaxTable))
+
+G_DEFINE_TYPE (NewTaxTable, new_tax_table, G_TYPE_OBJECT)
+
+static void
+new_tax_table_dispose (GObject *object)
+{
+    NewTaxTable *ntt = NEW_TAX_TABLE (object);
+
+    if (ntt->event_handler)
+        qof_event_unregister_handler (ntt->event_handler);
+    ntt->event_handler = 0;
     if (ntt->book)
         g_object_remove_weak_pointer (G_OBJECT (ntt->book),
                                       (gpointer *)&ntt->book);
-    if (ntt->event_handler)
-        qof_event_unregister_handler (ntt->event_handler);
+    ntt->book = NULL;
     if (ntt->has_parent)
     {
         GtkWidget *parent = g_weak_ref_get (&ntt->parent);
@@ -167,8 +200,10 @@ new_tax_table_free (NewTaxTable *ntt)
                 g_object_set_data (G_OBJECT (parent), "tax-entry-dialog-pending", NULL);
             g_object_unref (parent);
         }
-        g_weak_ref_clear (&ntt->parent);
     }
+    ntt->parent_destroy_handler = 0;
+    ntt->has_parent = FALSE;
+    g_weak_ref_set (&ntt->parent, NULL);
     if (ntt->has_owner_parent)
     {
         GtkWidget *owner = g_weak_ref_get (&ntt->owner_parent);
@@ -180,11 +215,38 @@ new_tax_table_free (NewTaxTable *ntt)
                 g_signal_handler_disconnect (owner, ntt->owner_destroy_handler);
             g_object_unref (owner);
         }
-        g_weak_ref_clear (&ntt->owner_parent);
     }
-    if (ntt->asynchronous && ntt->ttw)
-        tax_table_window_unref (ntt->ttw);
-    g_free (ntt);
+    ntt->owner_destroy_handler = 0;
+    ntt->has_owner_parent = FALSE;
+    g_weak_ref_set (&ntt->owner_parent, NULL);
+    g_clear_object (&ntt->ttw);
+    G_OBJECT_CLASS (new_tax_table_parent_class)->dispose (object);
+}
+
+static void
+new_tax_table_finalize (GObject *object)
+{
+    NewTaxTable *ntt = NEW_TAX_TABLE (object);
+
+    g_weak_ref_clear (&ntt->parent);
+    g_weak_ref_clear (&ntt->owner_parent);
+    G_OBJECT_CLASS (new_tax_table_parent_class)->finalize (object);
+}
+
+static void
+new_tax_table_class_init (NewTaxTableClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+    object_class->dispose = new_tax_table_dispose;
+    object_class->finalize = new_tax_table_finalize;
+}
+
+static void
+new_tax_table_init (NewTaxTable *ntt)
+{
+    g_weak_ref_init (&ntt->parent, NULL);
+    g_weak_ref_init (&ntt->owner_parent, NULL);
 }
 
 static void
@@ -534,8 +596,9 @@ new_tax_table_destroy_cb (GtkWidget *dialog, gpointer user_data)
 {
     NewTaxTable *ntt = user_data;
     g_signal_handlers_disconnect_by_data (dialog, ntt);
+    ntt->dialog = NULL;
     new_tax_table_create_complete (ntt);
-    new_tax_table_free (ntt);
+    g_object_unref (ntt);
 }
 
 static void
@@ -546,7 +609,7 @@ new_tax_table_response_cb (GtkDialog *dialog, gint response, gpointer user_data)
         return;
     ntt->responding = TRUE;
     g_object_ref (dialog);
-    ++ntt->ref_count;
+    g_object_ref (ntt);
     if (response != GTK_RESPONSE_OK)
     {
         if (g_signal_handler_is_connected (dialog, ntt->response_handler))
@@ -576,7 +639,7 @@ new_tax_table_response_cb (GtkDialog *dialog, gint response, gpointer user_data)
     }
     if (g_signal_handler_is_connected (dialog, ntt->response_handler))
         ntt->responding = FALSE;
-    new_tax_table_free (ntt);
+    g_object_unref (ntt);
     g_object_unref (dialog);
 }
 
@@ -598,23 +661,22 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     if (!ttw) return NULL;
     if (new_table && entry) return NULL;
 
-    ntt = g_new0 (NewTaxTable, 1);
-    ntt->ttw = ttw;
+    if (asynchronous &&
+        g_object_get_data (G_OBJECT (ttw->dialog), "tax-entry-dialog-pending"))
+        return NULL;
+
+    ntt = g_object_new (new_tax_table_get_type (), NULL);
+    ntt->ttw = g_object_ref (ttw);
     ntt->entry = entry;
     ntt->new_table = new_table;
     ntt->asynchronous = asynchronous;
     ntt->create_callback = create_callback;
     ntt->create_callback_data = callback_data;
-    ntt->ref_count = 1;
     if (asynchronous)
     {
-        if (g_object_get_data (G_OBJECT (ttw->dialog), "tax-entry-dialog-pending"))
-        {
-            g_free (ntt);
-            return NULL;
-        }
-        ntt->ttw = tax_table_window_ref (ttw);
         ntt->book = ttw->book;
+        g_object_add_weak_pointer (G_OBJECT (ntt->book),
+                                   (gpointer *)&ntt->book);
         ntt->session_identity = ttw->session;
         ntt->book_guid = *qof_book_get_guid (ttw->book);
         if (!new_table && ttw->current_table)
@@ -630,8 +692,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
             Account *account = gncTaxTableEntryGetAccount (entry);
             if (!account)
             {
-                tax_table_window_unref (ntt->ttw);
-                g_free (ntt);
+                g_object_unref (ntt);
                 return NULL;
             }
             ntt->entry_account_guid = *qof_instance_get_guid (QOF_INSTANCE (account));
@@ -639,13 +700,11 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
             ntt->entry_amount = gncTaxTableEntryGetAmount (entry);
             ntt->entry_identity = entry;
         }
-        g_object_add_weak_pointer (G_OBJECT (ntt->book),
-                                   (gpointer *)&ntt->book);
-        g_weak_ref_init (&ntt->parent, G_OBJECT (ttw->dialog));
+        g_weak_ref_set (&ntt->parent, G_OBJECT (ttw->dialog));
         ntt->has_parent = TRUE;
         if (owner_parent)
         {
-            g_weak_ref_init (&ntt->owner_parent, G_OBJECT (owner_parent));
+            g_weak_ref_set (&ntt->owner_parent, G_OBJECT (owner_parent));
             ntt->has_owner_parent = TRUE;
             ntt->owner_destroy_handler = g_signal_connect (
                 owner_parent, "destroy",
@@ -1231,7 +1290,7 @@ tax_table_delete_confirmed (GtkWindow *parent, gint response, gpointer user_data
         gnc_resume_gui_refresh ();
     }
 
-    tax_table_window_unref (ttw);
+    g_object_unref (ttw);
     g_free (request);
 }
 
@@ -1255,7 +1314,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     }
 
     TaxTableDeleteRequest *request = g_new0 (TaxTableDeleteRequest, 1);
-    request->ttw = tax_table_window_ref (ttw);
+    request->ttw = g_object_ref (ttw);
     request->table_guid = *gncTaxTableGetGUID (ttw->current_table);
     gnc_verify_dialog_async (GTK_WINDOW (ttw->dialog), FALSE,
                              tax_table_delete_confirmed, request,
@@ -1298,7 +1357,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     }
 
     TaxTableDeleteRequest *request = g_new0 (TaxTableDeleteRequest, 1);
-    request->ttw = tax_table_window_ref (ttw);
+    request->ttw = g_object_ref (ttw);
     request->table_guid = *gncTaxTableGetGUID (ttw->current_table);
     request->entry_identity = ttw->current_entry;
     request->delete_entry = TRUE;
@@ -1362,7 +1421,7 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
         gtk_widget_destroy (ttw->dialog);
         ttw->dialog = NULL;
     }
-    tax_table_window_unref (ttw);
+    g_object_unref (ttw);
 }
 
 static gboolean
@@ -1424,19 +1483,19 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                                         book);
     if (ttw)
     {
-        tax_table_window_ref (ttw);
+        g_object_ref (ttw);
         gtk_window_present (GTK_WINDOW(ttw->dialog));
         gboolean closing = ttw->closing;
-        tax_table_window_unref (ttw);
+        g_object_unref (ttw);
         if (closing)
             return NULL;
         return ttw;
     }
 
     /* Didn't find one -- create a new window */
-    ttw = g_new0 (TaxTableWindow, 1);
-    ttw->ref_count = 1;
+    ttw = g_object_new (tax_table_window_get_type (), NULL);
     ttw->book = book;
+    g_object_add_weak_pointer (G_OBJECT (book), (gpointer *)&ttw->book);
     ttw->session = gnc_get_current_session ();
 
     /* Open and read the Glade File */
@@ -1523,12 +1582,12 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog), parent);
     /* Showing a window can synchronously run user callbacks that close it.
      * Keep the controller alive until the show operation has returned. */
-    tax_table_window_ref (ttw);
+    g_object_ref (ttw);
     gtk_widget_show_all (ttw->dialog);
 
     g_object_unref (G_OBJECT(builder));
     gboolean closing = ttw->closing;
-    tax_table_window_unref (ttw);
+    g_object_unref (ttw);
     if (closing)
         return NULL;
     return ttw;
