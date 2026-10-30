@@ -39,7 +39,7 @@ gboolean gnc_uri_is_uri (const gchar *uri)
     gboolean is_uri = FALSE;
 
     gnc_uri_get_components ( uri, &scheme, &hostname, &port,
-                             &username, &password, &path );
+                             &username, &password, &path, NULL );
 
     /* For gnucash to consider a uri valid the following must be true:
      * - scheme and path must not be NULL
@@ -120,7 +120,7 @@ gboolean gnc_uri_targets_local_fs (const gchar *uri)
     gboolean is_local_fs = FALSE;
 
     gnc_uri_get_components ( uri, &scheme, &hostname, &port,
-                             &username, &password, &path );
+                             &username, &password, &path, NULL );
 
     /* For gnucash to consider a uri to target the local fs:
      * path must not be NULL
@@ -146,7 +146,8 @@ void gnc_uri_get_components (const gchar *uri,
                              gint32 *port,
                              gchar **username,
                              gchar **password,
-                             gchar **path)
+                             gchar **path,
+                             gchar **query)
 {
     gchar **splituri;
     gchar *url = NULL, *tmpusername = NULL, *tmphostname = NULL;
@@ -158,6 +159,8 @@ void gnc_uri_get_components (const gchar *uri,
     *username = NULL;
     *password = NULL;
     *path     = NULL;
+    if ( query != NULL )
+        *query = NULL;
 
     g_return_if_fail( uri != NULL && strlen (uri) > 0);
 
@@ -230,11 +233,23 @@ void gnc_uri_get_components (const gchar *uri,
     delimiter = g_strstr_len ( tmphostname, -1, "/" );
     if ( delimiter != NULL )
     {
+        gchar *pathpart = delimiter + 1;
         delimiter[0] = '\0';
         if ( gnc_uri_is_file_scheme ( *scheme ) ) /* always return absolute file paths */
-            *path = gnc_resolve_file_path ( (const gchar*)(delimiter + 1) );
+            *path = gnc_resolve_file_path ( (const gchar*)pathpart );
         else /* path is no file path, so copy it as is */
-            *path = g_strdup ( (const gchar*)(delimiter + 1) );
+        {
+            /* Split off an optional query string (the part after the first '?')
+             * so it doesn't get mistaken for part of the path/database name. */
+            gchar *querymark = g_strstr_len ( pathpart, -1, "?" );
+            if ( querymark != NULL )
+            {
+                querymark[0] = '\0';
+                if ( query != NULL )
+                    *query = g_strdup ( (const gchar*)(querymark + 1) );
+            }
+            *path = g_strdup ( (const gchar*)pathpart );
+        }
     }
 
     /* Check for a port specifier */
@@ -263,7 +278,7 @@ gchar *gnc_uri_get_scheme (const gchar *uri)
     gchar *path     = NULL;
 
     gnc_uri_get_components ( uri, &scheme, &hostname, &port,
-                             &username, &password, &path );
+                             &username, &password, &path, NULL );
 
     g_free (hostname);
     g_free (username);
@@ -283,7 +298,7 @@ gchar *gnc_uri_get_path (const gchar *uri)
     gchar *path     = NULL;
 
     gnc_uri_get_components ( uri, &scheme, &hostname, &port,
-                             &username, &password, &path );
+                             &username, &password, &path, NULL );
 
     g_free (scheme);
     g_free (hostname);
@@ -299,9 +314,10 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
                            gint32 port,
                            const gchar *username,
                            const gchar *password,
-                           const gchar *path)
+                           const gchar *path,
+                           const gchar *query)
 {
-    gchar *userpass = NULL, *portstr = NULL, *uri = NULL;
+    gchar *userpass = NULL, *portstr = NULL, *querystr = NULL, *uri = NULL;
 
     g_return_val_if_fail( path != 0, NULL );
 
@@ -371,12 +387,18 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
     else
         portstr = g_strdup ( "" );
 
+    if ( query != NULL && *query )
+        querystr = g_strconcat ( "?", query, NULL );
+    else
+        querystr = g_strdup ( "" );
+
     // XXX Do I have to add the slash always or are there situations
     //     it is in the path already ?
-    uri = g_strconcat ( scheme, "://", userpass, hostname, portstr, "/", path, NULL );
+    uri = g_strconcat ( scheme, "://", userpass, hostname, portstr, "/", path, querystr, NULL );
 
     g_free ( userpass );
     g_free ( portstr );
+    g_free ( querystr );
 
     return uri;
 
@@ -390,22 +412,24 @@ gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password)
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
+    gchar *query    = NULL;
     gchar *newuri   = NULL;
 
     gnc_uri_get_components ( uri, &scheme, &hostname, &port,
-                             &username, &password, &path );
+                             &username, &password, &path, &query );
     if (allow_password)
         newuri = gnc_uri_create_uri ( scheme, hostname, port,
-                                      username, password, path);
+                                      username, password, path, query);
     else
         newuri = gnc_uri_create_uri ( scheme, hostname, port,
-                                      username, /* no password */ NULL, path);
+                                      username, /* no password */ NULL, path, query);
 
     g_free (scheme);
     g_free (hostname);
     g_free (username);
     g_free (password);
     g_free (path);
+    g_free (query);
 
     return newuri;
 }

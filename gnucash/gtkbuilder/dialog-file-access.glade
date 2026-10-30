@@ -112,6 +112,23 @@
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="compress_checkbutton">
+                <property name="label" translatable="yes">Compress _Connection</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <property name="tooltip-text" translatable="yes">Compression may speed up initial load times for low-bandwidth or remote network connections.</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
