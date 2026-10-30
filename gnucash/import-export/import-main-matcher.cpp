@@ -70,26 +70,22 @@
 
 struct MatcherLifetime
 {
-    gatomicrefcount refs;
     GNCImportMainMatcher *info;
 };
 
 static MatcherLifetime *matcher_lifetime_new(GNCImportMainMatcher *info)
 {
-    auto life = g_new0(MatcherLifetime, 1);
-    g_atomic_ref_count_init(&life->refs);
+    auto life = g_atomic_rc_box_new0(MatcherLifetime);
     life->info = info;
     return life;
 }
 static MatcherLifetime *matcher_lifetime_ref(MatcherLifetime *life)
 {
-    g_atomic_ref_count_inc(&life->refs);
-    return life;
+    return static_cast<MatcherLifetime *>(g_atomic_rc_box_acquire(life));
 }
 static void matcher_lifetime_unref(MatcherLifetime *life)
 {
-    if (g_atomic_ref_count_dec(&life->refs))
-        g_free(life);
+    g_atomic_rc_box_release(life);
 }
 
 using StrStrMap = std::unordered_map<std::string,std::string>;
