@@ -8,6 +8,7 @@
 #include <libguile.h>
 #include <gtest/gtest.h>
 #include "googletest-glib-log-handler.hpp"
+#include "gtk-test-utils.hpp"
 #include "test/gnome-response-test-fixture.h"
 #include <utility>
 
@@ -141,21 +142,7 @@ make_fixture ()
     return f;
 }
 
-static GtkWidget *
-find_widget (GtkWidget *root, const char *name)
-{
-    if (g_strcmp0 (gtk_widget_get_name (root), name) == 0 ||
-        (GTK_IS_BUILDABLE(root) && !g_strcmp0(gtk_buildable_get_name(GTK_BUILDABLE(root)), name)))
-        return root;
-    if (!GTK_IS_CONTAINER (root))
-        return nullptr;
-    auto children = gtk_container_get_children (GTK_CONTAINER (root));
-    GtkWidget *found = nullptr;
-    for (auto node = children; node && !found; node = node->next)
-        found = find_widget (GTK_WIDGET (node->data), name);
-    g_list_free (children);
-    return found;
-}
+using gnc::test::find_widget_by_name;
 
 static GtkWidget *
 find_post_dialog ()
@@ -243,7 +230,7 @@ protected:
 
     GNCAccountSel *posting_selector (GtkWidget *form)
     {
-        auto box = find_widget (form, "acct_hbox");
+        auto box = find_widget_by_name (form, "acct_hbox");
         if (!GTK_IS_CONTAINER (box))
             return nullptr;
         auto children = gtk_container_get_children (GTK_CONTAINER (box));
@@ -345,7 +332,7 @@ TEST_F (InvoicePostResponseTest, MissingAccountShowsOneErrorPerClick)
     auto selector = posting_selector (form);
     ASSERT_NE (selector, nullptr);
     gnc_account_sel_set_account (selector, nullptr, FALSE);
-    auto ok = find_widget (form, "okbutton1");
+    auto ok = find_widget_by_name (form, "okbutton1");
     ASSERT_TRUE (GTK_IS_BUTTON (ok));
 
     for (int attempt = 0; attempt < 2; ++attempt)
@@ -374,7 +361,7 @@ TEST_F (InvoicePostResponseTest, PlaceholderAccountShowsOneErrorPerResponse)
     EXPECT_EQ (find_post_dialog (), form);
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
 
-    auto ok = find_widget (form, "okbutton1");
+    auto ok = find_widget_by_name (form, "okbutton1");
     ASSERT_TRUE (GTK_IS_BUTTON (ok));
     gtk_button_clicked (GTK_BUTTON (ok));
     EXPECT_EQ (dismiss_posting_errors (form), 1u);
@@ -389,7 +376,7 @@ TEST_F (InvoicePostResponseTest, ParentDestroyPreventsLatePostResponse)
     auto dialog = wait_for_dialog (find_post_dialog);
     ASSERT_NE (dialog, nullptr);
     retain_widget (dialog);
-    auto ok_button = find_widget (dialog, "okbutton1");
+    auto ok_button = find_widget_by_name (dialog, "okbutton1");
     ASSERT_NE (ok_button, nullptr);
     retain_widget (ok_button);
     gtk_widget_destroy (GTK_WIDGET (fixture.window));
@@ -405,7 +392,7 @@ TEST_F (InvoicePostResponseTest, CancelsForeignCurrencySelection)
     gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
     auto post_dialog = wait_for_dialog (find_post_dialog);
     ASSERT_NE (post_dialog, nullptr);
-    auto post_ok = find_widget (post_dialog, "okbutton1");
+    auto post_ok = find_widget_by_name (post_dialog, "okbutton1");
     ASSERT_NE (post_ok, nullptr);
     gtk_button_clicked (GTK_BUTTON (post_ok));
     auto transfer = wait_for_dialog (find_transfer_dialog);
@@ -430,7 +417,7 @@ TEST_F (InvoicePostResponseTest, ParentDestructionCancelsCurrencySelection)
     gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
     auto post_dialog = wait_for_dialog (find_post_dialog);
     ASSERT_NE (post_dialog, nullptr);
-    auto post_ok = find_widget (post_dialog, "okbutton1");
+    auto post_ok = find_widget_by_name (post_dialog, "okbutton1");
     ASSERT_NE (post_ok, nullptr);
     gtk_button_clicked (GTK_BUTTON (post_ok));
     auto transfer = wait_for_dialog (find_transfer_dialog);
@@ -455,7 +442,7 @@ TEST_F (InvoicePostResponseTest, AcceptsTwoForeignCurrenciesSequentially)
     gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
     auto post_dialog = wait_for_dialog (find_post_dialog);
     ASSERT_NE (post_dialog, nullptr);
-    auto post_ok = find_widget (post_dialog, "okbutton1");
+    auto post_ok = find_widget_by_name (post_dialog, "okbutton1");
     ASSERT_NE (post_ok, nullptr);
     gtk_button_clicked (GTK_BUTTON (post_ok));
     auto first = wait_for_dialog (find_transfer_dialog);
@@ -466,7 +453,7 @@ TEST_F (InvoicePostResponseTest, AcceptsTwoForeignCurrenciesSequentially)
     EXPECT_FALSE (gnc_gui_refresh_suspended ());
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
 
-    auto price_box = find_widget (first, "price_hbox");
+    auto price_box = find_widget_by_name (first, "price_hbox");
     ASSERT_NE (price_box, nullptr);
     auto children = gtk_container_get_children (GTK_CONTAINER (price_box));
     ASSERT_NE (children, nullptr);
@@ -481,7 +468,7 @@ TEST_F (InvoicePostResponseTest, AcceptsTwoForeignCurrenciesSequentially)
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
     EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
     EXPECT_FALSE (gnc_gui_refresh_suspended ());
-    price_box = find_widget (second, "price_hbox");
+    price_box = find_widget_by_name (second, "price_hbox");
     ASSERT_NE (price_box, nullptr);
     children = gtk_container_get_children (GTK_CONTAINER (price_box));
     ASSERT_NE (children, nullptr);

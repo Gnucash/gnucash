@@ -10,6 +10,7 @@
 #include <config.h>
 #include "googletest-glib-log-handler.hpp"
 #include <gtk/gtk.h>
+#include "gtk-test-utils.hpp"
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
 
@@ -23,34 +24,8 @@
 namespace
 {
 
-static GtkWidget *
-find_named (GtkWidget *widget, const char *name)
-{
-    if (g_strcmp0 (gtk_widget_get_name (widget), name) == 0)
-        return widget;
-    if (GTK_IS_BUILDABLE (widget) &&
-        g_strcmp0 (gtk_buildable_get_name (GTK_BUILDABLE (widget)), name) == 0)
-        return widget;
-    if (!GTK_IS_CONTAINER (widget))
-        return nullptr;
-    auto children = gtk_container_get_children (GTK_CONTAINER (widget));
-    GtkWidget *found = nullptr;
-    for (auto child = children; child && !found; child = child->next)
-        found = find_named (GTK_WIDGET (child->data), name);
-    g_list_free (children);
-    return found;
-}
-
-static GtkWidget *
-find_toplevel (const char *name)
-{
-    auto windows = gtk_window_list_toplevels ();
-    GtkWidget *found = nullptr;
-    for (auto node = windows; node && !found; node = node->next)
-        found = find_named (GTK_WIDGET (node->data), name);
-    g_list_free (windows);
-    return found;
-}
+using gnc::test::find_toplevel_by_name;
+using gnc::test::find_widget_by_name;
 
 static GtkWidget *
 find_new_sheet_dialog ()
@@ -116,9 +91,9 @@ protected:
         ASSERT_NE (parent, nullptr);
         gtk_widget_realize (GTK_WIDGET (parent));
         gnc_style_sheet_dialog_open (parent);
-        owner = find_toplevel ("gnc-id-style-sheet-select");
+        owner = find_toplevel_by_name ("gnc-id-style-sheet-select");
         ASSERT_NE (owner, nullptr);
-        add_button = find_named (owner, "add_button");
+        add_button = find_widget_by_name (owner, "add_button");
         ASSERT_TRUE (GTK_IS_BUTTON (add_button));
     }
 
@@ -127,7 +102,7 @@ protected:
         if (auto dialog = find_new_sheet_dialog ())
             gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-        auto manager = find_toplevel ("gnc-id-style-sheet-select");
+        auto manager = find_toplevel_by_name ("gnc-id-style-sheet-select");
         while (manager)
         {
             g_object_ref (manager);
@@ -135,7 +110,7 @@ protected:
             while (editor)
             {
                 g_object_ref (editor);
-                auto cancel = find_named (editor, "cancel_button");
+                auto cancel = find_widget_by_name (editor, "cancel_button");
                 EXPECT_TRUE (GTK_IS_BUTTON (cancel));
                 if (!GTK_IS_BUTTON (cancel))
                 {
@@ -151,7 +126,7 @@ protected:
 
             if (!gtk_widget_in_destruction (manager))
             {
-                auto close = find_named (manager, "close_button");
+                auto close = find_widget_by_name (manager, "close_button");
                 EXPECT_TRUE (GTK_IS_BUTTON (close));
                 if (GTK_IS_BUTTON (close))
                     gtk_button_clicked (GTK_BUTTON (close));
@@ -159,7 +134,7 @@ protected:
             while (g_main_context_iteration (nullptr, FALSE))
                 ;
             g_object_unref (manager);
-            manager = find_toplevel ("gnc-id-style-sheet-select");
+            manager = find_toplevel_by_name ("gnc-id-style-sheet-select");
         }
         if (parent)
             gtk_widget_destroy (GTK_WIDGET (parent));
@@ -181,8 +156,8 @@ TEST_F (StyleSheetCreationTest, AcceptCreatesOneStyleSheet)
     auto dialog = find_new_sheet_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    auto combo = GTK_COMBO_BOX (find_named (dialog, "template_combobox"));
-    auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    auto combo = GTK_COMBO_BOX (find_widget_by_name (dialog, "template_combobox"));
+    auto entry = GTK_ENTRY (find_widget_by_name (dialog, "name_entry"));
     ASSERT_TRUE (GTK_IS_COMBO_BOX (combo));
     ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Async style sheet test");
@@ -198,7 +173,7 @@ TEST_F (StyleSheetCreationTest, ClosingOwnerWithResponseDoesNotCreateSheet)
     gtk_button_clicked (GTK_BUTTON (add_button));
     auto dialog = find_new_sheet_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    auto entry = GTK_ENTRY (find_widget_by_name (dialog, "name_entry"));
     ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Must not outlive owner");
     g_signal_connect (dialog, "destroy", G_CALLBACK (destroy_sheet_owner),
@@ -206,26 +181,26 @@ TEST_F (StyleSheetCreationTest, ClosingOwnerWithResponseDoesNotCreateSheet)
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     EXPECT_EQ (style_sheet_count (), initial);
-    EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
+    EXPECT_EQ (find_toplevel_by_name ("gnc-id-style-sheet-select"), nullptr);
 }
 
 TEST_F (StyleSheetCreationTest, OwnerMayCloseAfterSchemeCreatesSheet)
 {
     const auto initial = style_sheet_count ();
-    auto list = GTK_TREE_VIEW (find_named (owner, "style_sheet_list_view"));
+    auto list = GTK_TREE_VIEW (find_widget_by_name (owner, "style_sheet_list_view"));
     ASSERT_TRUE (GTK_IS_TREE_VIEW (list));
     g_signal_connect (gtk_tree_view_get_model (list), "row-inserted",
                       G_CALLBACK (destroy_owner_on_insert), owner);
     gtk_button_clicked (GTK_BUTTON (add_button));
     auto dialog = find_new_sheet_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    auto entry = GTK_ENTRY (find_widget_by_name (dialog, "name_entry"));
     ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Survives owner close after Scheme creation");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     EXPECT_EQ (style_sheet_count (), initial + 1);
-    EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
+    EXPECT_EQ (find_toplevel_by_name ("gnc-id-style-sheet-select"), nullptr);
 }
 
 static int
