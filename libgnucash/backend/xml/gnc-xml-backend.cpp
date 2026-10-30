@@ -145,7 +145,21 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
     /* ---------------------------------------------------- */
     /* We should now have a fully resolved path name.
      * Let's start logging */
-    xaccLogSetBaseName (m_fullpath.c_str());
+    /* Build logs directory inside main file directory */
+    auto logs_dir = g_build_filename(m_dirname.c_str(), "logs", NULL);
+    g_mkdir_with_parents(logs_dir, 0700);
+    
+    /* Build new base path for logs */
+    auto filename = g_path_get_basename(m_fullpath.c_str());
+    auto new_base = g_build_filename(logs_dir, filename, NULL);
+    
+    /* Set log base name */
+    xaccLogSetBaseName(new_base);
+    
+    /* Cleanup */
+    g_free(logs_dir);
+    g_free(filename);
+    g_free(new_base);
     PINFO ("logpath=%s", m_fullpath.empty() ? "(null)" : m_fullpath.c_str());
 
     if (mode == SESSION_READ_ONLY)
@@ -694,11 +708,29 @@ GncXmlBackend::backup_file()
         }
     }
 
-    auto timestamp = gnc_date_timestamp ();
-    auto backup = m_fullpath + "." + timestamp + GNC_DATAFILE_EXT;
-    g_free (timestamp);
-
-    return link_or_make_backup (datafile, backup);
+    auto timestamp = gnc_date_timestamp();
+    
+    /* Ensure logs directory exists */
+    auto logs_dir = g_build_filename(m_dirname.c_str(), "logs", NULL);
+    g_mkdir_with_parents(logs_dir, 0700);
+    
+    /* Build backup filename inside logs directory */
+    auto filename = g_path_get_basename(m_fullpath.c_str());
+    auto backup_name = g_strconcat(filename, ".", timestamp, GNC_DATAFILE_EXT, NULL);
+    auto backup_path = g_build_filename(logs_dir, backup_name, NULL);
+    
+    g_free(timestamp);
+    
+    /* Perform backup */
+    auto result = link_or_make_backup(datafile, backup_path);
+    
+    /* Cleanup */
+    g_free(logs_dir);
+    g_free(filename);
+    g_free(backup_name);
+    g_free(backup_path);
+    
+    return result;
 }
 
 /*
