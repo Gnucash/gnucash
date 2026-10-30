@@ -961,8 +961,10 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         break;
     }
 
-    /* Namespace names are borrowed from the book. Take a snapshot before the
-       first notification so book destruction cannot invalidate those strings. */
+    /* Namespace names are borrowed from the book. The dialog assumes the
+     * book outlives it: all open windows and dialogs are destroyed before
+     * the book is, even when switching books. We snapshot the names as a
+     * defensive measure in case that invariant is ever violated. */
     auto owned_namespaces = g_list_copy_deep (
         namespaces, copy_namespace_name, nullptr);
     g_list_free (namespaces);

@@ -994,6 +994,11 @@ verify_children_compatible (AccountWindow *aw)
     request->original_type = xaccAccountGetType (account);
     g_object_add_weak_pointer (G_OBJECT (request->book),
                               (gpointer *)&request->book);
+    /* The weak ref is released in account_children_parent_destroyed
+     * when the dialog is destroyed, and again in the error path if
+     * the dialog cannot be created. Since verify_children_compatible
+     * can be called multiple times for the same AccountWindow, the
+     * previous weak ref (if any) is cleared before setting a new one. */
     g_signal_connect (aw->dialog, "destroy",
                       G_CALLBACK (account_children_parent_destroyed), request);
 

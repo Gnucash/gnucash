@@ -266,6 +266,8 @@ order_save_request_dispose (GObject *object)
     auto request = ORDER_SAVE_REQUEST (object);
     GtkWidget *window = g_weak_ref_get (&request->window);
 
+    /* Release all references held by the request. This runs when the
+     * last reference to the object is dropped, possibly multiple times. */
     if (window && request->destroy_handler)
         g_signal_handler_disconnect (window, request->destroy_handler);
     request->destroy_handler = 0;
@@ -280,6 +282,8 @@ order_save_request_finalize (GObject *object)
 {
     auto request = ORDER_SAVE_REQUEST (object);
 
+    /* Free any non-GObject resources owned directly by the request.
+     * Currently there are none; the weak_ref is cleared in dispose. */
     g_weak_ref_clear (&request->window);
     G_OBJECT_CLASS (order_save_request_parent_class)->finalize (object);
 }
