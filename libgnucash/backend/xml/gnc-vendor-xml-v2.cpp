@@ -131,7 +131,7 @@ struct vendor_pdata
 };
 
 static gboolean
-set_boolean (xmlNodePtr node, GncVendor* vendor,
+set_boolean (GncXmlNode* node, GncVendor* vendor,
              void (*func) (GncVendor* vendor, gboolean b))
 {
     gint64 val;
@@ -145,7 +145,7 @@ set_boolean (xmlNodePtr node, GncVendor* vendor,
 }
 
 static gboolean
-vendor_name_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_name_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
@@ -153,7 +153,7 @@ vendor_name_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_guid_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     GncVendor* vendor;
@@ -176,7 +176,7 @@ vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_id_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_id_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
@@ -184,7 +184,7 @@ vendor_id_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_notes_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_notes_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
@@ -192,7 +192,7 @@ vendor_notes_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_terms_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     GncBillTerm* term;
@@ -207,7 +207,7 @@ vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_addr_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_addr_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
@@ -215,7 +215,7 @@ vendor_addr_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_taxincluded_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     auto set_taxincluded = [](GncVendor* vendor, const char* str)
@@ -228,14 +228,14 @@ vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_active_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_active_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     return set_boolean (node, pdata->vendor, gncVendorSetActive);
 }
 
 static gboolean
-vendor_currency_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_currency_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     gnc_commodity* com;
@@ -249,7 +249,7 @@ vendor_currency_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_taxtable_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     GncTaxTable* taxtable;
@@ -272,14 +272,14 @@ vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
 }
 
 static gboolean
-vendor_taxtableoverride_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_taxtableoverride_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     return set_boolean (node, pdata->vendor, gncVendorSetTaxTableOverride);
 }
 
 static gboolean
-vendor_slots_handler (xmlNodePtr node, gpointer vendor_pdata)
+vendor_slots_handler (GncXmlNode* node, gpointer vendor_pdata)
 {
     struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->vendor));
@@ -305,7 +305,7 @@ static struct dom_tree_handler vendor_handlers_v2[] =
 };
 
 static GncVendor*
-dom_tree_to_vendor (xmlNodePtr node, QofBook* book)
+dom_tree_to_vendor (GncXmlNode* node, QofBook* book)
 {
     struct vendor_pdata vendor_pdata;
     gboolean successful;
@@ -336,7 +336,7 @@ gnc_vendor_end_handler (gpointer data_for_children,
                         gpointer* result, const gchar* tag)
 {
     GncVendor* vendor;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -360,7 +360,7 @@ gnc_vendor_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, vendor);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return vendor != NULL;
 }

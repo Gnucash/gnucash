@@ -19,6 +19,7 @@ set (backend_xml_utils_noinst_HEADERS
   gnc-vendor-xml-v2.h
   gnc-xml-backend.hpp
   gnc-xml-helper.h
+  gnc-xml-sax-node.h
   io-example-account.h
   io-gncxml-gen.h
   io-gncxml-v2.h
@@ -57,6 +58,7 @@ set (backend_xml_utils_SOURCES
   gnc-vendor-xml-v2.cpp
   gnc-xml-backend.cpp
   gnc-xml-helper.cpp
+  gnc-xml-sax-node.cpp
   io-example-account.cpp
   io-gncxml-gen.cpp
   io-gncxml-v1.cpp

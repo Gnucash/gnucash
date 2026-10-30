@@ -43,9 +43,9 @@
 static QofBook* book;
 
 static const char*
-node_and_commodity_equal (xmlNodePtr node, const gnc_commodity* com)
+node_and_commodity_equal (GncXmlNode* node, const gnc_commodity* com)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     while (g_strcmp0 ((char*)node->name, "text") == 0)
         node = node->next;
@@ -187,7 +187,9 @@ test_generation (void)
             gnc_commodity_destroy (ran_com);
             continue;
         }
-        auto compare_msg = node_and_commodity_equal (test_node, ran_com);
+        auto conv_node = gnc_xml_node_from_libxml (test_node);
+        auto compare_msg = node_and_commodity_equal (conv_node, ran_com);
+        gnc_xml_node_free (conv_node);
         if (compare_msg != nullptr)
         {
             failure_args ("commodity_xml", __FILE__, __LINE__,
@@ -240,7 +242,7 @@ test_generation (void)
 static gboolean
 test_real_commodity (const char* tag, gpointer globaldata, gpointer data)
 {
-    const char* msg = node_and_commodity_equal ((xmlNodePtr)globaldata,
+    const char* msg = node_and_commodity_equal ((GncXmlNode*)globaldata,
                                                 (gnc_commodity*)data);
     do_test_args (msg == NULL, "test_real_commodity",
                   __FILE__, __LINE__, msg);

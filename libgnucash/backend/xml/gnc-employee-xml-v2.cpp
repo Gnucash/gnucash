@@ -130,7 +130,7 @@ struct employee_pdata
 };
 
 static gboolean
-employee_username_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_username_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -138,7 +138,7 @@ employee_username_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_guid_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
     GncEmployee* employee;
@@ -163,7 +163,7 @@ employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_id_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_id_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -171,7 +171,7 @@ employee_id_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_language_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_language_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -179,7 +179,7 @@ employee_language_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_acl_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_acl_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -187,7 +187,7 @@ employee_acl_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_addr_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_addr_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -195,7 +195,7 @@ employee_addr_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_active_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_active_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
     gint64 val;
@@ -209,7 +209,7 @@ employee_active_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_workday_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_workday_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -218,7 +218,7 @@ employee_workday_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_rate_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_rate_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
 
@@ -227,7 +227,7 @@ employee_rate_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_currency_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_currency_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
     gnc_commodity* com;
@@ -241,7 +241,7 @@ employee_currency_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_ccard_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
     Account* ccard_acc;
@@ -258,7 +258,7 @@ employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
 }
 
 static gboolean
-employee_slots_handler (xmlNodePtr node, gpointer employee_pdata)
+employee_slots_handler (GncXmlNode* node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->employee));
@@ -283,7 +283,7 @@ static struct dom_tree_handler employee_handlers_v2[] =
 };
 
 static GncEmployee*
-dom_tree_to_employee (xmlNodePtr node, QofBook* book)
+dom_tree_to_employee (GncXmlNode* node, QofBook* book)
 {
     struct employee_pdata employee_pdata;
     gboolean successful;
@@ -313,7 +313,7 @@ gnc_employee_end_handler (gpointer data_for_children,
                           gpointer* result, const gchar* tag)
 {
     GncEmployee* employee;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -338,7 +338,7 @@ gnc_employee_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, employee);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return employee != NULL;
 }
