@@ -32,8 +32,10 @@ typedef void (*GncDateCloseResponseCallback) (gboolean accepted,
                                               time64 date,
                                               gpointer user_data);
 
-/* Asynchronous counterpart. The callback runs once for acceptance, cancel,
- * or parent destruction; the selected date is meaningful only when accepted. */
+/** Ask for a single date without blocking the caller. The dialog runs
+ * modelessly against @a parent; @a callback runs exactly once, for
+ * acceptance, cancellation, or destruction of @a parent, and @a date is
+ * meaningful only when @a accepted is TRUE. @a callback must not be NULL. */
 void gnc_dialog_date_close_async_parented (
     GtkWidget *parent, const char *message, const char *label_message,
     gboolean ok_is_default, time64 initial_date,

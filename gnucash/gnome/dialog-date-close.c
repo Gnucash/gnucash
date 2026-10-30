@@ -298,10 +298,8 @@ gnc_dialog_date_close_async_parented (
 {
     DialogDateClose *ddc;
     time64 date_value = initial_date;
-    if (!callback)
-    {
-        return;
-    }
+
+    g_return_if_fail (callback != NULL);
 
     ddc = gnc_dialog_date_close_create (parent, message, label_message,
                                         ok_is_default, &date_value,
