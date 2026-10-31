@@ -1495,7 +1495,6 @@ enum DeleteAccountMismatch
 
 struct DeleteAccountRequest
 {
-    gint ref_count;
     bool dialog_destroyed;
     bool changed;
     int event_handler;
@@ -1519,8 +1518,9 @@ struct DeleteAccountRequest
 static DeleteAccountRequest *
 delete_account_request_ref (DeleteAccountRequest *request)
 {
-    g_atomic_int_inc (&request->ref_count);
-    return request;
+    if (request)
+        return static_cast<DeleteAccountRequest *> (g_atomic_rc_box_acquire (request));
+    return nullptr;
 }
 
 static void
@@ -1528,14 +1528,13 @@ delete_account_request_unref (gpointer user_data)
 {
     auto request = static_cast<DeleteAccountRequest *> (user_data);
 
-    if (!g_atomic_int_dec_and_test (&request->ref_count))
+    if (!request)
         return;
-
     if (request->event_handler)
         qof_event_unregister_handler (request->event_handler);
     g_weak_ref_clear (&request->dialog);
     g_weak_ref_clear (&request->page);
-    g_free (request);
+    g_atomic_rc_box_release (request);
 }
 
 static GtkWindow *

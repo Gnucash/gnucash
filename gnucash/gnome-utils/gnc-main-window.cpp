@@ -1098,7 +1098,6 @@ gnc_main_window_save_all_windows(GKeyFile *keyfile)
 
 struct GncMainWindowFinishPendingRequest
 {
-    gatomicrefcount ref_count;
     GWeakRef book;
     bool had_book;
     GWeakRef window;
@@ -1113,7 +1112,6 @@ struct GncMainWindowFinishPendingRequest
 
 struct GncMainWindowAllFinishPendingRequest
 {
-    gatomicrefcount ref_count;
     GWeakRef book;
     bool had_book;
     GCancellable *cancellable;
@@ -1139,8 +1137,9 @@ main_window_pending_book_is_current (GWeakRef *reference, bool had_book)
 static GncMainWindowFinishPendingRequest*
 main_window_finish_pending_request_ref (GncMainWindowFinishPendingRequest *request)
 {
-    g_atomic_ref_count_inc (&request->ref_count);
-    return request;
+    if (request)
+        return static_cast<GncMainWindowFinishPendingRequest *> (g_atomic_rc_box_acquire (request));
+    return nullptr;
 }
 
 static void
@@ -1155,14 +1154,15 @@ main_window_finish_pending_request_free (GncMainWindowFinishPendingRequest *requ
     g_clear_object (&request->cancellable);
     g_weak_ref_clear (&request->window);
     g_weak_ref_clear (&request->book);
-    g_free (request);
+    g_atomic_rc_box_release (request);
 }
 
 static void
 main_window_finish_pending_request_unref (GncMainWindowFinishPendingRequest *request)
 {
-    if (request && g_atomic_ref_count_dec (&request->ref_count))
-        main_window_finish_pending_request_free (request);
+    if (!request)
+        return;
+    g_atomic_rc_box_release (request);
 }
 
 static void
@@ -1314,8 +1314,9 @@ gnc_main_window_finish_pending_async (GncMainWindow *window,
 static GncMainWindowAllFinishPendingRequest*
 main_window_all_finish_pending_request_ref (GncMainWindowAllFinishPendingRequest *request)
 {
-    g_atomic_ref_count_inc (&request->ref_count);
-    return request;
+    if (request)
+        return static_cast<GncMainWindowAllFinishPendingRequest *> (g_atomic_rc_box_acquire (request));
+    return nullptr;
 }
 
 static void
@@ -1325,14 +1326,15 @@ main_window_all_finish_pending_request_free (GncMainWindowAllFinishPendingReques
     g_clear_object (&request->current_window);
     g_clear_object (&request->cancellable);
     g_weak_ref_clear (&request->book);
-    g_free (request);
+    g_atomic_rc_box_release (request);
 }
 
 static void
 main_window_all_finish_pending_request_unref (GncMainWindowAllFinishPendingRequest *request)
 {
-    if (request && g_atomic_ref_count_dec (&request->ref_count))
-        main_window_all_finish_pending_request_free (request);
+    if (!request)
+        return;
+    g_atomic_rc_box_release (request);
 }
 
 static void

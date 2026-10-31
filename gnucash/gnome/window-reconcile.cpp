@@ -138,7 +138,6 @@ typedef struct
  */
 typedef struct _startRecnWindowData
 {
-    gatomicrefcount ref_count;
     Account       *account;         /* the account being reconciled            */
     QofBook       *book;
     GncGUID        account_guid;
@@ -229,18 +228,16 @@ static startRecnWindowData *
 start_recn_ref (startRecnWindowData *data)
 {
     if (data)
-        g_atomic_ref_count_inc (&data->ref_count);
-    return data;
+        return static_cast<startRecnWindowData *> (g_atomic_rc_box_acquire (data));
+    return nullptr;
 }
 
 static void
 start_recn_unref (startRecnWindowData *data)
 {
-    if (data && g_atomic_ref_count_dec (&data->ref_count))
-    {
-        g_clear_object (&data->book);
-        g_free (data);
-    }
+    if (!data)
+        return;
+    g_atomic_rc_box_release (data);
 }
 
 /** IMPLEMENTATIONS *************************************************/
