@@ -94,7 +94,7 @@ TEST_F (DateRangeResponseTest, WarningClosesWithWindow)
     connect_destroy_handler (dialog);
 
     gtk_window_close (GTK_WINDOW (dialog));
-    expect_warning_destroyed (2);
+    expect_warning_destroyed ();
     g_object_unref (dialog);
 }
 
