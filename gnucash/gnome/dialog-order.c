@@ -239,7 +239,7 @@ gnc_order_window_ok_save (OrderWindow *ow)
     return TRUE;
 }
 
-typedef struct _OrderSaveRequest
+typedef struct
 {
     GObject parent;
     OrderWindow *ow;
@@ -299,10 +299,6 @@ order_save_request_class_init (OrderSaveRequestClass *klass)
 static void
 order_save_request_init (OrderSaveRequest *request)
 {
-    request->ow = NULL;
-    request->book = NULL;
-    request->order_guid = *guid_null ();
-    request->destroy_handler = 0;
     g_weak_ref_init (&request->window, NULL);
 }
 
@@ -407,7 +403,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
     gnc_order_update_window (ow);
 }
 
-typedef struct _OrderCloseRequest
+typedef struct
 {
     GObject parent;
     OrderWindow *ow;
@@ -468,11 +464,6 @@ order_close_request_class_init (OrderCloseRequestClass *klass)
 static void
 order_close_request_init (OrderCloseRequest *request)
 {
-    request->ow = NULL;
-    request->book = NULL;
-    request->order_guid = *guid_null ();
-    request->destroy_handler = 0;
-    request->restore_close_button = FALSE;
     g_weak_ref_init (&request->window, NULL);
 }
 
