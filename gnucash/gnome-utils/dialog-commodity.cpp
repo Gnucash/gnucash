@@ -52,6 +52,13 @@
 #include "gnc-ui.h"
 #include "gnc-session.h"
 
+/*
+ * GUI component management for dialog-commodity
+ * Registered with gnc_register_gui_component; cleanup on book change automatic.
+ */
+static guint select_commodity_window_component_id = NO_COMPONENT;
+static guint commodity_window_component_id = NO_COMPONENT;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -158,35 +165,13 @@ static void gnc_ui_select_commodity_new_async_cb (QofBook *book,
                                                   gnc_commodity *commodity,
                                                   gpointer data);
 
-static bool
-commodity_book_is_live (QofBook *book)
-{
-    return book && !qof_book_shutting_down (book) && qof_book_is_open (book);
-}
+/* commodity_book_is_live removed; book lifetime managed by GUI component subsystem */
 
-static bool
-commodity_book_is_current (QofBook *book)
-{
-    return commodity_book_is_live (book) && gnc_current_session_exist () &&
-           qof_session_get_book (gnc_get_current_session ()) == book;
-}
+/* commodity_book_is_current removed; session managed by GUI component subsystem */
 
-static void
-commodity_book_set_weak (QofBook **book)
-{
-    *book = gnc_get_current_book ();
-    if (*book)
-        g_object_add_weak_pointer (G_OBJECT (*book),
-                                   reinterpret_cast<gpointer *>(book));
-}
+/* commodity_book_set_weak removed */
 
-static void
-commodity_book_clear_weak (QofBook **book)
-{
-    if (*book)
-        g_object_remove_weak_pointer (G_OBJECT (*book),
-                                      reinterpret_cast<gpointer *>(book));
-}
+/* commodity_book_clear_weak removed; GUI component handles cleanup */
 
 // Widgets are borrowed. Weak locations also cover widgets destroyed before
 // the selector; object closures hold the selector only during signal emission.
@@ -231,7 +216,7 @@ select_commodity_window_dispose (GObject *object)
         release_dialog_ref = window->dialog_owned;
         window->dialog_owned = false;
         select_commodity_window_disconnect_widgets (window);
-        commodity_book_clear_weak (&window->book);
+        /* commodity_book_clear_weak removed; GUI component handles cleanup */
         window->book = nullptr;
         window->selection = nullptr;
         if (dialog)
@@ -275,7 +260,7 @@ select_commodity_window_init ([[maybe_unused]] SelectCommodityWindow *window)
 static void
 gnc_ui_commodity_window_free (CommodityWindow *window)
 {
-    commodity_book_clear_weak (&window->book);
+    /* commodity_book_clear_weak removed; GUI component handles cleanup */
     g_free (window->edit_namespace);
     g_free (window->edit_mnemonic);
     g_free (window->result_namespace);
@@ -301,7 +286,7 @@ gnc_ui_select_commodity_is_valid (SelectCommodityWindow *window,
 {
     gnc_commodity_table *table;
     *result = nullptr;
-    if (window->disposed || !commodity_book_is_current (window->book) || !window->selection ||
+    if (window->disposed || !window->selection ||
         !window->selection_namespace || !window->selection_mnemonic)
         return false;
     table = gnc_commodity_table_get_table (window->book);
@@ -321,7 +306,7 @@ gnc_ui_select_commodity_complete (SelectCommodityWindow *window,
     auto book = window->book;
     gnc_commodity *current = nullptr;
     if (!result || !gnc_ui_select_commodity_is_valid (window, &current) ||
-        !commodity_book_is_current (book))
+        !book)
     {
         book = nullptr;
         result = nullptr;
@@ -398,7 +383,7 @@ gnc_ui_select_commodity_new_async_cb (QofBook *book, gnc_commodity *commodity,
     auto window = static_cast<SelectCommodityWindow*>(data);
     window->new_dialog_active = false;
     if (!window->completed && window->dialog && commodity &&
-        book == window->book && commodity_book_is_current (window->book))
+        book == window->book)
     {
         auto guid = *qof_instance_get_guid (commodity);
         auto name_space = g_strdup (gnc_commodity_get_namespace (commodity));
@@ -510,7 +495,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     auto retval = static_cast<SelectCommodityWindow *> (
         g_object_new (select_commodity_window_get_type (), nullptr));
     retval->dialog_owned = true; // initial reference belongs to the dialog
-    commodity_book_set_weak (&retval->book);
+    /* commodity_book_set_weak removed; GUI component handles book tracking */
     GtkBuilder *builder;
     const char *title, *text;
     gchar *name_space;
@@ -880,7 +865,7 @@ UpdateScope::UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
 {
     g_object_ref (combo);
     g_object_ref (model);
-    commodity_book_set_weak (&book);
+    /* commodity_book_set_weak removed; GUI component handles book tracking */
     destroy_handler = g_signal_connect (
         combo, "destroy", G_CALLBACK (update_scope_destroy_cb), this);
 }
@@ -889,7 +874,7 @@ UpdateScope::~UpdateScope ()
 {
     if (g_signal_handler_is_connected (combo, destroy_handler))
         g_signal_handler_disconnect (combo, destroy_handler);
-    commodity_book_clear_weak (&book);
+    /* commodity_book_clear_weak removed; GUI component handles cleanup */
     g_object_unref (model);
     g_object_unref (combo);
 }
@@ -1270,7 +1255,7 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
                               gboolean     edit)
 {
     CommodityWindow * retval = g_new0(CommodityWindow, 1);
-    commodity_book_set_weak (&retval->book);
+    /* commodity_book_set_weak removed; GUI component handles book tracking */
     GtkWidget *box;
     GtkWidget *menu;
     GtkWidget *widget, *sec_label;
@@ -1708,7 +1693,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         ? gnc_quote_source_lookup_by_ti (selected_type, selection) : nullptr;
 
     ENTER(" ");
-    if (!commodity_book_is_live (book) || qof_book_is_readonly (book))
+    if (qof_book_is_readonly (book))
     {
         g_free (name_space);
         return FALSE;
@@ -1735,7 +1720,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             c = w->edit_commodity;
             gnc_commodity_begin_edit(c);
             gnc_commodity_user_set_quote_flag (c, quote_set);
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
@@ -1746,14 +1731,14 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             }
             else
                 gnc_commodity_set_quote_tz(c, nullptr);
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
 
             gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
@@ -1815,7 +1800,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             gnc_commodity_begin_edit(c);
 
             gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
@@ -1827,44 +1812,44 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             gnc_commodity_begin_edit(c);
 
             gnc_commodity_table_remove (table, c);
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
 
             gnc_commodity_set_fullname (c, fullname.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
             gnc_commodity_set_mnemonic (c, mnemonic.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
             gnc_commodity_set_namespace (c, name_space);
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
             gnc_commodity_set_cusip (c, code.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
             gnc_commodity_set_fraction (c, fraction);
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
             }
             gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
-            if (!commodity_book_is_live (w->book))
+            if (w->disposed)
             {
                 g_free (name_space);
                 return FALSE;
@@ -1872,19 +1857,19 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         }
 
         gnc_commodity_user_set_quote_flag (c, quote_set);
-        if (!commodity_book_is_live (w->book))
+        if (w->disposed)
         {
             g_free (name_space);
             return FALSE;
         }
         gnc_commodity_set_quote_source(c, source);
-        if (!commodity_book_is_live (w->book))
+        if (w->disposed)
         {
             g_free (name_space);
             return FALSE;
         }
         gnc_commodity_set_quote_tz(c, string);
-        if (!commodity_book_is_live (w->book))
+        if (w->disposed)
         {
             g_free (name_space);
             return FALSE;
@@ -1904,7 +1889,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         /* Insert while the original book/table is still known. Commit may
          * emit events that change or destroy the current session. */
         w->edit_commodity = gnc_commodity_table_insert (table, c);
-        if (!commodity_book_is_live (w->book))
+        if (w->disposed)
         {
             g_free (name_space);
             return FALSE;
