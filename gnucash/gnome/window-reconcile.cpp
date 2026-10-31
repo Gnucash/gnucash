@@ -233,11 +233,18 @@ start_recn_ref (startRecnWindowData *data)
 }
 
 static void
+start_recn_data_clear (gpointer user_data)
+{
+    auto data = static_cast<startRecnWindowData *> (user_data);
+    g_clear_object (&data->book);
+}
+
+static void
 start_recn_unref (startRecnWindowData *data)
 {
     if (!data)
         return;
-    g_atomic_rc_box_release (data);
+    g_atomic_rc_box_release_full (data, start_recn_data_clear);
 }
 
 /** IMPLEMENTATIONS *************************************************/
@@ -851,13 +858,12 @@ start_recn_open(GtkWidget *parent, Account *account,
     }
     GtkWidget *dialog, *end_value, *date_value, *include_children_button;
     GtkBuilder *builder;
-    auto data = g_new0 (startRecnWindowData, 1);
+    auto data = g_atomic_rc_box_new0 (startRecnWindowData);
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
     gnc_numeric ending;
     GtkWidget *entry;
     char *title;
-    g_atomic_ref_count_init (&data->ref_count);
     data->book = static_cast<QofBook *>(g_object_ref (book));
     data->account_guid = *xaccAccountGetGUID (account);
     data->callback = callback;

@@ -1154,7 +1154,6 @@ main_window_finish_pending_request_free (GncMainWindowFinishPendingRequest *requ
     g_clear_object (&request->cancellable);
     g_weak_ref_clear (&request->window);
     g_weak_ref_clear (&request->book);
-    g_atomic_rc_box_release (request);
 }
 
 static void
@@ -1162,7 +1161,7 @@ main_window_finish_pending_request_unref (GncMainWindowFinishPendingRequest *req
 {
     if (!request)
         return;
-    g_atomic_rc_box_release (request);
+    g_atomic_rc_box_release_full (request, (GDestroyNotify) main_window_finish_pending_request_free);
 }
 
 static void
@@ -1288,8 +1287,7 @@ gnc_main_window_finish_pending_async (GncMainWindow *window,
         return;
     }
 
-    request = g_new0 (GncMainWindowFinishPendingRequest, 1);
-    g_atomic_ref_count_init (&request->ref_count);
+    request = g_atomic_rc_box_new0 (GncMainWindowFinishPendingRequest);
     request->had_book = gnc_current_session_exist ();
     g_weak_ref_init (&request->book, request->had_book ?
                      G_OBJECT (gnc_get_current_book ()) : nullptr);
@@ -1326,7 +1324,6 @@ main_window_all_finish_pending_request_free (GncMainWindowAllFinishPendingReques
     g_clear_object (&request->current_window);
     g_clear_object (&request->cancellable);
     g_weak_ref_clear (&request->book);
-    g_atomic_rc_box_release (request);
 }
 
 static void
@@ -1334,7 +1331,7 @@ main_window_all_finish_pending_request_unref (GncMainWindowAllFinishPendingReque
 {
     if (!request)
         return;
-    g_atomic_rc_box_release (request);
+    g_atomic_rc_box_release_full (request, (GDestroyNotify) main_window_all_finish_pending_request_free);
 }
 
 static void
@@ -1420,8 +1417,7 @@ main_window_all_finish_pending_async_full (GCancellable *cancellable,
         return;
     }
 
-    request = g_new0 (GncMainWindowAllFinishPendingRequest, 1);
-    g_atomic_ref_count_init (&request->ref_count);
+    request = g_atomic_rc_box_new0 (GncMainWindowAllFinishPendingRequest);
     request->had_book = gnc_current_session_exist ();
     g_weak_ref_init (&request->book, request->had_book ?
                      G_OBJECT (gnc_get_current_book ()) : nullptr);

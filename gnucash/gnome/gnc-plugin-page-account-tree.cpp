@@ -1524,17 +1524,22 @@ delete_account_request_ref (DeleteAccountRequest *request)
 }
 
 static void
-delete_account_request_unref (gpointer user_data)
+delete_account_request_clear (gpointer user_data)
 {
     auto request = static_cast<DeleteAccountRequest *> (user_data);
 
-    if (!request)
-        return;
     if (request->event_handler)
         qof_event_unregister_handler (request->event_handler);
     g_weak_ref_clear (&request->dialog);
     g_weak_ref_clear (&request->page);
-    g_atomic_rc_box_release (request);
+}
+
+static void
+delete_account_request_unref (gpointer user_data)
+{
+    if (!user_data)
+        return;
+    g_atomic_rc_box_release_full (user_data, delete_account_request_clear);
 }
 
 static GtkWindow *
@@ -1984,8 +1989,7 @@ gnc_plugin_page_account_tree_delete_account_after_pending
     if (!book)
         return;
 
-    auto request = g_new0 (DeleteAccountRequest, 1);
-    request->ref_count = 1;
+    auto request = g_atomic_rc_box_new0 (DeleteAccountRequest);
     request->book_guid = *qof_instance_get_guid (QOF_INSTANCE (book));
     request->account_guid = *xaccAccountGetGUID (account);
     g_weak_ref_init (&request->page, G_OBJECT (page));
