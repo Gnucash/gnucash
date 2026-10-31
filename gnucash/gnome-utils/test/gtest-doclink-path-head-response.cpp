@@ -178,8 +178,13 @@ using DoclinkStaleResponseTest =
 static std::string
 stale_response_name (const ::testing::TestParamInfo<StaleResponseCase> &info)
 {
-    const char *names[] = {"ReadOnly", "SessionSwitch", "ParentDestroy",
-                           "PreferenceDrift", "DisposedBookRetainedObject"};
+    const char *names[] = {
+        "ReadOnly",
+        "SessionSwitch",
+        "ParentDestroy",
+        "PreferenceDrift",
+        "DisposedBookRetainedObject",
+    };
     return names[static_cast<int> (info.param)];
 }
 
