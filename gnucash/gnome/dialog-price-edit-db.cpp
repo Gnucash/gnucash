@@ -117,8 +117,19 @@ price_delete_request_finalize (GObject *object)
 }
 
 static void
+price_delete_request_dispose (GObject *object)
+{
+    auto request = PRICE_DELETE_REQUEST (object);
+    
+    /* Clear the weak reference in dispose so it can run multiple times safely */
+    g_weak_ref_set (&request->window, NULL);
+    G_OBJECT_CLASS (price_delete_request_parent_class)->dispose (object);
+}
+
+static void
 price_delete_request_class_init (PriceDeleteRequestClass *klass)
 {
+    G_OBJECT_CLASS (klass)->dispose = price_delete_request_dispose;
     G_OBJECT_CLASS (klass)->finalize = price_delete_request_finalize;
 }
 
@@ -156,6 +167,7 @@ price_delete_finished (gint response, gpointer user_data)
     }
 
     g_clear_object (&window);
+    /* request is owned by the caller (via g_object_new), unref to balance */
     g_object_unref (request);
 }
 
