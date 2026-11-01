@@ -37,14 +37,15 @@
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
 # aba2222 <ABCSSS2021@outlook.com>, 2025.
 # SIB <shawndu0820@gmail.com>, 2025.
+# Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-07 09:45+0000\n"
-"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
+"PO-Revision-Date: 2026-11-01 04:51+0000\n"
+"Last-Translator: Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -52,7 +53,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5598,7 +5599,7 @@ msgstr "追踪您的日常个人收入和支出。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Manage your stock, bond and mutual fund accounts with ease."
-msgstr "轻松管理您的股票，债券以及共同基金账户。"
+msgstr "轻松管理您的股票、债券以及基金账户。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Keep your small business' accounting up to date."
@@ -12013,14 +12014,14 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"在下一页中，您的 QIF 文件中的科目和您拥有的任何股票或共同基金将会与 GnuCash "
-"的科目进行匹配。如果 GnuCash 科目已经存在相同的名字，或者相似的名字以及相同的"
+"在下一页中，您的 QIF 文件中的科目和您拥有的任何股票或基金将会与 GnuCash 的科"
+"目进行匹配。如果现有 GnuCash 科目拥有相同的名字，或者拥有相似的名字以及兼容的"
 "类型，那么这个科目就会用于匹配；否则，GnuCash 将会用 QIF 科目的名字和类别创建"
 "一个新的科目。如果您不喜欢建议的 GnuCash 科目可以双击来改变它。\n"
 "\n"
 "注意，GnuCash 将会创建许多在您其它个人理财软件中不存在的科目，包括为您拥有的"
-"每一支股票创建一个单独的科目；给经纪佣金的单独的科目；特殊的“所有者权益”科目"
-"（默认的留存收益子科目），既您的期初余额的来源等等。所有的这些科目将会在下一"
+"每一支股票创建一个单独的科目、给经纪佣金的单独的科目、特殊的“所有者权益”科目"
+"（默认的留存收益子科目）作为您的期初余额的来源等等。所有的这些科目将会在下一"
 "页中出现，所以如果需要您可以修改它们，但是您不修改它们也是安全的。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:530
@@ -12144,13 +12145,13 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
-"在下一页，会需要您提供出现在您导入的 QIF 文件中的关于股票、共同基金和其他投资"
-"的信息。GnuCash 需要一些额外的关于这些投资的细节，而这些是无法从 QIF 格式的文"
-"件中得到的。\n"
+"在下一页，会需要您提供出现在您导入的 QIF 文件中的关于股票、基金和其他投资的信"
+"息。GnuCash 需要一些额外的关于这些投资的细节，而这些是无法从 QIF 格式的文件中"
+"得到的。\n"
 "\n"
-"每支股票、共同基金或其它投资必须有一个名称和一个缩写，如股票代码。由于一些无"
-"关的投资拥有相同的缩写，您还需要指明缩写的类型。举例来说，您可以选择“证交所”"
-"分配给股票代码(NASDAQ、NYSE等等)，或选择一个投资类型。\n"
+"每支股票、基金或其它投资必须有一个名称和一个缩写，如股票代码。由于一些无关的"
+"投资拥有相同的缩写，您还需要指明缩写的类型。举例来说，您可以选择分配该缩写的"
+"交易所分配（NASDAQ、NYSE等等），或选择一个投资类型。\n"
 "\n"
 "如果您看到您的交易所没有列出，或者没有合适的选项，那么您可以输入一个新的。"
 
@@ -19829,8 +19830,8 @@ msgid ""
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
 "or an appropriate investment type, you can enter a new one."
 msgstr ""
-"选择股票代码的交易所，或选择投资的类型(比如基金)。如果您没有看到您的交易所或"
-"者合适的投资类型，您可以输入一个新的。"
+"选择股票代码的交易所，或选择投资的类型（比如“基金”）。如果您没有看到您的交易"
+"所或者合适的投资类型，您可以输入一个新的。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:925
 msgid "Name or _description"
@@ -28248,7 +28249,7 @@ msgstr "汇率数据库(_P)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "显示并编辑股票和共同基金的价格"
+msgstr "显示并编辑股票和基金的价格"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
@@ -28256,7 +28257,7 @@ msgstr "证券编辑器(_S)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "显示并编辑股票和共同基金商品"
+msgstr "显示并编辑股票、基金等商品"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
@@ -30097,7 +30098,7 @@ msgstr "股票"
 
 #: libgnucash/engine/Account.cpp:4339
 msgid "Mutual Fund"
-msgstr "公募基金"
+msgstr "基金"
 
 #: libgnucash/engine/Account.cpp:4344
 msgid "A/Receivable"

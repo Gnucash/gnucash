@@ -15,14 +15,15 @@
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
 # Deleted User <hamburger1024@users.noreply.hosted.weblate.org>, 2026.
 # Deleted User <noreply+62046@weblate.org>, 2026.
+# Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-08 20:22+0800\n"
-"PO-Revision-Date: 2026-09-25 03:51+0000\n"
-"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
+"PO-Revision-Date: 2026-11-01 04:51+0000\n"
+"Last-Translator: Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -30,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgctxt "quoting convention"
@@ -113,7 +114,7 @@ msgstr "货币市场"
 #. "-"
 msgctxt "account type"
 msgid "mutual fund"
-msgstr "共同基金"
+msgstr "基金"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
