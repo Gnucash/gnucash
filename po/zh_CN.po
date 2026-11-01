@@ -37,14 +37,15 @@
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
 # aba2222 <ABCSSS2021@outlook.com>, 2025.
 # SIB <shawndu0820@gmail.com>, 2025.
+# Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-25 03:51+0000\n"
-"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
+"PO-Revision-Date: 2026-11-01 04:51+0000\n"
+"Last-Translator: Zhaoquan Huang <taoyouh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -52,7 +53,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5598,7 +5599,7 @@ msgstr "追踪您的日常个人收入和支出。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Manage your stock, bond and mutual fund accounts with ease."
-msgstr "轻松管理您的股票，债券以及共同基金账户。"
+msgstr "轻松管理您的股票、债券以及基金账户。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Keep your small business' accounting up to date."
@@ -6649,14 +6650,14 @@ msgstr "清空"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:159
 msgid "You must provide a name for this Tax Table."
-msgstr "您必须提供这个税率表的名称。"
+msgstr "您必须提供这个计税表的名称。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:166
 #, c-format
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
-msgstr "您必须为这个税率表提供一个独一无二的名称。您的选择“%s”已经被使用了。"
+msgstr "您必须为这个计税表提供一个独一无二的名称。您的选择“%s”已经被使用了。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -6682,18 +6683,18 @@ msgstr "重命名(_R)"
 #: gnucash/gnome-utils/dialog-tax-table.c:705
 #, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "税表名称\"%s \"已经存在。"
+msgstr "计税表名称\"%s \"已经存在。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
 msgid "Tax table \"%s\" is in use. You cannot delete it."
-msgstr "税率表“%s”正在使用中。您不能删除它。"
+msgstr "计税表“%s”正在使用中。您不能删除它。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:777
 msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
-msgstr "您不能从税率表删除最后一笔事项。如果您想要的话可以改试删除这个税率表。"
+msgstr "您不能从计税表删除最后一个条目。如果您确实想要这么做，可以删除这个计税表。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:784
 msgid "Are you sure you want to delete this entry?"
@@ -12013,14 +12014,14 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"在下一页中，您的 QIF 文件中的科目和您拥有的任何股票或共同基金将会与 GnuCash "
-"的科目进行匹配。如果 GnuCash 科目已经存在相同的名字，或者相似的名字以及相同的"
+"在下一页中，您的 QIF 文件中的科目和您拥有的任何股票或基金将会与 GnuCash 的科"
+"目进行匹配。如果现有 GnuCash 科目拥有相同的名字，或者拥有相似的名字以及兼容的"
 "类型，那么这个科目就会用于匹配；否则，GnuCash 将会用 QIF 科目的名字和类别创建"
 "一个新的科目。如果您不喜欢建议的 GnuCash 科目可以双击来改变它。\n"
 "\n"
 "注意，GnuCash 将会创建许多在您其它个人理财软件中不存在的科目，包括为您拥有的"
-"每一支股票创建一个单独的科目；给经纪佣金的单独的科目；特殊的“所有者权益”科目"
-"（默认的留存收益子科目），既您的期初余额的来源等等。所有的这些科目将会在下一"
+"每一支股票创建一个单独的科目、给经纪佣金的单独的科目、特殊的“所有者权益”科目"
+"（默认的留存收益子科目）作为您的期初余额的来源等等。所有的这些科目将会在下一"
 "页中出现，所以如果需要您可以修改它们，但是您不修改它们也是安全的。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:530
@@ -12144,13 +12145,13 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
-"在下一页，会需要您提供出现在您导入的 QIF 文件中的关于股票、共同基金和其他投资"
-"的信息。GnuCash 需要一些额外的关于这些投资的细节，而这些是无法从 QIF 格式的文"
-"件中得到的。\n"
+"在下一页，会需要您提供出现在您导入的 QIF 文件中的关于股票、基金和其他投资的信"
+"息。GnuCash 需要一些额外的关于这些投资的细节，而这些是无法从 QIF 格式的文件中"
+"得到的。\n"
 "\n"
-"每支股票、共同基金或其它投资必须有一个名称和一个缩写，如股票代码。由于一些无"
-"关的投资拥有相同的缩写，您还需要指明缩写的类型。举例来说，您可以选择“证交所”"
-"分配给股票代码(NASDAQ、NYSE等等)，或选择一个投资类型。\n"
+"每支股票、基金或其它投资必须有一个名称和一个缩写，如股票代码。由于一些无关的"
+"投资拥有相同的缩写，您还需要指明缩写的类型。举例来说，您可以选择分配该缩写的"
+"交易所分配（NASDAQ、NYSE等等），或选择一个投资类型。\n"
 "\n"
 "如果您看到您的交易所没有列出，或者没有合适的选项，那么您可以输入一个新的。"
 
@@ -13596,12 +13597,12 @@ msgstr "含税"
 #: gnucash/gtkbuilder/dialog-vendor.glade:590
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
-msgstr "税率"
+msgstr "计税表"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:652
 #: gnucash/gtkbuilder/dialog-vendor.glade:594
 msgid "Override the global Tax Table?"
-msgstr "覆盖全局的税率表？"
+msgstr "覆盖全局的计税表？"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:688
 #: gnucash/gtkbuilder/dialog-customer.glade:710
@@ -14329,7 +14330,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1410
 msgid "Yes, reset the Tax Tables"
-msgstr "是的，重置税率表"
+msgstr "是的，重置计税表"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1427
 msgid "No, keep them as they are"
@@ -14337,7 +14338,7 @@ msgstr "不，保持现状"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1450
 msgid "Reset Tax Tables to present Values?"
-msgstr "重置税率表到当前值？"
+msgstr "重置计税表到当前值？"
 
 #: gnucash/gtkbuilder/dialog-job.glade:7
 msgid "Job Dialog"
@@ -16354,13 +16355,11 @@ msgstr "编号"
 #: gnucash/gtkbuilder/dialog-tax-table.glade:7
 #: gnucash/gtkbuilder/dialog-tax-table.glade:31
 msgid "Tax Tables"
-msgstr "税率"
+msgstr "计税表"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:142
-#, fuzzy
-#| msgid "<b>Tax Table Entries</b>"
 msgid "Tax Table Entries"
-msgstr "<b>税务科目</b>"
+msgstr "计税表项"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:200
 msgid "De_lete"
@@ -16379,10 +16378,8 @@ msgid "Percent %"
 msgstr "百分比"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:388
-#, fuzzy
-#| msgid "<b>Tax Table Entry</b>"
 msgid "Tax Table Entry"
-msgstr "<b>定义</b>"
+msgstr "计税表项"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:497
 #: gnucash/register/ledger-core/split-register.c:2180
@@ -18674,7 +18671,7 @@ msgstr "含税"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:155
 msgid "Tax-table"
-msgstr "须纳税的"
+msgstr "计税表"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
 msgid "Account-posted"
@@ -19833,8 +19830,8 @@ msgid ""
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
 "or an appropriate investment type, you can enter a new one."
 msgstr ""
-"选择股票代码的交易所，或选择投资的类型(比如基金)。如果您没有看到您的交易所或"
-"者合适的投资类型，您可以输入一个新的。"
+"选择股票代码的交易所，或选择投资的类型（比如“基金”）。如果您没有看到您的交易"
+"所或者合适的投资类型，您可以输入一个新的。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:925
 msgid "Name or _description"
@@ -20322,7 +20319,7 @@ msgstr "这个账户通常应该是费用或资产类型。"
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr "税率表 %s 不存在。您想要创建它吗？"
+msgstr "计税表 %s 不存在。您想要创建它吗？"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:877
 msgid ""
@@ -20411,7 +20408,7 @@ msgstr "已税"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 msgctxt "sample for 'Tax Table'"
 msgid "Tax Table 1"
-msgstr "税率表1"
+msgstr "计税表 1"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
 msgctxt "sample"
@@ -20569,7 +20566,7 @@ msgstr "编辑此交易的单位数量"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:701
 msgid "Enter the Tax Table to apply to this entry"
-msgstr "输入要应用到这笔交易的税率表"
+msgstr "输入要应用到这笔交易的计税表"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:710
 msgid "Is this entry taxable?"
@@ -24555,8 +24552,8 @@ msgid ""
 "from Business Invoices and Bills which will require Tax Tables to be set up "
 "correctly. Please see the documentation."
 msgstr ""
-"这些税收账户可以使用标准注册表来填充，或者从商业发票和账单中填充，这就需要正"
-"确设置税收表。请参阅文件。"
+"这些税收科目可以使用标准账簿来填充，或者在正确设置计税表的前提下从商业发票和"
+"账单中填充。请参阅文档。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:64
 msgid ""
@@ -28252,7 +28249,7 @@ msgstr "汇率数据库(_P)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "显示并编辑股票和共同基金的价格"
+msgstr "显示并编辑股票和基金的价格"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
@@ -28260,7 +28257,7 @@ msgstr "证券编辑器(_S)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "显示并编辑股票和共同基金商品"
+msgstr "显示并编辑股票、基金等商品"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
@@ -28528,11 +28525,11 @@ msgstr "查看所有商业原始凭证"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
-msgstr "税率(_T)"
+msgstr "销售计税表(_T)"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "查看并编辑税率表（消费税/增值税）"
+msgstr "查看并编辑销售计税表（商品及服务税、增值税）"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -29125,7 +29122,7 @@ msgstr "查找员工凭证…"
 msgid ""
 "Open the Find Employee Voucher Dialog with the vouchers already filtered for "
 "this employee"
-msgstr ""
+msgstr "打开“查找员工凭证”对话框，并显示该员工的凭证"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 msgid "_Print Checks…"
@@ -29572,6 +29569,8 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"执行选中的计划交易。如果该计划未到达安排的执行时间，则执行该计划中的下一次交"
+"易"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
@@ -29693,13 +29692,11 @@ msgstr "自动清算未在时间限制内完成"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:205
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "科目余额已经等于自动结算余额。"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:239
-#, fuzzy
-#| msgid "The interest rate cannot be zero."
 msgid "The selected amount cannot be cleared."
-msgstr "利率不能为零。"
+msgstr "选中的金额无法结算。"
 
 #: libgnucash/app-utils/gnc-exp-parser.c:615
 msgid "Illegal variable in expression."
@@ -30101,7 +30098,7 @@ msgstr "股票"
 
 #: libgnucash/engine/Account.cpp:4339
 msgid "Mutual Fund"
-msgstr "公募基金"
+msgstr "基金"
 
 #: libgnucash/engine/Account.cpp:4344
 msgid "A/Receivable"
@@ -30812,24 +30809,20 @@ msgid ""
 msgstr "修改发票报表的时间长度。值为0则代表禁用。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1339
-#, fuzzy
-#| msgid "Default Customer TaxTable"
 msgid "Default Customer Tax Table"
-msgstr "销项税率"
+msgstr "客户默认计税表"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1340
 msgid "The default tax table to apply to customers."
-msgstr "适用于客户的默认税率。"
+msgstr "适用于客户的默认计税表。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1343
-#, fuzzy
-#| msgid "Default Vendor TaxTable"
 msgid "Default Vendor Tax Table"
-msgstr "进项税率"
+msgstr "供应商默认计税表"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1344
 msgid "The default tax table to apply to vendors."
-msgstr "适用于供应商的默认税率。"
+msgstr "适用于供应商的默认计税表。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1349
 msgid "The default date format used for fancy printed dates."
@@ -30844,10 +30837,8 @@ msgid " (closed)"
 msgstr " (已关闭)"
 
 #: libgnucash/engine/gncOwner.c:1012
-#, fuzzy
-#| msgid "Offset between documents: "
 msgid "Offset between business items: "
-msgstr "文档之间的偏移： "
+msgstr "业务之间的偏移： "
 
 #: libgnucash/engine/gncOwner.c:1124
 msgid "Lot Link"

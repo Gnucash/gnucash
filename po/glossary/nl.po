@@ -10,14 +10,15 @@
 # Ceaus <github@pohw.nl>, 2026.
 # Geert Janssens <info@kobaltwit.be>, 2026.
 # BlueRains <83722494+BlueRains@users.noreply.github.com>, 2026.
+# Ceaus <ceaus@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-08 20:22+0800\n"
-"PO-Revision-Date: 2026-09-30 14:51+0000\n"
-"Last-Translator: Ceaus <github@pohw.nl>\n"
+"PO-Revision-Date: 2026-10-14 11:51+0000\n"
+"Last-Translator: Ceaus <ceaus@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -25,11 +26,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
-#, fuzzy
-#| msgid "\"\""
 msgctxt "quoting convention"
 msgid "\"\""
 msgstr "\"\""
@@ -51,270 +50,194 @@ msgid "account name"
 msgstr "rekeningnaam"
 
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
-#, fuzzy
-#| msgid "account type: Active"
 msgctxt "account type"
 msgid "active"
-msgstr "rekening type: Activa"
+msgstr "activa"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
-#, fuzzy
-#| msgid "account type: Asset"
 msgctxt "account type"
 msgid "asset"
-msgstr "rekening type: Activa"
+msgstr "bedrijfsmiddel"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
-#| msgid "account type: Assets & Liabilities"
 msgctxt "account type"
 msgid "assets & liabilities"
-msgstr "rekening type: Bezittingen en Schulden"
+msgstr "bezittingen en schulden"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
-#, fuzzy
-#| msgid "account type: checking"
 msgctxt "account type"
 msgid "checking"
-msgstr "rekening type: Betaalrekening"
+msgstr "betaalrekening"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: currency"
 msgctxt "account type"
 msgid "currency"
-msgstr "rekening type: Valuta"
+msgstr "valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
-#, fuzzy
-#| msgid "account type: Equity"
 msgctxt "account type"
 msgid "equity"
-msgstr "rekening type: Eigen vermogen"
+msgstr "eigen vermogen"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: Expense"
 msgctxt "account type"
 msgid "expense"
-msgstr "rekeningtype: Uitgaven"
+msgstr "uitgaven"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: Income"
 msgctxt "account type"
 msgid "income"
-msgstr "rekeningtype: Inkomsten"
+msgstr "inkomsten"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
-#, fuzzy
-#| msgid "account type: Liability"
 msgctxt "account type"
 msgid "liability"
-msgstr "rekening type: Schulden"
+msgstr "schulden"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: money-market"
 msgctxt "account type"
 msgid "money-market"
-msgstr "rekening type: Geldmarkt"
+msgstr "geldmarkt"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: Mutual fund"
 msgctxt "account type"
 msgid "mutual fund"
-msgstr "rekening type: Investeringsfonds"
+msgstr "investeringsfonds"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
-#| msgid "account type: Passive"
 msgctxt "account type"
 msgid "passive"
-msgstr "rekening type: Passiva"
+msgstr "passiva"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
-#| msgid "account type: Profit & Loss"
 msgctxt "account type"
 msgid "profit & loss"
-msgstr "rekening type: Winst & Verlies"
+msgstr "winst & verlies"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
-#, fuzzy
-#| msgid "account type: saving"
 msgctxt "account type"
 msgid "saving"
-msgstr "rekening type: Spaarrekening"
+msgstr "spaarrekening"
 
 #. "-"
-#, fuzzy
-#| msgid "account type: Stock"
 msgctxt "account type"
 msgid "stock"
-msgstr "rekening type: Beleggingen"
+msgstr "beleggingen"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
-#| msgid "account type: trading"
 msgctxt "account type"
 msgid "trading"
-msgstr "rekening type: Wisselkoers"
+msgstr "valuta"
 
 #. "-"
-#, fuzzy
-#| msgid "account: parent account"
 msgctxt "account"
 msgid "parent account"
-msgstr "rekening type: Bovenliggend dagboek"
+msgstr "bovenliggende rekening"
 
 #. "-"
-#, fuzzy
-#| msgid "account: subaccount"
 msgctxt "account"
 msgid "subaccount"
-msgstr "rekening type: Onderliggend dagboek"
+msgstr "onderliggend rekening"
 
 #. "-"
-#, fuzzy
-#| msgid "account: top level account"
 msgctxt "account"
 msgid "top level account"
-msgstr "rekening type: Hoogste dagboek"
+msgstr "hoogste rekening"
 
 #. "The process of doing something that caused a transaction to happen"
-#, fuzzy
-#| msgid "Action (register)"
 msgctxt "register"
 msgid "action"
-msgstr "Actie"
+msgstr "actie"
 
 #. "Automated teller machine"
-#, fuzzy
-#| msgid "action: ATM"
 msgctxt "action"
 msgid "ATM"
-msgstr "actie: Geldautomaat"
+msgstr "Geldautomaat"
 
 #. "Transaction was an auto deposit"
-#, fuzzy
-#| msgid "action: autoDep"
 msgctxt "action"
 msgid "autoDep"
-msgstr "actie: autoBoeking"
+msgstr "automatische storting"
 
 #. "-"
-#, fuzzy
-#| msgid "action: buy"
 msgctxt "action"
 msgid "buy"
-msgstr "actie: aankoop"
+msgstr "aankoop"
 
 #. "-"
-#, fuzzy
-#| msgid "action: deposit"
 msgctxt "action"
 msgid "deposit"
-msgstr "actie: storting"
+msgstr "storting"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
-#, fuzzy
-#| msgid "action: direct debit"
 msgctxt "action"
 msgid "direct debit"
-msgstr "actie: automatische afschrijving"
+msgstr "automatische afschrijving"
 
 #. "transaction is a distribution (???)"
-#, fuzzy
-#| msgid "action: dist"
 msgctxt "action"
 msgid "dist"
-msgstr "actie: dist"
+msgstr "uitgifte"
 
 #. "transaction is a dividend"
-#, fuzzy
-#| msgid "action: div"
 msgctxt "action"
 msgid "div"
-msgstr "actie: dividend"
+msgstr "dividend"
 
 #. "-"
-#, fuzzy
-#| msgid "action: fee"
 msgctxt "action"
 msgid "fee"
-msgstr "actie: vergoeding"
+msgstr "vergoeding"
 
 #. "transaction comes from interest"
-#, fuzzy
-#| msgid "action: int"
 msgctxt "action"
 msgid "int"
-msgstr "actie: rente"
+msgstr "rente"
 
 #. "-"
-#, fuzzy
-#| msgid "action: loan"
 msgctxt "action"
 msgid "loan"
-msgstr "actie: lening"
+msgstr "lening"
 
 #. "see: payment 1."
-#, fuzzy
-#| msgid "action: payment"
 msgctxt "action"
 msgid "payment"
-msgstr "actie: betaling"
+msgstr "betaling"
 
 #. "Point of sale"
-#, fuzzy
-#| msgid "action: POS"
 msgctxt "action"
 msgid "POS"
-msgstr "actie: kassa"
+msgstr "POS"
 
 #. "-"
-#, fuzzy
-#| msgid "action: rebate"
 msgctxt "action"
 msgid "rebate"
-msgstr "actie: korting"
+msgstr "korting"
 
 #. "-"
-#, fuzzy
-#| msgid "action: sell"
 msgctxt "action"
 msgid "sell"
-msgstr "actie: verkoop"
+msgstr "verkoop"
 
 #. "-"
-#, fuzzy
-#| msgid "action: Teller"
 msgctxt "action"
 msgid "teller"
-msgstr "actie: kassa"
+msgstr "kassa"
 
 #. "see: transfer 2. (=credit transfer)"
-#, fuzzy
-#| msgid "action: transfer"
 msgctxt "action"
 msgid "transfer"
-msgstr "actie: overboeking"
+msgstr "overboeking"
 
 #. "-"
-#, fuzzy
-#| msgid "action: wire"
 msgctxt "action"
 msgid "wire"
-msgstr "actie: overschrijving"
+msgstr "overschrijving"
 
 #. "-"
-#, fuzzy
-#| msgid "action: withdraw"
 msgctxt "action"
 msgid "withdraw"
-msgstr "actie: opname"
+msgstr "opname"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
@@ -333,8 +256,6 @@ msgid "average"
 msgstr "gemiddelde"
 
 #. "The amount of money that is in one's account"
-#, fuzzy
-#| msgid "balance (noun)"
 msgctxt "noun"
 msgid "balance"
 msgstr "saldo"
@@ -352,8 +273,6 @@ msgid "balance sheet"
 msgstr "balans"
 
 #. "To arrange for income and spending to be equal"
-#, fuzzy
-#| msgid "balance, to"
 msgctxt "verb"
 msgid "balance"
 msgstr "balanceren"
@@ -387,15 +306,11 @@ msgid "Budget"
 msgstr "Budget"
 
 #. "-"
-#, fuzzy
-#| msgid "business (adjective)"
 msgctxt "adjective"
 msgid "business"
-msgstr "zakelijke"
+msgstr "zakelijk"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
-#, fuzzy
-#| msgid "business (noun)"
 msgctxt "noun"
 msgid "business"
 msgstr "bedrijf"
@@ -417,15 +332,11 @@ msgid "check"
 msgstr "cheque"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
-#, fuzzy
-#| msgid "check and repair, to"
 msgctxt "verb"
 msgid "check and repair"
 msgstr "controleren en repareren"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
-#, fuzzy
-#| msgid "close, to"
 msgctxt "verb"
 msgid "close"
 msgstr "sluiten"
@@ -1148,7 +1059,7 @@ msgstr "leverancier"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "voucher"
+msgstr "vergoedingen"
 
 #. "see debit"
 #, fuzzy
