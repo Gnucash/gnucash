@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-27 07:51+0000\n"
+"PO-Revision-Date: 2026-11-02 08:51+0000\n"
 "Last-Translator: Pedro Albuquerque "
 "<pedroalbuquerque@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -2497,7 +2497,7 @@ msgstr "Total de entradas"
 
 #: gnucash/gnome/dialog-doclink.c:659
 msgid "Business item can not be modified."
-msgstr "O item de negócios não pode ser modificado."
+msgstr "O item não pode ser modificado."
 
 #: gnucash/gnome/dialog-doclink.c:668 gnucash/gnome/dialog-doclink.c:769
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
@@ -2569,7 +2569,7 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Duplo clique na entrada na coluna Id para saltar para o item de negócios.\n"
+"Duplo clique na entrada na coluna Id para saltar para o item.\n"
 "Duplo clique na entrada na coluna Documento ligado para abrir o documento "
 "ligado.\n"
 "Duplo clique na entrada na coluna Disponível para modificar a ligação do "
@@ -2577,7 +2577,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:1106
 msgid "Business Document Links"
-msgstr "Ligações de documentos de negócios"
+msgstr "Ligações de documentos da empresa"
 
 #: gnucash/gnome/dialog-employee.c:203
 msgid "You must enter a Payment-Address Name."
@@ -22564,7 +22564,7 @@ msgstr "Folha de estilo"
 #: gnucash/report/report-core.scm:171 gnucash/ui/gnc-main-window.ui:357
 #: gnucash/ui/gnc-plugin-business.ui:159
 msgid "_Business"
-msgstr "Ne_gócios"
+msgstr "E_mpresa"
 
 #: gnucash/report/report-core.scm:172
 msgid "Invoice Number"
@@ -29100,7 +29100,7 @@ msgstr "Mostrar/Ocultar a barra de estado nesta janela"
 
 #: gnucash/ui/gnc-main-window.ui:193
 msgid "Tab P_osition"
-msgstr "P_osição do separador"
+msgstr "P_osição dos separadores"
 
 #: gnucash/ui/gnc-main-window.ui:198
 msgid "Display the notebook tabs at the top of the window"
@@ -29658,11 +29658,11 @@ msgstr "Abrir o diálogo Localizar vale de despesa"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
-msgstr "Documentos comerciais ligados"
+msgstr "Documentos comerciais anexados"
 
 #: gnucash/ui/gnc-plugin-business.ui:140
 msgid "View all Linked Business Documents"
-msgstr "Ver todos os documentos comerciais ligados"
+msgstr "Ver todos os documentos comerciais anexados"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
@@ -29934,7 +29934,7 @@ msgstr "Verificar e _corrigir"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:169
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
 msgid "Check & Repair A_ccount"
-msgstr "Verificar e corrigir _conta"
+msgstr "_Conta"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:171
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:283
@@ -29947,7 +29947,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
 msgid "Check & Repair Su_baccounts"
-msgstr "Verificar e corrigir su_bcontas"
+msgstr "Su_bcontas"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:177
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:288
@@ -29961,7 +29961,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
 msgid "Check & Repair A_ll"
-msgstr "Verificar e corrigir _todas"
+msgstr "_Todas"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:183
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:293
