@@ -155,6 +155,21 @@
     (test-equal "set-type! line does not require intersect"
       #f (gnc:html-chart-get chart '(options interaction intersect)))
 
+    ;; a sankey chart is drawn by the chartjs-chart-sankey plugin,
+    ;; which lays the flows out on its own hidden linear scales
+    (let ((sankey (gnc:make-html-chart)))
+      (gnc:html-chart-set-type! sankey 'sankey)
+      (test-equal "set-type! sankey requires intersect"
+        #t (gnc:html-chart-get sankey '(options interaction intersect)))
+      (test-equal "set-type! sankey hides the x-axis"
+        #f (gnc:html-chart-get sankey '(options scales x display)))
+      (test-equal "set-type! sankey hides the y-axis"
+        #f (gnc:html-chart-get sankey '(options scales y display)))
+      (test-equal "set-type! sankey needs a linear x-axis"
+        'linear (gnc:html-chart-get sankey '(options scales x type)))
+      (test-equal "set-type! sankey tooltips address a single flow"
+        'nearest (gnc:html-chart-get sankey '(options plugins tooltip mode))))
+
     ;; title - a string, or a list of strings for a multi-line title
     (gnc:html-chart-set-title! chart "single line")
     (test-equal "set-title! string" "single line" (gnc:html-chart-title chart))
@@ -279,6 +294,18 @@ may share a page without sharing their variables"
         (not (string-contains html "chartjsoptions.options.scales.x.ticks.callback")))
       (test-assert "custom y-axis ticks can be disabled"
         (not (string-contains html "chartjsoptions.options.scales.y.ticks.callback")))))
+
+  ;; the sankey chart type is not part of chartjs itself
+  (let ((chart (gnc:make-html-chart)))
+    (test-assert "a bar chart does not load the sankey plugin"
+      (not (string-contains (render-chart chart) "chartjs-chart-sankey")))
+    (gnc:html-chart-set-type! chart 'sankey)
+    (let ((html (render-chart chart)))
+      (test-assert "a sankey chart loads the sankey plugin"
+        (string-contains html "chartjs-chart-sankey"))
+      (test-assert "a sankey chart leaves its hidden axis ticks alone"
+        (not (or (string-contains html "chartjsoptions.options.scales.x.ticks.callback")
+                 (string-contains html "chartjsoptions.options.scales.y.ticks.callback"))))))
 
   ;; a multicolumn report renders several charts into the same page
   (let* ((html-1 (render-chart (gnc:make-html-chart)))
