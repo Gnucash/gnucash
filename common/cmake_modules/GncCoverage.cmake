@@ -90,6 +90,22 @@ add_custom_target(lcov-generate-html
   COMMAND_EXPAND_LISTS)
 set_target_properties(lcov-generate-html PROPERTIES ADDITIONAL_CLEAN_FILES "${coverage_html_dir}")
 
+# geninfo exits 1 when there are no .gcda files (lcov >= 2.3, regardless of
+# --ignore-errors empty), which happens for targets the tests never run. The
+# _base.info from lcov-initialize already covers those, so skip the capture.
+# Usage: collect-target.sh target_dir result_info lcov-command...
+file(GENERATE OUTPUT ${CMAKE_BINARY_DIR}/collect-target.sh
+  CONTENT
+  "#!/bin/sh
+rm -f \"$2\"
+if find \"$1\" -name '*.gcda' -print -quit | grep -q .
+then
+  shift 2
+  exec \"$@\"
+fi
+"
+  FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE WORLD_EXECUTE)
+
 function (add_coverage_target tgt)
   get_target_property(build_dir ${tgt} BINARY_DIR)
   set(target_dir "${build_dir}/CMakeFiles/${tgt}.dir")
@@ -102,8 +118,11 @@ function (add_coverage_target tgt)
   add_dependencies(lcov-initialize lcov-initialize-${tgt})
   add_dependencies(lcov-initialize-${tgt} ${tgt})
 
+  set(result_info "${coverage_dir}/${tgt}_result.info")
   add_custom_target(lcov-collect-${tgt}
-    COMMAND lcov ${geninfo_flags} ${generate_flags} -c --directory ${target_dir} -o "${coverage_dir}/${tgt}_result.info"
+    COMMAND sh ${CMAKE_BINARY_DIR}/collect-target.sh ${target_dir} ${result_info}
+      lcov ${geninfo_flags} ${generate_flags} -c --directory ${target_dir} -o ${result_info}
+    DEPENDS ${CMAKE_BINARY_DIR}/collect-target.sh
     VERBATIM
     COMMAND_EXPAND_LISTS)
   add_dependencies(lcov-collect lcov-collect-${tgt})
