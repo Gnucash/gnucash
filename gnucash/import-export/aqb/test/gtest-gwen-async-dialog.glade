@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog type="dialog" name="async_test" flags="decorShrinkable decorStretchable">
+  <widget type="vLayout" name="layout" flags="fillX fillY">
+    <widget type="label" name="message" text="Asynchronous Gwen dialog test" />
+    <widget type="hLayout" name="buttons" flags="fillX">
+      <widget type="pushButton" name="accept" text="Accept" />
+      <widget type="pushButton" name="reject" text="Reject" />
+    </widget>
+  </widget>
+</dialog>

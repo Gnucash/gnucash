@@ -66,7 +66,7 @@ if (WEBVIEW2)
 # The MSYS2 webview2-loader package doesn't include a link (.dll.a)
 # library so we have to dlopen the library at runtime. We just need to
 # include the header here.
-  target_include_directories(gnc-html PRIVATE ${WEBVIEW2_INCLUDE_DIRS})
+  target_include_directories(gnc-html SYSTEM PRIVATE ${WEBVIEW2_INCLUDE_DIRS})
 else()
   target_link_libraries(gnc-html PRIVATE PkgConfig::WEBKIT)
 endif()

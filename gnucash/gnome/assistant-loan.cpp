@@ -732,8 +732,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         g_object_set (ldd->optEscrowGAS, "entry-width", 50, NULL);
         gnc_account_sel_set_new_account_modal (GNC_ACCOUNT_SEL(ldd->optEscrowGAS), true);
         gnc_account_sel_set_new_account_ability( ldd->optEscrowGAS, TRUE );
-        gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
-                           GTK_WIDGET(ldd->optEscrowGAS) );
+        gtk_box_append (GTK_BOX (ldd->optEscrowHBox), GTK_WIDGET(ldd->optEscrowGAS) );
 
         {
             /* . Each RepayOpt gets an "entry" in the optContainer.
@@ -822,7 +821,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         }
 
         ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-        gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+        gtk_box_append (GTK_BOX (ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
 
         g_signal_connect (ldd->payGncFreq, "changed",
                           G_CALLBACK (loan_pay_page_valid_cb), ldd);
@@ -1535,10 +1534,10 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
         {
             g_signal_handlers_disconnect_by_func( ldd->payGncFreq,
                                                   (gpointer) loan_pay_page_valid_cb, ldd );
-            gtk_container_remove( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_box_remove( GTK_BOX(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
             ldd->payGncFreq = NULL;
             ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new_from_recurrence( rod->schedule, rod->startDate ));
-            gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_box_append (GTK_BOX (ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
             g_signal_connect (ldd->payGncFreq, "changed",
                               G_CALLBACK (loan_pay_page_valid_cb), ldd);
         }
@@ -1909,8 +1908,7 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
         }
     }
 
-    gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
-                       GTK_WIDGET(ldd->revView) );
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (ldd->revScrollWin), GTK_WIDGET(ldd->revView) );
     gtk_widget_show( GTK_WIDGET(ldd->revView) );
 
     loan_rev_recalc_schedule( ldd );

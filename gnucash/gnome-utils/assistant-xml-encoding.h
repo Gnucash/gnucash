@@ -25,7 +25,11 @@
 #define ASSISTANT_XML_ENCODING_H
 
 #include "qof.h"
+#include <gtk/gtk.h>
 
-gboolean gnc_xml_convert_single_file (const gchar *filename);
+typedef void (*GncXmlConvertCallback) (gboolean converted, gpointer user_data);
+void gnc_xml_convert_single_file_async (GtkWindow *parent, const gchar *filename,
+                                        GncXmlConvertCallback completed,
+                                        gpointer user_data);
 
 #endif /* ASSISTANT_XML_ENCODING_H */

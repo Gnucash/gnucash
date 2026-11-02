@@ -37,6 +37,7 @@
 #define __GNC_PLUGIN_PAGE_H
 
 #include <glib.h>
+#include <gio/gio.h>
 #include "qof.h"
 
 G_BEGIN_DECLS
@@ -75,6 +76,10 @@ typedef struct GncPluginPage
                                 *   code.  */
 } GncPluginPage;
 
+
+typedef void (*GncPluginPagePendingCallback) (GncPluginPage *page,
+                                             gboolean accepted,
+                                             gpointer user_data);
 
 /** The class data structure for a content plugin. */
 typedef struct
@@ -201,6 +206,9 @@ typedef struct
      *  which should cancel the pending operation.  TRUE
      *  otherwise */
     gboolean (* finish_pending) (GncPluginPage *plugin_page);
+    void (* finish_pending_async) (GncPluginPage *page, GCancellable *cancellable,
+                                  GncPluginPagePendingCallback callback,
+                                  gpointer user_data);
 } GncPluginPageClass;
 
 
@@ -594,6 +602,10 @@ void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
  *  should cancel the pending operation.  TRUE otherwise
  */
 gboolean gnc_plugin_page_finish_pending (GncPluginPage *plugin_page);
+void gnc_plugin_page_finish_pending_async (GncPluginPage *page,
+                                          GCancellable *cancellable,
+                                          GncPluginPagePendingCallback callback,
+                                          gpointer user_data);
 
 G_END_DECLS
 

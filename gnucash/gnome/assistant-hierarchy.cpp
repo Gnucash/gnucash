@@ -887,7 +887,7 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 
         data->category_accounts_tree = tree_view;
         gtk_tree_view_expand_all (tree_view);
-        gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
+        gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(data->category_accounts_container), GTK_WIDGET(tree_view));
         gtk_widget_show(GTK_WIDGET(tree_view));
     }
     else
@@ -1381,8 +1381,8 @@ on_final_account_prepare (hierarchy_data  *data)
         g_list_free(renderers);
     }
 
-    gtk_container_add(GTK_CONTAINER(data->final_account_tree_container),
-                      GTK_WIDGET(data->final_account_tree));
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(data->final_account_tree_container),
+                                    GTK_WIDGET(data->final_account_tree));
 
     /* Expand the entire tree */
     gtk_tree_view_expand_all (tree_view);
@@ -1541,8 +1541,8 @@ assistant_insert_book_options_page (hierarchy_data *data)
     auto parent = gtk_widget_get_parent (options);
 
     g_object_ref (options);
-    gtk_container_remove (GTK_CONTAINER(parent), options);
-    gtk_container_add (GTK_CONTAINER(vbox), options);
+    gtk_box_remove (GTK_BOX(parent), options);
+    gtk_box_append (GTK_BOX (vbox), options);
     g_object_unref (options);
 
     gtk_widget_show_all (vbox);

@@ -207,6 +207,10 @@ Transaction * gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *p
  *  @param plugin_page A pointer to the GncPluginPageRegister.
  */
 void gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page);
+void gnc_plugin_page_register_jump_to_split_async (GncPluginPage* plugin_page,
+                                                    Split *split);
+void gnc_plugin_page_register_jump_to_split_amount_async (GncPluginPage* plugin_page,
+                                                           Split *split);
 
 
 G_END_DECLS
@@ -219,4 +223,3 @@ G_END_DECLS
 #endif
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER_H */
-

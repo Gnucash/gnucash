@@ -56,6 +56,10 @@ AccountList * gnc_account_get_descendants_sorted (const Account *account);
 %ignore gnc_account_get_descendants_sorted;
 %include <Account.h>
 
+/* Borrowed dialog inputs are not a scripting API. */
+%ignore gnc_exchange_current_session;
+%ignore GncTransactionInfo;
+%ignore gnc_transaction_from_transaction_info;
 %include <Transaction.h>
 
 %include <gnc-lot.h>

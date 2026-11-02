@@ -110,8 +110,8 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK,
                                          "%s", errmsg);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
+        g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+        gtk_widget_show (dialog);
         g_free (errmsg);
         errmsg = 0;
 
@@ -419,4 +419,3 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
     }
 }
-

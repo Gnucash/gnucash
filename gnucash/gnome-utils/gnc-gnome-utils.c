@@ -210,9 +210,9 @@ gnc_gnome_help (GtkWindow *parent, const char *dir, const char *detail)
                   componentsJoinedByString: @"-"];
         if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
-            gnc_error_dialog (parent, "%s\n%s\n%s: %s", _(msg_no_help_found),
-                              _(msg_no_help_reason),
-                              _(msg_no_help_location), [docs_dir UTF8String]);
+            gnc_error_dialog_async (parent, "%s\n%s\n%s: %s", _(msg_no_help_found),
+                                    _(msg_no_help_reason),
+                                    _(msg_no_help_location), [docs_dir UTF8String]);
             [pool release];
             return;
         }
@@ -302,7 +302,7 @@ gnc_gnome_help (GtkWindow *parent, const char *dir, const char *detail)
         [[NSWorkspace sharedWorkspace] openURL: url];
     else
     {
-       gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+       gnc_error_dialog_async (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     [pool release];
 }
@@ -330,7 +330,7 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     if (!found)
     {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog_async (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     else
     {
@@ -362,7 +362,7 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     g_assert(error != NULL);
     {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog_async (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     PERR ("%s", error->message);
     g_error_free(error);
@@ -393,7 +393,7 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
         return;
     }
 
-    gnc_error_dialog (parent, "%s", message);
+    gnc_error_dialog_async (parent, "%s", message);
 
     [pool release];
     return;
@@ -425,7 +425,7 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
         {
             const gchar *message =
             _("GnuCash could not find the linked document.");
-            gnc_error_dialog (parent, "%s:\n%s", message, filename);
+            gnc_error_dialog_async (parent, "%s:\n%s", message, filename);
         }
         g_free (wincmd);
         g_free (winuri);
@@ -465,7 +465,7 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
         else
             error_uri = g_strdup (uri);
 
-        gnc_error_dialog (parent, "%s\n%s", message, error_uri);
+        gnc_error_dialog_async (parent, "%s\n%s", message, error_uri);
         g_free (error_uri);
     }
     PERR ("%s", error->message);
@@ -743,18 +743,142 @@ gnc_gui_shutdown (void)
 /*  shutdown gnucash.  This function will initiate an orderly
  *  shutdown, and when that has finished it will exit the program.
  */
+static gboolean shutdown_query_pending;
+
+typedef struct
+{
+    guint identifier;
+    guint references;
+    gboolean active;
+    GncGuiShutdownBarrier provider;
+    gpointer data;
+} ShutdownBarrier;
+
+static GList *shutdown_barriers;
+static guint next_barrier_identifier;
+static GHashTable *session_operations;
+static guint next_operation_identifier;
+
+gboolean
+gnc_gui_session_operation_pending (void)
+{
+    return session_operations && g_hash_table_size (session_operations) > 0;
+}
+
+guint
+gnc_gui_begin_session_operation (QofBook *book)
+{
+    if (shutdown_query_pending || !book || !gnc_current_session_exist () ||
+        gnc_get_current_book () != book || !qof_book_is_open (book) ||
+        qof_book_shutting_down (book) || gnc_file_save_in_progress () ||
+        g_object_get_data (G_OBJECT (book), "gnc-file-open-pending") ||
+        g_object_get_data (G_OBJECT (book), "gnc-query-save-pending") ||
+        g_object_get_data (G_OBJECT (book), "gnc-save-close-pending")) return 0;
+    if (!session_operations)
+        session_operations = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                                    NULL, g_object_unref);
+    do { ++next_operation_identifier; }
+    while (!next_operation_identifier || g_hash_table_contains (
+        session_operations, GUINT_TO_POINTER (next_operation_identifier)));
+    g_hash_table_insert (session_operations, GUINT_TO_POINTER (next_operation_identifier),
+                         g_object_ref (book));
+    return next_operation_identifier;
+}
+
+void
+gnc_gui_end_session_operation (guint identifier)
+{
+    if (session_operations && identifier)
+        g_hash_table_remove (session_operations, GUINT_TO_POINTER (identifier));
+}
+
+static void
+shutdown_barrier_unref (gpointer data)
+{
+    ShutdownBarrier *barrier = data;
+    if (--barrier->references == 0) g_free (barrier);
+}
+
+guint
+gnc_gui_add_shutdown_barrier (GncGuiShutdownBarrier provider, gpointer data)
+{
+    g_return_val_if_fail (provider && !shutdown_query_pending, 0);
+    ShutdownBarrier *barrier = g_new0 (ShutdownBarrier, 1);
+    barrier->identifier = ++next_barrier_identifier;
+    barrier->references = 1;
+    barrier->active = TRUE;
+    barrier->provider = provider;
+    barrier->data = data;
+    shutdown_barriers = g_list_append (shutdown_barriers, barrier);
+    return barrier->identifier;
+}
+
+void
+gnc_gui_remove_shutdown_barrier (guint identifier)
+{
+    for (GList *link = shutdown_barriers; link; link = link->next)
+    {
+        ShutdownBarrier *barrier = link->data;
+        if (barrier->identifier != identifier) continue;
+        barrier->active = FALSE;
+        shutdown_barriers = g_list_delete_link (shutdown_barriers, link);
+        shutdown_barrier_unref (barrier);
+        return;
+    }
+}
+
+typedef struct
+{
+    GPtrArray *providers;
+    guint position;
+} ShutdownDrain;
+
+static void
+gnc_shutdown_after_save (gboolean permitted, [[maybe_unused]] gpointer user_data)
+{
+    shutdown_query_pending = FALSE;
+    if (permitted && !gnome_is_terminating)
+    {
+        gnc_hook_run (HOOK_UI_SHUTDOWN, NULL);
+        gnc_gui_shutdown ();
+    }
+}
+
+static gboolean
+shutdown_drain_continue (gpointer user_data)
+{
+    ShutdownDrain *request = user_data;
+    while (request->position < request->providers->len)
+    {
+        ShutdownBarrier *barrier = g_ptr_array_index (request->providers, request->position++);
+        if (!barrier->active) continue;
+        barrier->provider (barrier->data, shutdown_drain_continue, request);
+        return G_SOURCE_REMOVE;
+    }
+    g_ptr_array_unref (request->providers);
+    g_free (request);
+    gnc_file_query_save_async (gnc_ui_get_main_window (NULL), FALSE,
+                               gnc_shutdown_after_save, NULL);
+    return G_SOURCE_REMOVE;
+}
+
 void
 gnc_shutdown (int exit_status)
 {
     if (gnucash_ui_is_running())
     {
-        if (!gnome_is_terminating)
+        if (!gnome_is_terminating && !shutdown_query_pending)
         {
-            if (gnc_file_query_save (gnc_ui_get_main_window (NULL), FALSE))
+            shutdown_query_pending = TRUE;
+            ShutdownDrain *request = g_new0 (ShutdownDrain, 1);
+            request->providers = g_ptr_array_new_with_free_func (shutdown_barrier_unref);
+            for (GList *link = shutdown_barriers; link; link = link->next)
             {
-                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
-                gnc_gui_shutdown();
+                ShutdownBarrier *barrier = link->data;
+                ++barrier->references;
+                g_ptr_array_add (request->providers, barrier);
             }
+            shutdown_drain_continue (request);
         }
     }
     else
@@ -765,4 +889,3 @@ gnc_shutdown (int exit_status)
         exit(exit_status);
     }
 }
-

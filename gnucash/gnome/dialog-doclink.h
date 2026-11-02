@@ -27,19 +27,33 @@
 extern "C" {
 #endif
 
+/** Completion for gnc_doclink_get_uri_dialog_async.
+ *
+ *  @param parent The GtkWindow that was passed to the dialog
+ *  @param uri The resulting uri. The callback takes ownership and should
+ *  free this memory with g_free when uri is no longer needed.
+ *  @param user_data The data that was passed to the dialog
+ */
+typedef void (*GncDoclinkUriCallback) (GtkWindow *parent, gchar *uri,
+                                       gpointer user_data);
+
 /** Present the right edit dialog for the uri.
  *
- *  The function allocates memory for the uri. The calling function should
- *  free this memory with g_free when uri is no longer needed.
+ *  The dialog runs without a nested main loop, so this function returns at
+ *  once and @a callback reports the outcome when the user is done. It runs
+ *  exactly once: with the amended uri on acceptance, with an empty string
+ *  when the link is removed, and with @a uri unchanged on cancellation.
  *
  *  @param parent The GtkWindow for the parent widget
  *  @param title The dialog title to be used for the dialog
  *  @param uri The old uri to be amended in the dialog
- *
- *  @return The ammeded uri, can be NULL if deletion required.
+ *  @param callback The completion to run, which must not be NULL
+ *  @param user_data The data to pass to @a callback
  */
-gchar * gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
-                                    const gchar *uri);
+void gnc_doclink_get_uri_dialog_async (GtkWindow *parent, const gchar *title,
+                                       const gchar *uri,
+                                       GncDoclinkUriCallback callback,
+                                       gpointer user_data);
 
 /** Open the doclink uri.
  *

@@ -6,7 +6,8 @@ set(doc_DATA
 
 set(doc_noinst_DATA
         CMakeLists.txt gnucash.1.in
-        gnucash-cli.1.in tip_of_the_day.list.c README.txt)
+        gnucash-cli.1.in tip_of_the_day.list.c README.txt
+        gtk3-dialog-preparation.md)
 
 install(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 

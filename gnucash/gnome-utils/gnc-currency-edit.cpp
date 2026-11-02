@@ -373,7 +373,7 @@ gnc_currency_edit_new (void)
     gtk_entry_completion_set_match_func (completion,
                                          (GtkEntryCompletionMatchFunc)match_func,
                                          GTK_TREE_MODEL(store), nullptr);
-    gtk_entry_set_completion (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (gce))),
+    gtk_entry_set_completion (GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX(gce))),
                               completion);
 
     return GTK_WIDGET (gce);
@@ -465,7 +465,7 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
 
     model = gtk_combo_box_get_model (GTK_COMBO_BOX(gce));
 
-    entry = gtk_bin_get_child (GTK_BIN(gce));
+    entry = gtk_combo_box_get_child (GTK_COMBO_BOX(gce));
 
     g_object_ref (model);
 

@@ -32,5 +32,6 @@
 /** @file gncEntryLedgerControl.h
  */
 TableControl * gnc_entry_ledger_control_new (void);
+void gnc_entry_ledger_cancel_async_close_requests (GncEntryLedger *ledger);
 /** @} */
 #endif /* GNC_ENTRY_LEDGER_CONTROL_H */

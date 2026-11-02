@@ -52,75 +52,21 @@ typedef struct
     GtkWidget           *warning;                        /* Warning Label */
 } AccountPickerDialog;
 
-/**  Must be called with a string containing a unique identifier for the
-  account.  If an account with a matching online_id is
-  found, the function immediately returns with a pointer to that
-  account.  Otherwise, the user is prompted to select a GnuCash
-  account or create a new one (in both cases, the unique identifier is
-  written to the account, so the user won't be prompted
-  again).  If the user refuses to select or create an account, NULL is
-  returned.
+/** Find an account by its online identifier without showing user interface. */
+Account *gnc_import_find_account_by_online_id(const gchar *online_id,
+                                               GNCAccountType default_type);
 
-  @param parent The parent widget. Can be NULL.
-
-    @param account_online_id_value The string containing your unique
-    account_id coming from some string of your module.  This is the
-    normal mode of operation. Can be NULL.
-
-    If account_online_id_value==NULL, you basically end up with an account
-    selector that allows you to select an account whose GncGUID will be
-    remembered elsewhere.  You would fill account_human_description to tell
-    the user what he is looking for.  In this mode, the  online_id
-    field of the found account will not be touched.  To use this mode,
-    prompt_on_no_match must NOT be set to 0.
-
-    @param account_human_description
-	 A human-readable description of
-    the account.  Can be NULL. If it is not NULL, it will be shown before
-    the id in the account matching dialog.  It will also be used as
-    the default account name if a new account is created.
-
-    @param new_account_default_commodity
-	 Default commodity of
-    the new account. Can be NULL. If not NULL, it will be the
-    account's commodity if a new account is created.  Also, if not
-    NULL, the function will also warn the user if the found or created
-    account's commodity doesn't match.
-
-    @param new_account_default_type
-	 Default account type of a
-    new account. Can be NULL.  If not ACCT_TYPE_NONE, it will be the
-    account's type if a new account is created.  If not
-    ACCT_TYPE_NONE, the function will also warn the user if the found
-    or created account's commodity doesn't match.
-
-    @param prompt_on_no_match Only active if no account with the
-    account_online_id_value could be found in gnucash, or if online-id
-    was NULL. In that case, if prompt_on_no_match is TRUE (nonzero), the user
-    will be asked to create a new account. If prompt_on_no_match is FALSE
-    (zero), this function will simply return NULL but will neither
-    select nor create any account.
-
-    @param default_selection If not NULL, that account will be
-    pre-selected by default.
-
-    @param ok_pressed A pointer to gboolean.  If non-NULL, whether or
-    not the picker dialog was closed by the user pressing ok will be
-    stored in the parameter.  If no dialog was created by the
-    gnc_import_select_account() call, TRUE is always returned.
-
-  @return A pointer to the found or created Account, or NULL if no
-  account was found or created.
-*/
-Account * gnc_import_select_account(GtkWidget *parent,
-                                    const gchar * account_online_id_value,
-                                    gboolean prompt_on_no_match,
-                                    const gchar * account_human_description,
-                                    const gnc_commodity * new_account_default_commodity,
-                                    GNCAccountType new_account_default_type,
-                                    Account * default_selection,
-                                    gboolean * ok_pressed
-                                   );
+typedef void (*GncImportAccountCallback)(Account *account, gboolean accepted,
+                                         gpointer user_data);
+void gnc_import_select_account_async(GtkWidget *parent,
+                                     const gchar *account_online_id_value,
+                                     gboolean prompt_on_no_match,
+                                     const gchar *account_human_description,
+                                     const gnc_commodity *new_account_default_commodity,
+                                     GNCAccountType new_account_default_type,
+                                     Account *default_selection,
+                                     GncImportAccountCallback callback,
+                                     gpointer user_data);
 
 #ifdef __cplusplus
 }

@@ -21,4 +21,10 @@ Procedure:
   Substituting your own userid for 'me'.
 * Run `util/ci/macos-ci-deps/make-macos-deps-tarball.sh gnucash-4.2-mac-dependencies.tar.xz` from the root of the source directory, changing the tarball's name if appropriate.
 * Upload the resulting tarball to the Dependencies folder in the Gnucash files section on SourceForge.
+  The archive must include the GTK GSettings schemas and LibOFX DTDs, including
+  `org.gtk.Settings.FileChooser`, `opensp.dcl`, and `ofx160.dtd`. The packaging
+  script compiles and verifies the schemas and checks the DTDs before creating
+  the archive. CI also verifies these resources before building GnuCash.
+  Updating the manifests does not update an already published archive: rebuild
+  and upload it, then update the SHA256 in `.github/workflows/mac-tests.yaml`.
 * If necessary modify `.github/workflows/mac-tests.yaml to reflect the tarball's URI.

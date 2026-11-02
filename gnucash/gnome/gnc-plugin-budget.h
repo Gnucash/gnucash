@@ -42,8 +42,13 @@ G_DECLARE_FINAL_TYPE (GncPluginBudget, gnc_plugin_budget, GNC, PLUGIN_BUDGET, Gn
 /* function prototypes */
 GncPlugin *gnc_plugin_budget_new (void);
 
-/* Launch the budget list dialog.*/
-GncBudget * gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book);
+/** Complete once after closing the selector. The selected budget is borrowed
+ * only for the callback; cancellation or a changed session supplies NULL. */
+typedef void (*GncBudgetSelectionCallback) (GtkWindow *parent, GncBudget *budget,
+                                          gpointer user_data);
+void gnc_budget_gui_select_budget_async (GtkWindow *parent, QofBook *book,
+                                        GncBudgetSelectionCallback callback,
+                                        gpointer user_data);
 
 
 G_END_DECLS

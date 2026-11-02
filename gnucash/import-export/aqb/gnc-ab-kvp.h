@@ -128,4 +128,6 @@ void gnc_ab_set_standing_order_metadata (SchedXaction *sx,
                                          const gchar *id,
                                          const gchar *account_guid);
 
+G_END_DECLS
+
 #endif /* GNC_AB_KVP_H */

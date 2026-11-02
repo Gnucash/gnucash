@@ -308,8 +308,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
         gtk_widget_set_size_request(GTK_WIDGET(scroller), 300, 100);
-        gtk_container_add (GTK_CONTAINER (scroller), sw->result_view);
-        gtk_container_add(GTK_CONTAINER(frame), scroller);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), sw->result_view);
+        gtk_frame_set_child (GTK_FRAME (frame), scroller);
 
         /* Create the button_box */
         button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -676,8 +676,8 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
     sw->crit_list = g_list_remove (sw->crit_list, data);
 
     /* and from the display */
-    gtk_container_remove (GTK_CONTAINER (sw->criteria_table), element);
-    gtk_container_remove (GTK_CONTAINER (sw->criteria_table), button);
+    gtk_grid_remove (GTK_GRID (sw->criteria_table), element);
+    gtk_grid_remove (GTK_GRID (sw->criteria_table), button);
 
     /* disable match-type menu when there is no criterion */
     if (!sw->crit_list)
@@ -742,7 +742,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
      * the pointer to data stays the same.
      */
     if (data->elemwidget)
-        gtk_container_remove (GTK_CONTAINER (data->container), data->elemwidget);
+        gtk_grid_remove (GTK_GRID (data->container), data->elemwidget);
     g_object_unref (G_OBJECT (data->element));
 
     newelem = gnc_search_core_type_new_type_name

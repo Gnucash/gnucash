@@ -60,7 +60,13 @@ void gnc_ab_select_imex_dlg_destroy (GncABSelectImExDlg* imexd);
  * @param imexd the dialog.
  * @return A GTK_RESPONSE status.
  */
-int gnc_ab_select_imex_dlg_run (GncABSelectImExDlg* imexd);
+typedef void (*GncABSelectImExCallback) (gboolean accepted,
+                                         const gchar *imexporter,
+                                         const gchar *profile,
+                                         gpointer user_data);
+void gnc_ab_select_imex_dlg_run_async (GncABSelectImExDlg *imexd,
+                                       GncABSelectImExCallback completed,
+                                       gpointer user_data);
 
 /**
  * Get the selected importer/exporter name

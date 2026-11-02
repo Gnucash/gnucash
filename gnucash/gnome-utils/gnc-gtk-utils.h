@@ -41,6 +41,40 @@
 extern "C" {
 #endif
 
+/* GTK4 compatibility wrappers for GtkBin removal (child setters and getters) */
+#if !GTK_CHECK_VERSION(4, 0, 0)
+static inline GtkWidget *gtk_window_get_child (GtkWindow *window) { return gtk_bin_get_child (GTK_BIN (window)); }
+static inline void gtk_window_set_child (GtkWindow *window, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (window), child); }
+
+static inline GtkWidget *gtk_frame_get_child (GtkFrame *frame) { return gtk_bin_get_child (GTK_BIN (frame)); }
+static inline void gtk_frame_set_child (GtkFrame *frame, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (frame), child); }
+
+static inline GtkWidget *gtk_button_get_child (GtkButton *button) { return gtk_bin_get_child (GTK_BIN (button)); }
+static inline void gtk_button_set_child (GtkButton *button, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (button), child); }
+
+static inline GtkWidget *gtk_expander_get_child (GtkExpander *expander) { return gtk_bin_get_child (GTK_BIN (expander)); }
+static inline void gtk_expander_set_child (GtkExpander *expander, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (expander), child); }
+
+static inline GtkWidget *gtk_scrolled_window_get_child (GtkScrolledWindow *sw) { return gtk_bin_get_child (GTK_BIN (sw)); }
+static inline void gtk_scrolled_window_set_child (GtkScrolledWindow *sw, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (sw), child); }
+
+static inline GtkWidget *gtk_combo_box_get_child (GtkComboBox *combo) { return gtk_bin_get_child (GTK_BIN (combo)); }
+static inline void gtk_combo_box_set_child (GtkComboBox *combo, GtkWidget *child) { gtk_container_add (GTK_CONTAINER (combo), child); }
+
+static inline GtkWidget *gtk_event_box_get_child (GtkWidget *eb) { return gtk_bin_get_child (GTK_BIN (eb)); }
+static inline GtkWidget *gtk_menu_item_get_child (GtkMenuItem *mi) { return gtk_bin_get_child (GTK_BIN (mi)); }
+
+/* GTK4 compatibility wrappers for GtkContainer removal (box, grid, child setters) */
+#if !GTK_CHECK_VERSION(4, 0, 0)
+static inline void gtk_box_append (GtkBox *box, GtkWidget *child) { gtk_box_pack_start (box, child, FALSE, FALSE, 0); }
+static inline void gtk_box_prepend (GtkBox *box, GtkWidget *child) { gtk_box_pack_end (box, child, FALSE, FALSE, 0); }
+static inline void gtk_box_remove (GtkBox *box, GtkWidget *child) { gtk_container_remove (GTK_CONTAINER (box), child); }
+static inline void gtk_grid_remove (GtkGrid *grid, GtkWidget *child) { gtk_container_remove (GTK_CONTAINER (grid), child); }
+#endif
+#endif
+
+
+
 /** @name gtk Miscellaneous Functions
  @{
 */

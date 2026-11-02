@@ -140,6 +140,31 @@ GType gnc_transaction_get_type(void);
  the xaccTransDestroy() method should be called. */
 Transaction * xaccMallocTransaction (QofBook *book);
 
+/** Input for a committed two-account transfer. Accounts and amounts must
+ * already be validated by the caller. Number/action uses this book's option,
+ * not the current GUI session's option.
+ */
+typedef struct
+{
+    QofBook *book;
+    Account *from_account;
+    Account *to_account;
+    gnc_commodity *from_commodity;
+    gnc_commodity *to_commodity;
+    time64 date;
+    gnc_numeric amount;
+    gnc_numeric to_amount;
+    const char *number;
+    const char *description;
+    const char *notes;
+    const char *memo;
+} GncTransactionInfo;
+
+/** Returns a transaction owned by info->book after committing its edits and
+ * those of both accounts. The caller is responsible for input validation.
+ */
+Transaction *gnc_transaction_from_transaction_info (const GncTransactionInfo *info);
+
 /** Destroys a transaction.
  *  Each split in transaction @a trans is removed from its
  *  account and destroyed as well.

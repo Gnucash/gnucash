@@ -72,12 +72,10 @@ set(gnucash_GRESOURCES
   ui/gnc-plugin-page-account-tree.ui
   ui/gnc-plugin-page-budget.ui
   ui/gnc-plugin-page-invoice.ui
-  ui/gnc-plugin-page-invoices-owner.ui
   ui/gnc-plugin-page-owner-tree.ui
   ui/gnc-plugin-page-register.ui
   ui/gnc-plugin-page-report.ui
   ui/gnc-plugin-page-sx-list.ui
-  ui/gnc-plugin-page-tracelog.ui
   ui/gnc-plugin-qif-import.ui
   ui/gnc-reconcile-window.ui
 )

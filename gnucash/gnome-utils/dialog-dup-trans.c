@@ -31,6 +31,8 @@
 #include "dialog-dup-trans.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
+#include "gnc-ui.h"
+#include "gnc-gui-query.h"
 #include "qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -53,7 +55,63 @@ typedef struct
     GtkWidget *num_label;             // GtkLabel
     GtkWidget *tnum_label;            // GtkLabel
     GtkWidget *link_label;            // GtkLabel
+    GncDupTransDialogCallback completed;
+    gpointer user_data;
+    gchar *doclink_input;
+    GncDupTransResult *result;
 } DupTransDialog;
+
+void
+gnc_dup_trans_result_free (GncDupTransResult *result)
+{
+    if (!result)
+        return;
+    g_free (result->num);
+    g_free (result->tnum);
+    g_free (result->doclink);
+    g_free (result);
+}
+
+static void
+gnc_dup_trans_dialog_capture (GtkDialog *widget, gint response, gpointer user_data)
+{
+    DupTransDialog *dialog = user_data;
+    GncDupTransResult *result = NULL;
+    if (response == GTK_RESPONSE_OK)
+    {
+        result = g_new0 (GncDupTransResult, 1);
+        result->date = gnc_date_edit_get_date (GNC_DATE_EDIT (dialog->date_edit));
+        gnc_date_edit_get_gdate (GNC_DATE_EDIT (dialog->date_edit), &result->gdate);
+        result->num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dialog->num_edit)));
+        result->tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY (dialog->tnum_edit)));
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->link_edit)))
+            result->doclink = g_strdup (dialog->doclink_input);
+    }
+    dialog->result = result;
+}
+
+static void
+gnc_dup_trans_dialog_complete (GtkWindow *parent, gint response, gpointer user_data)
+{
+    DupTransDialog *dialog = user_data;
+    GncDupTransDialogCallback callback = dialog->completed;
+    gpointer data = dialog->user_data;
+    GncDupTransResult *result = dialog->result;
+    g_signal_handlers_disconnect_by_data (dialog->dialog, dialog);
+    g_signal_handlers_disconnect_by_data (dialog->num_edit, dialog);
+    g_signal_handlers_disconnect_by_data (dialog->tnum_edit, dialog);
+    g_object_unref (dialog->num_edit);
+    g_object_unref (dialog->tnum_edit);
+    g_object_unref (dialog->dialog);
+    g_free (dialog->doclink_input);
+    g_free (dialog);
+    if (response != GTK_RESPONSE_OK)
+    {
+        gnc_dup_trans_result_free (result);
+        result = NULL;
+    }
+    callback (result, data);
+}
 
 /* Parses the string value and returns true if it is a
  * number. In that case, *num is set to the value parsed.
@@ -140,7 +198,7 @@ gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
 }
 
 static void
-gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
+gnc_dup_trans_dialog_create (GtkWindow *parent, DupTransDialog *dt_dialog,
                              gboolean show_date, time64 date,
                              const char *num_str, const char *tnum_str)
 {
@@ -231,23 +289,25 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     g_object_unref (G_OBJECT(builder));
 }
 
-static gboolean
-gnc_dup_trans_dialog_internal (GtkWidget * parent,
-                               const char* window_title, const char* title,
-                               gboolean show_date, time64 *date_p, GDate *gdate_p,
-                               const char *num, char **out_num,
-                               const char *tnum, char **out_tnum,
-                               const char *tlink, char **out_tlink)
+static void
+gnc_dup_trans_dialog_internal (GtkWindow *parent,
+                               const char *window_title, const char *title,
+                               gboolean show_date, time64 initial_date,
+                               const char *num, const char *tnum,
+                               const char *tlink,
+                               GncDupTransDialogCallback completed,
+                               gpointer user_data)
 {
     DupTransDialog *dt_dialog;
     GtkWidget *entry;
-    gboolean ok;
-    gint result;
 
     dt_dialog = g_new0 (DupTransDialog, 1);
+    dt_dialog->completed = completed;
+    dt_dialog->user_data = user_data;
+    dt_dialog->doclink_input = g_strdup (tlink);
 
     gnc_dup_trans_dialog_create (parent, dt_dialog, show_date,
-                                 *date_p, num, tnum);
+                                 initial_date, num, tnum);
 
     if (!show_date)
     {
@@ -256,7 +316,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         if (dt_dialog->date_edit)
             gtk_widget_set_visible (dt_dialog->date_edit, FALSE);
         // If no "date" field, there must be a "num" field, so give it focus
-        if (out_num)
+        if (num)
             gtk_widget_grab_focus (dt_dialog->num_edit);
     }
     else
@@ -278,7 +338,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         g_free (full_text);
     }
 
-    if (!out_num)
+    if (!num)
     {
         // The "num" field isn't being asked for, so we make the widgets invisible
         gtk_widget_set_visible (dt_dialog->num_label, FALSE);
@@ -315,81 +375,52 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         gtk_widget_set_visible (dt_dialog->link_edit, FALSE);
     }
 
-    result = gtk_dialog_run (GTK_DIALOG(dt_dialog->dialog));
-
-    if (result == GTK_RESPONSE_OK)
-    {
-        if (date_p)
-            *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT(dt_dialog->date_edit));
-        if (gdate_p)
-            gnc_date_edit_get_gdate (GNC_DATE_EDIT(dt_dialog->date_edit), gdate_p);
-        if (out_num)
-            *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->num_edit)));
-        if (tnum)
-            *out_tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->tnum_edit)));
-        if (tlink)
-        {
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dt_dialog->link_edit)))
-                *out_tlink = g_strdup (tlink);
-        }
-        ok = TRUE;
-    }
-    else
-        ok = FALSE;
-
-    gtk_widget_destroy (GTK_WIDGET(dt_dialog->dialog));
-    g_free (dt_dialog);
-
-    return ok;
+    if (parent)
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (dt_dialog->dialog), TRUE);
+    g_object_ref (dt_dialog->dialog);
+    g_object_ref (dt_dialog->num_edit);
+    g_object_ref (dt_dialog->tnum_edit);
+    g_signal_connect (dt_dialog->dialog, "response",
+                      G_CALLBACK (gnc_dup_trans_dialog_capture), dt_dialog);
+    gnc_gui_query_bind_dialog_response (GTK_DIALOG (dt_dialog->dialog),
+        gnc_dup_trans_dialog_complete, dt_dialog);
+    gtk_window_set_modal (GTK_WINDOW (dt_dialog->dialog), TRUE);
+    gtk_widget_show (dt_dialog->dialog);
 }
 
-gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, const char* title,
-                      gboolean show_date, time64 *date_p,
-                      const char *num, char **out_num,
-                      const char *tnum, char **out_tnum,
-                      const char *tlink, char **out_tlink)
+void
+gnc_dup_trans_dialog_async (GtkWindow *parent, const gchar *window_title,
+                            const gchar *title, gboolean show_date,
+                            time64 initial_date, const gchar *num,
+                            const gchar *tnum, const gchar *doclink,
+                            GncDupTransDialogCallback completed,
+                            gpointer user_data)
 {
-    return gnc_dup_trans_dialog_internal (parent, NULL, title,
-                                          show_date, date_p, NULL,
-                                          num, out_num, tnum, out_tnum,
-                                          tlink, out_tlink);
+    g_return_if_fail (completed != NULL);
+    gnc_dup_trans_dialog_internal (parent, window_title, title, show_date,
+                                   initial_date, num, tnum, doclink,
+                                   completed, user_data);
 }
 
-gboolean
-gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
-                            const char *num, char **out_num)
+void
+gnc_dup_date_dialog_async (GtkWindow *parent, const gchar *title,
+                           const GDate *initial_date,
+                           GncDupTransDialogCallback completed,
+                           gpointer user_data)
 {
-    time64 tmp_time;
-    g_assert (gdate_p);
-
-    tmp_time = gdate_to_time64 (*gdate_p);
-    return gnc_dup_trans_dialog_internal (parent, NULL, NULL, TRUE,
-                                          &tmp_time, gdate_p,
-                                          num, out_num, NULL, NULL,
-                                          NULL, NULL);
+    g_return_if_fail (initial_date != NULL);
+    gnc_dup_trans_dialog_async (parent, NULL, title, TRUE,
+                                gdate_to_time64 (*initial_date), NULL, NULL, NULL,
+                                completed, user_data);
 }
 
-gboolean
-gnc_dup_time64_dialog (GtkWidget * parent, const char *window_title,
-                       const char* title, time64 *date)
+void
+gnc_dup_time64_dialog_async (GtkWindow *parent, const gchar *window_title,
+                             const gchar *title, time64 initial_date,
+                             GncDupTransDialogCallback completed,
+                             gpointer user_data)
 {
-    return gnc_dup_trans_dialog_internal (parent, window_title, title, TRUE,
-                                          date, NULL,
-                                          NULL, NULL, NULL, NULL,
-                                          NULL, NULL);
+    gnc_dup_trans_dialog_async (parent, window_title, title, TRUE,
+                                initial_date, NULL, NULL, NULL,
+                                completed, user_data);
 }
-
-gboolean
-gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *gdate_p)
-{
-    time64 tmp_time;
-    g_assert (gdate_p);
-
-    tmp_time = gdate_to_time64 (*gdate_p);
-    return gnc_dup_trans_dialog_internal (parent, NULL, title, TRUE,
-                                          &tmp_time, gdate_p,
-                                          NULL, NULL, NULL, NULL,
-                                          NULL, NULL);
-}
-

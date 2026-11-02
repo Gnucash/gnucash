@@ -109,7 +109,6 @@ static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
-static void impl_webkit_load_html_string( GncHtml* self, const gchar* html_str );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
@@ -176,8 +175,8 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
 
-     gtk_container_add( GTK_CONTAINER(priv->base.container),
-                        GTK_WIDGET(priv->web_view) );
+     gtk_scrolled_window_set_child( GTK_SCROLLED_WINDOW(priv->base.container),
+                                     GTK_WIDGET(priv->web_view) );
 
      g_object_ref_sink( priv->base.container );
 
@@ -219,7 +218,6 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
 
      html_class->show_url = impl_webkit_show_url;
      html_class->show_data = impl_webkit_show_data;
-     html_class->load_html_string = impl_webkit_load_html_string;
      html_class->reload = impl_webkit_reload;
      html_class->copy_to_clipboard = impl_webkit_copy_to_clipboard;
      html_class->export_to_file = impl_webkit_export_to_file;
@@ -236,8 +234,7 @@ gnc_html_webkit_dispose( GObject* obj )
 
      if ( priv->web_view != nullptr )
      {
-          gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                                GTK_WIDGET(priv->web_view));
+          gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container), NULL);
 
           priv->web_view = nullptr;
      }
@@ -653,13 +650,16 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
      g_return_val_if_fail (note != nullptr, FALSE);
 
      auto top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
-     auto dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
+     auto dialog = gtk_message_dialog_new (top,
+                                      (GtkDialogFlags)(GTK_DIALOG_MODAL |
+                                                       GTK_DIALOG_DESTROY_WITH_PARENT),
                                       GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
                                       "%s\n%s",
                                       webkit_notification_get_title (note),
                                       webkit_notification_get_body (note));
-     gtk_dialog_run (GTK_DIALOG (dialog));
-     gtk_widget_destroy (dialog);
+     g_signal_connect (dialog, "response",
+                       G_CALLBACK (gtk_widget_destroy), nullptr);
+     gtk_widget_show (dialog);
      return TRUE;
 }
 
@@ -747,32 +747,6 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
      DEBUG("Loading uri '%s'", uri);
      webkit_web_view_load_uri( priv->web_view, uri );
      g_free( uri );
-
-     LEAVE("");
-}
-
-/********************************************************************
- * gnc_html_load_html_string
- * render a self-contained HTML string in memory (no temp file / file://).
- ********************************************************************/
-
-static void
-impl_webkit_load_html_string( GncHtml* self, const gchar* html_str )
-{
-     g_return_if_fail( self != nullptr );
-     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
-
-     auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-
-     ENTER( "html_str %20.20s", html_str ? html_str : "(null)" );
-
-     /* Keep a copy so export-to-file and print still work. */
-     g_free( priv->html_string );
-     priv->html_string = g_strdup( html_str ? html_str : "" );
-
-     /* The string is self-contained (no external/local resources), so load it
-        directly rather than via the temp-file file:// path used for reports. */
-     webkit_web_view_load_html( priv->web_view, priv->html_string, BASE_URI_NAME );
 
      LEAVE("");
 }

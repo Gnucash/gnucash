@@ -1118,3 +1118,22 @@ gnc_plugin_page_finish_pending (GncPluginPage *page)
 
 /** @} */
 /** @} */
+
+void
+gnc_plugin_page_finish_pending_async (GncPluginPage *page,
+                                      GCancellable *cancellable,
+                                      GncPluginPagePendingCallback callback,
+                                      gpointer user_data)
+{
+    if (!GNC_IS_PLUGIN_PAGE (page) ||
+        (cancellable && g_cancellable_is_cancelled (cancellable)))
+    {
+        if (callback) callback (page, FALSE, user_data);
+        return;
+    }
+    GncPluginPageClass *klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
+    if (klass->finish_pending_async)
+        klass->finish_pending_async (page, cancellable, callback, user_data);
+    else if (callback)
+        callback (page, gnc_plugin_page_finish_pending (page), user_data);
+}

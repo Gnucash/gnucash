@@ -32,6 +32,8 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
 #include <string.h>
@@ -663,6 +665,40 @@ gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
  *  that had a menu selected.  That's not really important for this
  *  function and we're about to close all the windows anyway.
  */
+typedef struct
+{
+    GWeakRef window;
+    GWeakRef book;
+    gchar *filename;
+    gboolean destroyed;
+    gulong destroy_handler;
+} HistoryOpenRequest;
+
+static void
+history_open_window_destroyed (GtkWidget *window, gpointer user_data)
+{
+    ((HistoryOpenRequest *) user_data)->destroyed = TRUE;
+}
+
+static void
+history_open_pending_finished (gboolean accepted, gpointer user_data)
+{
+    HistoryOpenRequest *request = user_data;
+    GtkWindow *window = g_weak_ref_get (&request->window);
+    QofBook *book = g_weak_ref_get (&request->book);
+    if (window && request->destroy_handler)
+        g_signal_handler_disconnect (window, request->destroy_handler);
+    if (accepted && window && !request->destroyed && book &&
+        gnc_current_session_exist () && gnc_get_current_book () == book)
+        gnc_file_open_file (window, request->filename, FALSE);
+    g_clear_object (&window);
+    g_clear_object (&book);
+    g_weak_ref_clear (&request->window);
+    g_weak_ref_clear (&request->book);
+    g_free (request->filename);
+    g_free (request);
+}
+
 static void
 gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
                                        GVariant      *parameter,
@@ -676,8 +712,7 @@ gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
     g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_finish_pending(data->window))
-      return;
+    if (!gnc_current_session_exist ()) return;
     // action name will be of the form 'RecentFile1Action'
     action_name =  g_action_get_name (G_ACTION(simple));
 
@@ -688,11 +723,13 @@ gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
 
     PINFO("File to open is '%s' on action '%s'", filename, action_name);
 
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    /* also opens new account page */
-    gnc_file_open_file (GTK_WINDOW (data->window),
-                        filename, /*open_readonly*/ FALSE);
-    gnc_window_set_progressbar_window (NULL);
+    HistoryOpenRequest *request = g_new0 (HistoryOpenRequest, 1);
+    g_weak_ref_init (&request->window, data->window);
+    g_weak_ref_init (&request->book, gnc_get_current_book ());
+    request->filename = g_strdup (filename);
+    request->destroy_handler = g_signal_connect (data->window, "destroy",
+        G_CALLBACK (history_open_window_destroyed), request);
+    gnc_main_window_all_finish_pending_async (NULL, history_open_pending_finished, request);
 
     g_free (pref);
     g_free (filename);

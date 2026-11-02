@@ -37,7 +37,6 @@ set_source_files_properties (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS $
 
 set_local_dist(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
         ${gnome_search_noinst_HEADERS})
-set(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
 
 add_library (gnc-gnome-search
     ${gnome_search_SOURCES}
@@ -65,3 +64,6 @@ install(TARGETS gnc-gnome-search
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+
+add_subdirectory(test)
+set(gnome_search_DIST ${gnome_search_DIST_local} ${test_gnome_search_DIST} PARENT_SCOPE)

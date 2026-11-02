@@ -550,7 +550,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                       "state-section", STATE_SECTION,
                       "show-column-menu", true,
                       nullptr);
-        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->tree_view));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swin), GTK_WIDGET(priv->tree_view));
 
         selection = gtk_tree_view_get_selection (priv->tree_view);
         gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -609,7 +609,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         }
         gnc_dense_cal_set_num_months (priv->gdcal, num_months);
 
-        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swin), GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component ("plugin-page-sx-list",
@@ -1040,6 +1040,45 @@ _destroy_sx_names (gpointer data, gpointer user_data)
     *to_delete_names = g_list_append (*to_delete_names, xaccSchedXactionGetName (sx));
 }
 
+typedef struct
+{
+    GWeakRef page;
+    QofBook *book;
+    GList *sxes;
+} SxDeleteRequest;
+
+static void
+sx_delete_request_free (SxDeleteRequest *request)
+{
+    if (!request)
+        return;
+    g_weak_ref_clear (&request->page);
+    g_clear_object (&request->book);
+    g_list_free_full (request->sxes, g_object_unref);
+    g_free (request);
+}
+
+static void
+sx_delete_confirmed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<SxDeleteRequest *> (user_data);
+    auto page = request ? GNC_PLUGIN_PAGE_SX_LIST (g_weak_ref_get (&request->page)) : nullptr;
+    if (request && page && parent == GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))) &&
+        response == GTK_RESPONSE_YES && request->book == gnc_get_current_book () &&
+        !qof_book_shutting_down (request->book))
+    {
+        gppsl_update_selected_list (page, TRUE, nullptr);
+        for (auto node = request->sxes; node; node = node->next)
+        {
+            auto sx = GNC_SCHEDXACTION (node->data);
+            if (!qof_instance_get_destroying (QOF_INSTANCE (sx)))
+                _destroy_sx (sx, nullptr);
+        }
+    }
+    g_clear_object (&page);
+    sx_delete_request_free (request);
+}
+
 
 static void
 gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
@@ -1085,12 +1124,14 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
     g_free (text_list_of_scheduled_transaction_names);
     g_list_free (to_delete_names);
 
-    if (gnc_verify_dialog (window, false, "%s", message))
-    {
-        gppsl_update_selected_list (plugin_page, true, nullptr);
-
-        g_list_foreach (to_delete, (GFunc)_destroy_sx, nullptr);
-    }
+    auto request = g_new0 (SxDeleteRequest, 1);
+    g_weak_ref_init (&request->page, plugin_page);
+    request->book = static_cast<QofBook *> (g_object_ref (gnc_get_current_book ()));
+    request->sxes = g_list_copy_deep (to_delete,
+        [](gconstpointer sx, gpointer) -> gpointer { return g_object_ref (const_cast<gpointer> (sx)); },
+        nullptr);
+    gnc_verify_dialog_async (window, FALSE, sx_delete_confirmed, request,
+                             "%s", message);
 
     g_free (message);
     g_list_free (to_delete);

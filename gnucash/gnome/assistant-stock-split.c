@@ -695,7 +695,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
         scroll = GTK_WIDGET(gtk_builder_get_object(builder, "income_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroll), tree);
 
         /* asset tree */
         tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
@@ -711,7 +711,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
         scroll = GTK_WIDGET(gtk_builder_get_object(builder, "asset_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroll), tree);
 
         gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));

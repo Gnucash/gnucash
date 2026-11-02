@@ -253,10 +253,9 @@ gnc_table_show_range (Table *table,
 void
 gnc_table_gnome_init (void)
 {
-    TableGUIHandlers gui_handlers;
+    TableGUIHandlers gui_handlers = {0};
 
     gui_handlers.cursor_refresh = gnc_table_refresh_cursor_gnome;
 
     gnc_table_set_default_gui_handlers (&gui_handlers);
 }
-

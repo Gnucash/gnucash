@@ -28,6 +28,10 @@ extern "C" {
 QofSession * gnc_get_current_session (void);
 void gnc_clear_current_session(void);
 void gnc_set_current_session (QofSession *session);
+/* Transfer ownership of the current session to the caller and install session.
+ * Unlike clear, this does not destroy either session. Used for reversible Save
+ * As: the active session must always contain the book displayed by the GUI. */
+QofSession * gnc_exchange_current_session (QofSession *session);
 gboolean gnc_current_session_exist(void);
 
 #ifdef __cplusplus

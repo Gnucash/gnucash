@@ -120,11 +120,11 @@ gnumeric_create_popup_menu_list (GSList *elements,
                 GtkWidget *image = gtk_image_new_from_icon_name (pix_name,
                                    GTK_ICON_SIZE_MENU);
 
-                gtk_container_add (GTK_CONTAINER (box), image);
+                gtk_box_append (GTK_BOX (box), image);
                 gtk_widget_show (image);
             }
             gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
-            gtk_container_add (GTK_CONTAINER (item), box);
+            gtk_box_append (GTK_BOX (item), box);
 
             if (element->sensitive_filter != 0 &&
                     (element->sensitive_filter & sensitive_filter))

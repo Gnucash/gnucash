@@ -261,7 +261,12 @@ void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
  * 
  *  @return TRUE if the register filter should be cleared
  **/
-gboolean gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split);
+typedef void (*GncSplitRegClearFilterCallback) (gboolean clear_filter,
+                                                gpointer user_data);
+void gnc_split_reg_clear_filter_for_split_async (GNCSplitReg *gsr,
+                                                  Split *split,
+                                                  GncSplitRegClearFilterCallback completed,
+                                                  gpointer user_data);
 
 /**
  * Set the focus of the register to the sheet

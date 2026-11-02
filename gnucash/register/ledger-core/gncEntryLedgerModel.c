@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 
 #include "Account.h"
+#include "guid.h"
 #include "gnc-ui-util.h"
 #include "qof.h"	/* for g_strcmp0 */
 
@@ -39,6 +40,30 @@
 
 
 /** Private Interfaces ***********************************************/
+
+static gpointer
+gnc_entry_ledger_guid_malloc (void)
+{
+    GncGUID *guid = guid_malloc ();
+    *guid = *guid_null ();
+    return guid;
+}
+
+static void
+gnc_entry_ledger_guid_free (gpointer guid)
+{
+    guid_free (guid);
+}
+
+static void
+gnc_entry_ledger_guid_copy (gpointer p_to, gconstpointer p_from)
+{
+    GncGUID *to = p_to;
+    const GncGUID *from = p_from;
+
+    g_return_if_fail (to != NULL);
+    *to = from ? *from : *guid_null ();
+}
 
 /* GET_LABEL */
 
@@ -1233,11 +1258,9 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
                                                   models[i].cell);
     } /* for */
 
-    /*
-    model->cell_data_allocator = ;
-    model->cell_data_deallocator = ;
-    model->cell_data_copy = ;
-    */
+    model->cell_data_allocator = gnc_entry_ledger_guid_malloc;
+    model->cell_data_deallocator = gnc_entry_ledger_guid_free;
+    model->cell_data_copy = gnc_entry_ledger_guid_copy;
 
     gnc_table_model_set_post_save_handler (model, gnc_entry_ledger_save_cells);
 

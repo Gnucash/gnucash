@@ -25,6 +25,8 @@
 #include "search-core-type.h"
 #include "qof.h"
 
+G_BEGIN_DECLS
+
 #define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchAccount, gnc_search_account, GNC, SEARCH_ACCOUNT, GNCSearchCoreType)
 
@@ -33,5 +35,6 @@ GNCSearchAccount	*gnc_search_account_matchall_new	(void);
 
 /* methods */
 
-#endif /* ! _GNCSEARCH_ACCOUNT_H */
+G_END_DECLS
 
+#endif /* ! _GNCSEARCH_ACCOUNT_H */

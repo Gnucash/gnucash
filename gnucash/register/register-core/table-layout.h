@@ -28,6 +28,8 @@
 #include "basiccell.h"
 #include "cellblock.h"
 
+G_BEGIN_DECLS
+
 /** @addtogroup Table Table
  * @{
  * @file table-layout.h
@@ -83,4 +85,5 @@ void gnc_table_layout_restore_cursor (TableLayout *layout,
                                       CellBlock *cursor,
                                       CursorBuffer *buffer);
 /** @} */
+G_END_DECLS
 #endif

@@ -2675,10 +2675,7 @@ StockAssistantController::finish()
             auto gsr = gnc_plugin_page_register_get_gsr (page);
             gnc_split_reg_raise (gsr);
 
-            if (gnc_split_reg_clear_filter_for_split (gsr, split))
-                gnc_plugin_page_register_clear_current_filter (page);
-
-            gnc_split_reg_jump_to_split (gsr, split);
+            gnc_plugin_page_register_jump_to_split_async (page, split);
         }
     }
 

@@ -462,27 +462,21 @@ void gnc_main_window_save_all_windows(GKeyFile *keyfile);
 void gnc_main_window_restore_default_state(GncMainWindow *window);
 
 
-/** Tell a window to finish any outstanding activities.  This function
- *  will call gnc_plugin_page_finish_pending for each installed page.
- *  If any page returns a failure indication, then the function stops
- *  walking pages and immediately returns a failure.
- *
- *  @param window The window whose pages should be checked.
- *
- *  @return FALSE if any page could not or would not comply, which
- *  should cancel the pending operation.  TRUE otherwise */
-gboolean gnc_main_window_finish_pending (GncMainWindow *window);
+typedef void (*GncMainWindowPendingCallback) (GncMainWindow *window,
+                                             gboolean accepted, gpointer user_data);
+typedef void (*GncMainWindowAllPendingCallback) (gboolean accepted, gpointer user_data);
+/** Ask each installed page to finish outstanding work in sequence. Completion
+ *  reports FALSE on refusal, cancellation, owner destruction or book change. */
+void gnc_main_window_finish_pending_async (GncMainWindow *window,
+                                          GCancellable *cancellable,
+                                          GncMainWindowPendingCallback callback,
+                                          gpointer user_data);
+/** Apply the same request to all windows; leased session work must finish
+ *  before the caller may perform a file transition. */
+void gnc_main_window_all_finish_pending_async (GCancellable *cancellable,
+                                              GncMainWindowAllPendingCallback callback,
+                                              gpointer user_data);
 
-
-/** Tell all pages in all windows to finish any outstanding
- *  activities.  This function will call
- *  gnc_plugin_page_finish_pending for each installed page.  If any
- *  page returns a failure indication, then the function stops walking
- *  pages and immediately returns a failure.
- *
- *  @return FALSE if any page could not or would not comply, which
- *  should cancel the pending operation.  TRUE otherwise */
-gboolean gnc_main_window_all_finish_pending (void);
 
 /** Change the sensitivity of a command in all windows.  This can be
  *  used to serialize access to a command so that in cannot be

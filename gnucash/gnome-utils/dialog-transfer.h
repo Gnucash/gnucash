@@ -40,11 +40,14 @@ typedef struct _xferDialog XferDialog;
  */
 XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);
 
-/** Run the dialog until the user has either successfully completed the
- * transaction (just clicking OK doesn't always count) or clicked Cancel.
- * Return TRUE if the transaction was a success, FALSE otherwise.
- */
-gboolean gnc_xfer_dialog_run_until_done( XferDialog * );
+typedef void (*gnc_xfer_dialog_finished_cb) (gboolean completed,
+                                              gpointer user_data);
+
+/** Present the transfer dialog and report once it closes. The XferDialog is
+ * invalid after the callback returns. */
+void gnc_xfer_dialog_run_async (XferDialog *xferData,
+                                gnc_xfer_dialog_finished_cb finished_cb,
+                                gpointer user_data);
 
 void gnc_xfer_dialog_close( XferDialog * );
 
@@ -209,21 +212,18 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
                                 gnc_xfer_dialog_cb handler,
                                 gpointer user_data);
 
-/* Uses the XferDialog to obtain from the user an explicit exchange
-   rate.  This exchange rate will then be uses to converting 'amount',
-   which is given in the commodity of the register Account, reg_acc,
-   into a split value for a split whose Account is the commodity
-   specified by xfer_com.
+typedef void (*gnc_xfer_dialog_exchange_finished_cb) (gboolean completed,
+                                                       gnc_numeric exch_rate,
+                                                       gpointer user_data);
 
-   The 'exch_rate' argument is used to set the initial value of the
-   rate.  If the dialog completes successfully 'FALSE' is returned and
-   'exch_rate' is also used to store the converted value.  Otherwise,
-   TRUE is returned and the 'exch_rate' argument is undefined.
-*/
-gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
+/** Configure and present an exchange-only transfer dialog. The callback
+ * receives the accepted rate; cancellation reports completed FALSE. */
+void gnc_xfer_dialog_run_exchange_async (
+    XferDialog *xfer, gnc_numeric exch_rate, gnc_numeric amount,
     Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com,
-    gboolean expanded);
+    gboolean expanded,
+    gnc_xfer_dialog_exchange_finished_cb finished_cb,
+    gpointer user_data);
 
 #ifdef __cplusplus
 }

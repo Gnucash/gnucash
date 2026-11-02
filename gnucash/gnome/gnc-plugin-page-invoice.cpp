@@ -1240,6 +1240,67 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
     LEAVE(" ");
 }
 
+struct DoclinkEditRequest
+{
+    GncPluginPageInvoice *page;
+    QofBook *book;
+    GncGUID invoice_guid;
+    gchar *old_uri;
+};
+
+static void
+gnc_plugin_page_invoice_doclink_completed (GtkWindow *parent, gchar *uri,
+                                           gpointer user_data)
+{
+    auto request = static_cast<DoclinkEditRequest *> (user_data);
+    auto plugin_page = request->page;
+    if (parent && plugin_page && request->book &&
+        parent == GTK_WINDOW (gnc_plugin_page_get_window (
+            GNC_PLUGIN_PAGE (plugin_page))) &&
+        gnc_get_current_book () == request->book &&
+        qof_book_is_open (request->book) &&
+        !qof_book_shutting_down (request->book))
+    {
+        auto invoice = gncInvoiceLookup (request->book, &request->invoice_guid);
+        if (invoice)
+        {
+            bool has_uri = uri != NULL;
+            auto priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE (plugin_page);
+            if (uri && g_strcmp0 (request->old_uri, uri) != 0)
+            {
+                GtkWidget *doclink_button =
+                    gnc_invoice_window_get_doclink_button (priv->iw);
+                if (g_strcmp0 (uri, "") == 0)
+                {
+                    has_uri = false;
+                    if (doclink_button)
+                        gtk_widget_hide (doclink_button);
+                }
+                else if (doclink_button)
+                {
+                    gchar *display_uri =
+                        gnc_doclink_get_unescaped_just_uri (uri);
+                    gtk_link_button_set_uri (GTK_LINK_BUTTON (doclink_button),
+                                             display_uri);
+                    gtk_widget_show (doclink_button);
+                    g_free (display_uri);
+                }
+                gncInvoiceSetDocLink (invoice, uri);
+            }
+            update_doclink_actions (GNC_PLUGIN_PAGE (plugin_page), has_uri);
+        }
+    }
+    if (request->page)
+        g_object_remove_weak_pointer (G_OBJECT (request->page),
+                                      (gpointer *)&request->page);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    g_free (request->old_uri);
+    g_free (request);
+    g_free (uri);
+}
+
 static void
 gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
                                   GVariant *paramter,
@@ -1250,8 +1311,8 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
     GtkWindow *parent;
     GncInvoice *invoice;
     const gchar *uri;
-    gchar *ret_uri;
-    gboolean has_uri = FALSE;
+    QofBook *book;
+    DoclinkEditRequest *request;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", simple, plugin_page);
@@ -1259,42 +1320,23 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
     parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
 
     invoice = gnc_invoice_window_get_invoice (priv->iw);
+    if (!invoice)
+        return;
     uri = gncInvoiceGetDocLink (invoice);
-
-    ret_uri = gnc_doclink_get_uri_dialog (parent, _("Manage Document Link"), uri);
-
-    if (ret_uri)
-        has_uri = TRUE;
-
-    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-    {
-        GtkWidget *doclink_button =
-            gnc_invoice_window_get_doclink_button (priv->iw);
-
-        if (g_strcmp0 (ret_uri, "") == 0)
-        {
-            has_uri = FALSE;
-            if (doclink_button)
-                gtk_widget_hide (GTK_WIDGET(doclink_button));
-        }
-        else
-        {
-            if (doclink_button)
-            {
-                gchar *display_uri =
-                    gnc_doclink_get_unescaped_just_uri (ret_uri);
-                gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
-                                         display_uri);
-                gtk_widget_show (GTK_WIDGET(doclink_button));
-                g_free (display_uri);
-            }
-        }
-        gncInvoiceSetDocLink (invoice, ret_uri);
-    }
-    // update the menu actions
-    update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
-
-    g_free (ret_uri);
+    book = qof_instance_get_book (QOF_INSTANCE (invoice));
+    if (!book)
+        return;
+    request = g_new0 (DoclinkEditRequest, 1);
+    request->page = plugin_page;
+    request->book = book;
+    request->invoice_guid = *gncInvoiceGetGUID (invoice);
+    request->old_uri = g_strdup (uri);
+    g_object_add_weak_pointer (G_OBJECT (plugin_page),
+                               (gpointer *)&request->page);
+    g_object_add_weak_pointer (G_OBJECT (book), (gpointer *)&request->book);
+    gnc_doclink_get_uri_dialog_async (
+        parent, _("Manage Document Link"), uri,
+        gnc_plugin_page_invoice_doclink_completed, request);
     LEAVE(" ");
 }
 

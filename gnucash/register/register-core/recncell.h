@@ -41,8 +41,17 @@
 
 #include "basiccell.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef const char * (*RecnCellStringGetter) (char flag);
-typedef gboolean (*RecnCellConfirm) (char old_flag, gpointer data);
+typedef enum {
+    GNC_RECN_CELL_CONFIRM_REJECT,
+    GNC_RECN_CELL_CONFIRM_ACCEPT,
+    GNC_RECN_CELL_CONFIRM_DEFERRED
+} RecnCellConfirmResult;
+typedef RecnCellConfirmResult (*RecnCellConfirm) (char old_flag, gpointer data);
 
 typedef struct
 {
@@ -57,6 +66,8 @@ typedef struct
     RecnCellStringGetter get_string;
     RecnCellConfirm confirm_cb;
     gpointer confirm_data;
+    gboolean confirm_pending;
+    char pending_flag;
     gboolean read_only;
 } RecnCell;
 
@@ -68,6 +79,7 @@ char gnc_recn_cell_get_flag (RecnCell *cell);
 void gnc_recn_cell_set_confirm_cb (RecnCell *cell,
                                    RecnCellConfirm confirm_cb,
                                    gpointer data);
+gboolean gnc_recn_cell_complete_confirm (RecnCell *cell, gboolean accepted);
 
 void gnc_recn_cell_set_string_getter (RecnCell *cell,
                                       RecnCellStringGetter getter);
@@ -84,5 +96,8 @@ void gnc_recn_cell_set_valid_flags (RecnCell *cell, const char *flags,
 void gnc_recn_cell_set_flag_order (RecnCell *cell, const char *flags);
 
 void gnc_recn_cell_set_read_only (RecnCell *cell, gboolean read_only);
+#ifdef __cplusplus
+}
+#endif
 /** @} */
 #endif

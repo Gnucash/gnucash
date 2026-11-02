@@ -54,13 +54,21 @@ G_BEGIN_DECLS
  * of the to date entry
  * @param to_now Location to write to whether the to now button has been chosen
  */
-gboolean gnc_ab_enter_daterange(GtkWidget *parent,
-                                const char *heading,
-                                time64 *from_date,
-                                gboolean *last_retv_date,
-                                gboolean *first_possible_date,
-                                time64 *to_date,
-                                gboolean *to_now);
+typedef void (*GncABDateRangeCallback) (gboolean accepted,
+                                        time64 from_date,
+                                        gboolean last_retrieval_date,
+                                        gboolean earliest_date,
+                                        time64 to_date,
+                                        gboolean until_now,
+                                        gpointer user_data);
+
+void gnc_ab_enter_daterange_async (GtkWindow *parent, const gchar *heading,
+                                   time64 from_date,
+                                   gboolean last_retrieval_date,
+                                   gboolean earliest_date, time64 to_date,
+                                   gboolean until_now,
+                                   GncABDateRangeCallback completed,
+                                   gpointer user_data);
 
 G_END_DECLS
 

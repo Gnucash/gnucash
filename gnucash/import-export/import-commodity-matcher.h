@@ -25,47 +25,30 @@
 #ifndef IMPORT_COMMODITY_MATCHER_H
 #define IMPORT_COMMODITY_MATCHER_H
 
+#include <gtk/gtk.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "gnc-commodity.h"
 
-/**
-  Must be called with a string containing a unique identifier for the
-  commodity.  If an commodity with a matching cusip is found, the
-  function immediately returns with a pointer to that commodity.
-  Otherwise, the user may be prompted to select a GnuCash commodity or
-  create a new one (in both cases, the cusip is written to the
-  commodity's cusip field, overwriting anything that was there before.
+typedef void (*GncImportCommodityCallback) (gnc_commodity *commodity,
+                                             gboolean accepted,
+                                             gpointer user_data);
 
-  @param cusip The string containing the code for which you want a
-  matching commodity.  A CUISP code or similar UNIQUE code.  The stock
-  ticker is NOT appropriate, unless you have no other option. Must be
-  non-NULL.
+/** Find an existing commodity by its exchange identifier without prompting. */
+gnc_commodity *gnc_import_find_commodity_by_cusip (const char *cusip);
 
-  @param ask_on_unknown If the cusip value is unknown and this parameter
-  is false (zero), the function returns NULL. Otherwise the user will
-  be asked to select an existing or create a new commodity.
-
-  @param default_fullname A human-readable description of the
-  commodity, such as the stock name.  Can be NULL. If it is not NULL,
-  it will be shown to the user when selecting a commodity.  It will
-  also be used as the default if a new commodity is created.
-
-  @param default_mnemonic Usually the stock ticker or similar. Can be
-  NULL.  If it is not NULL, it will be shown to the user when
-  selecting a commodity.  It will also be used as the default if a new
-  commodity is created.
-
-  @return A pointer to the found or created commodity, or NULL if no
-  commodity was found or created.
-
-*/
-gnc_commodity * gnc_import_select_commodity(const char * cusip,
-        gboolean ask_on_unknown,
-        const char * default_fullname,
-        const char * default_mnemonic);
+/** Resolve or select a commodity without entering a nested GTK loop.
+ *  The callback's commodity is borrowed and is NULL on cancellation. */
+void gnc_import_select_commodity_async (GtkWidget *parent,
+                                        const char *cusip,
+                                        gboolean ask_on_unknown,
+                                        const char *default_fullname,
+                                        const char *default_mnemonic,
+                                        GncImportCommodityCallback callback,
+                                        gpointer user_data);
 
 
 #ifdef __cplusplus

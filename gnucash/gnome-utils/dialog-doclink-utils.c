@@ -32,6 +32,7 @@
 #include "gncInvoice.h"
 
 #include "gnc-prefs.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gnome-utils.h"
@@ -135,7 +136,7 @@ gnc_doclink_get_unescaped_just_uri (const gchar *uri)
 gchar *
 gnc_doclink_convert_trans_link_uri (gpointer trans, gboolean book_ro)
 {
-    const gchar *uri = xaccTransGetDocLink (trans); // get the existing uri
+    gchar *uri = g_strdup (xaccTransGetDocLink (trans));
     const gchar *part = NULL;
 
     if (!uri)
@@ -152,12 +153,13 @@ gnc_doclink_convert_trans_link_uri (gpointer trans, gboolean book_ro)
         else if (g_str_has_prefix (uri,"file:"))
             part = uri + strlen ("file:");
 
+        gchar *converted = g_strdup (part);
         if (!xaccTransGetReadOnly (trans) && !book_ro)
-            xaccTransSetDocLink (trans, part);
-
-        return g_strdup (part);
+            xaccTransSetDocLink (trans, converted);
+        g_free (uri);
+        return converted;
     }
-    return g_strdup (uri);
+    return uri;
 }
 
 /* =================================================================== */
@@ -270,121 +272,177 @@ typedef struct
     gboolean     change_old;
     const gchar *new_path_head_uri;
     gboolean     change_new;
-    gboolean     book_ro;
+    QofBook    **book;
+    const gboolean *parent_destroyed;
 }DoclinkUpdate;
 
-static void
-update_invoice_uri (QofInstance* data, gpointer user_data)
+static QofBook *
+doclink_update_book (DoclinkUpdate *update)
 {
-    DoclinkUpdate *doclink_update = user_data;
-    GncInvoice *invoice = GNC_INVOICE(data);
-    const gchar* uri = gncInvoiceGetDocLink (invoice);
+    gchar *path_head = gnc_doclink_get_path_head ();
+    gboolean same_path = g_strcmp0 (path_head, update->new_path_head_uri) == 0;
+    QofBook *book;
+    g_free (path_head);
+    if (!same_path)
+        return NULL;
+    book = *update->book;
+    if (!book || *update->parent_destroyed || !qof_book_is_open (book) ||
+        qof_book_shutting_down (book) || qof_book_is_readonly (book) ||
+        !gnc_current_session_exist () ||
+        qof_session_get_book (gnc_get_current_session ()) != book)
+        return NULL;
+    return book;
+}
 
-    if (uri && *uri)
-    {
-        gboolean rel = FALSE;
-        gchar *scheme = gnc_uri_get_scheme (uri);
-
-        if (!scheme) // path is relative
-            rel = TRUE;
-
-        // check for relative and we want to change them
-        if (rel && doclink_update->change_old)
-        {
-            gchar *new_uri = gnc_doclink_get_use_uri (doclink_update->old_path_head_uri, uri, scheme);
-            gncInvoiceSetDocLink (invoice, new_uri);
-            g_free (new_uri);
-        }
-        g_free (scheme);
-
-        // check for not relative and we want to change them
-        if (!rel && doclink_update->change_new && g_str_has_prefix (uri, doclink_update->new_path_head_uri))
-        {
-            // relative paths do not start with a '/'
-            const gchar *part = uri + strlen (doclink_update->new_path_head_uri);
-            gchar *new_uri = g_strdup (part);
-
-            gncInvoiceSetDocLink (invoice, new_uri);
-            g_free (new_uri);
-        }
-    }
+static gchar *
+doclink_updated_uri (const gchar *uri, const DoclinkUpdate *update)
+{
+    gchar *scheme, *result = NULL;
+    if (!uri || !*uri)
+        return NULL;
+    scheme = gnc_uri_get_scheme (uri);
+    if (!scheme && update->change_old)
+        result = gnc_doclink_get_use_uri (update->old_path_head_uri, uri, scheme);
+    else if (scheme && update->change_new &&
+             g_str_has_prefix (uri, update->new_path_head_uri))
+        result = g_strdup (uri + strlen (update->new_path_head_uri));
+    g_free (scheme);
+    return result;
 }
 
 static void
-update_trans_uri (QofInstance* data, gpointer user_data)
+doclink_collect_guid (QofInstance *instance, gpointer data)
 {
-    DoclinkUpdate *doclink_update = user_data;
-    Transaction *trans = GNC_TRANSACTION(data);
-    gchar *uri;
-
-    // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_doclink_convert_trans_link_uri (trans, doclink_update->book_ro);
-
-    if (uri && *uri)
-    {
-        gboolean rel = FALSE;
-        gchar *scheme = gnc_uri_get_scheme (uri);
-
-        if (!scheme) // path is relative
-            rel = TRUE;
-
-        // check for relative and we want to change them
-        if (rel && doclink_update->change_old)
-        {
-            gchar *new_uri = gnc_doclink_get_use_uri (doclink_update->old_path_head_uri, uri, scheme);
-
-            if (!xaccTransGetReadOnly (trans))
-                xaccTransSetDocLink (trans, new_uri);
-
-            g_free (new_uri);
-        }
-        g_free (scheme);
-
-        // check for not relative and we want to change them
-        if (!rel && doclink_update->change_new && g_str_has_prefix (uri, doclink_update->new_path_head_uri))
-        {
-            // relative paths do not start with a '/'
-            const gchar *part = uri + strlen (doclink_update->new_path_head_uri);
-            gchar *new_uri = g_strdup (part);
-
-            if (!xaccTransGetReadOnly (trans))
-                xaccTransSetDocLink (trans, new_uri);
-
-            g_free (new_uri);
-        }
-    }
-    g_free (uri);
+    GncGUID guid = *qof_instance_get_guid (instance);
+    g_array_append_val ((GArray *)data, guid);
 }
 
 static void
-change_relative_and_absolute_uri_paths (const gchar *old_path_head_uri, gboolean change_old,
-                                        const gchar *new_path_head_uri, gboolean change_new)
+change_relative_and_absolute_uri_paths (DoclinkUpdate *update)
 {
-    QofBook      *book = gnc_get_current_book();
-    gboolean      book_ro = qof_book_is_readonly (book);
-    DoclinkUpdate  *doclink_update;
+    QofBook *book = doclink_update_book (update);
+    GArray *transactions, *invoices;
+    if (!book)
+        return;
+    transactions = g_array_new (FALSE, FALSE, sizeof (GncGUID));
+    invoices = g_array_new (FALSE, FALSE, sizeof (GncGUID));
+    /* Snapshot identities before setters can emit events or remove objects. */
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
+                            doclink_collect_guid, transactions);
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
+                            doclink_collect_guid, invoices);
+    for (guint i = 0; i < transactions->len && (book = doclink_update_book (update)); ++i)
+    {
+        GncGUID *guid = &g_array_index (transactions, GncGUID, i);
+        Transaction *trans = xaccTransLookup (guid, book);
+        gchar *uri, *new_uri;
+        if (!trans || xaccTransGetReadOnly (trans))
+            continue;
+        uri = gnc_doclink_convert_trans_link_uri (trans, FALSE);
+        book = doclink_update_book (update);
+        trans = book ? xaccTransLookup (guid, book) : NULL;
+        new_uri = doclink_updated_uri (uri, update);
+        if (trans && !xaccTransGetReadOnly (trans) && new_uri &&
+            g_strcmp0 (xaccTransGetDocLink (trans), uri) == 0)
+            xaccTransSetDocLink (trans, new_uri);
+        g_free (new_uri);
+        g_free (uri);
+    }
+    for (guint i = 0; i < invoices->len && (book = doclink_update_book (update)); ++i)
+    {
+        GncInvoice *invoice = gncInvoiceLookup (book, &g_array_index (invoices, GncGUID, i));
+        gchar *uri, *new_uri;
+        if (!invoice)
+            continue;
+        uri = g_strdup (gncInvoiceGetDocLink (invoice));
+        new_uri = doclink_updated_uri (uri, update);
+        if (new_uri)
+            gncInvoiceSetDocLink (invoice, new_uri);
+        g_free (new_uri);
+        g_free (uri);
+    }
+    g_array_free (transactions, TRUE);
+    g_array_free (invoices, TRUE);
+}
 
-    /* if book is read only, nothing to do */
-    if (book_ro)
+typedef struct
+{
+    GtkWidget       *dialog;
+    GtkToggleButton *use_old_path_head;
+    GtkToggleButton *use_new_path_head;
+    gchar           *old_path_head_uri;
+    gchar           *new_path_head_uri;
+    gboolean         completed;
+    QofBook          *book;
+    GtkWindow        *parent;
+    gboolean         parent_destroyed;
+} DoclinkPathHeadRequest;
+
+static void
+doclink_path_head_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                    DoclinkPathHeadRequest *request)
+{
+    request->parent_destroyed = TRUE;
+}
+
+static void
+doclink_path_head_request_complete (DoclinkPathHeadRequest *request,
+                                    gboolean accepted,
+                                    gboolean dialog_destroying)
+{
+    gboolean use_old = FALSE;
+    gboolean use_new = FALSE;
+
+    if (request->completed)
         return;
 
-    doclink_update = g_new0 (DoclinkUpdate, 1);
+    request->completed = TRUE;
+    if (accepted)
+    {
+        use_old = gtk_toggle_button_get_active (request->use_old_path_head);
+        use_new = gtk_toggle_button_get_active (request->use_new_path_head);
+    }
 
-    doclink_update->old_path_head_uri = old_path_head_uri;
-    doclink_update->new_path_head_uri = new_path_head_uri;
-    doclink_update->change_old = change_old;
-    doclink_update->change_new = change_new;
-    doclink_update->book_ro = book_ro;
+    g_signal_handlers_disconnect_by_data (request->dialog, request);
+    if (!dialog_destroying)
+        gtk_widget_destroy (request->dialog);
 
-    /* Loop through the transactions */
-    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
-                            update_trans_uri, doclink_update);
+    if (use_old || use_new)
+    {
+        DoclinkUpdate update = {request->old_path_head_uri, use_old,
+                                request->new_path_head_uri, use_new,
+                                &request->book, &request->parent_destroyed};
+        change_relative_and_absolute_uri_paths (&update);
+    }
 
-    /* Loop through the invoices */
-    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
-                            update_invoice_uri, doclink_update);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    if (request->parent)
+        g_signal_handlers_disconnect_by_data (request->parent, request);
+    g_clear_object (&request->parent);
 
-    g_free (doclink_update);
+    g_clear_object (&request->use_old_path_head);
+    g_clear_object (&request->use_new_path_head);
+    g_clear_object (&request->dialog);
+    g_free (request->old_path_head_uri);
+    g_free (request->new_path_head_uri);
+    g_free (request);
+}
+
+static void
+doclink_path_head_response_cb ([[maybe_unused]] GtkDialog *dialog, gint response,
+                               DoclinkPathHeadRequest *request)
+{
+    doclink_path_head_request_complete (request, response == GTK_RESPONSE_OK,
+                                       FALSE);
+}
+
+static void
+doclink_path_head_destroy_cb ([[maybe_unused]] GtkWidget *dialog,
+                              DoclinkPathHeadRequest *request)
+{
+    doclink_path_head_request_complete (request, FALSE, TRUE);
 }
 
 void
@@ -392,9 +450,10 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
 {
     GtkWidget  *dialog;
     GtkBuilder *builder;
+    GtkWidget  *ok_button;
     GtkWidget  *use_old_path_head, *use_new_path_head;
     GtkWidget  *old_head_label, *new_head_label;
-    gint        result;
+    DoclinkPathHeadRequest *request;
     gchar      *new_path_head_uri = gnc_doclink_get_path_head ();
 
     if (g_strcmp0 (old_path_head_uri, new_path_head_uri) == 0)
@@ -405,15 +464,15 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
 
     /* Create the dialog box */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-doclink.glade", "link_path_head_changed_dialog");
+    if (!gnc_builder_add_from_file (builder, "dialog-doclink.glade",
+                                   "link_path_head_changed_dialog"))
+    {
+        g_object_unref (builder);
+        g_free (new_path_head_uri);
+        return;
+    }
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "link_path_head_changed_dialog"));
-
-    if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
-
-    // Set the name and style context for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink-change");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
+    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "button4"));
 
     old_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "existing_path_head"));
     new_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "new_path_head"));
@@ -421,24 +480,51 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
     use_old_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_old_path_head"));
     use_new_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_new_path_head"));
 
+    if (!dialog || !ok_button || !old_head_label || !new_head_label ||
+        !use_old_path_head || !use_new_path_head)
+    {
+        g_object_unref (builder);
+        g_free (new_path_head_uri);
+        return;
+    }
+
+    request = g_new0 (DoclinkPathHeadRequest, 1);
+    request->dialog = g_object_ref (dialog);
+    request->use_old_path_head = g_object_ref (GTK_TOGGLE_BUTTON (use_old_path_head));
+    request->use_new_path_head = g_object_ref (GTK_TOGGLE_BUTTON (use_new_path_head));
+    request->old_path_head_uri = g_strdup (old_path_head_uri);
+    request->new_path_head_uri = new_path_head_uri;
+    if (gnc_current_session_exist ())
+    {
+        request->book = qof_session_get_book (gnc_get_current_session ());
+        if (request->book)
+            g_object_add_weak_pointer (G_OBJECT (request->book),
+                                       (gpointer *)&request->book);
+    }
+    if (parent)
+    {
+        request->parent = g_object_ref (parent);
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (doclink_path_head_parent_destroyed), request);
+    }
+
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW(dialog), TRUE);
+
+    // Set the name and style context for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink-change");
+    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
+
     // display path head text and test if present
     gnc_doclink_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
-    gnc_doclink_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
+    gnc_doclink_set_path_head_label (new_head_label, request->new_path_head_uri, _("New"));
 
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (doclink_path_head_response_cb), request);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (doclink_path_head_destroy_cb), request);
+    g_object_unref (builder);
     gtk_widget_show (dialog);
-    g_object_unref (G_OBJECT(builder));
-
-    // run the dialog
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    if (result == GTK_RESPONSE_OK)
-    {
-        gboolean use_old = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_old_path_head));
-        gboolean use_new = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_new_path_head));
-
-        if (use_old || use_new)
-            change_relative_and_absolute_uri_paths (old_path_head_uri, use_old,
-                                                    new_path_head_uri, use_new);
-    }
-    g_free (new_path_head_uri);
-    gtk_widget_destroy (dialog);
 }

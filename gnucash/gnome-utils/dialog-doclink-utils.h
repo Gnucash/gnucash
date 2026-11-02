@@ -117,7 +117,10 @@ gchar * gnc_doclink_get_unescaped_just_uri (const gchar *uri);
  *  When the path head is changed a dialog is raised that allows for
  *  existing relative file document links to be made absolute based on the
  *  old_path_head_uri and existing absolute file document links to be made
- *  relative based on the new_path_head_uri.
+ *  relative based on the new path head. The function returns immediately;
+ *  links are updated only after the user accepts the dialog and selects one
+ *  or both options. Closing the dialog or destroying its parent leaves links
+ *  unchanged. The old path head is copied before returning.
  *
  *  @param parent The GtkWindow for the parent widget
  *  @param old_path_head_uri The old path head uri

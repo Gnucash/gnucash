@@ -83,12 +83,11 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
                                       const char *name, gboolean *isnew)
 {
     const char *placeholder = _("The account %s does not allow transactions.");
-    const char *missing = _("The account %s does not exist. "
-                            "Would you like to create it?");
     char *account_name;
     ComboCell *cell = (ComboCell *) bcell;
     Account *account;
-    GList *account_types = NULL;
+    if (isnew)
+        *isnew = FALSE;
 
     /* Find the account */
     account = gnc_account_lookup_for_register (gnc_get_current_root_account (), name);
@@ -96,30 +95,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
         account = gnc_account_lookup_by_code (gnc_get_current_root_account(), name);
 
     if (!account)
-    {
-        /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (GTK_WINDOW (ledger->parent), TRUE, missing, name))
-            return NULL;
-
-        /* No changes, as yet. */
-        *isnew = FALSE;
-
-        /* User said yes, they want to create a new account. */
-        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_CREDIT);
-        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_ASSET);
-        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_LIABILITY);
-        if ( ledger->is_cust_doc )
-            account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_INCOME);
-        else
-            account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_EXPENSE);
-
-        account = gnc_ui_new_accounts_from_name_with_defaults (GTK_WINDOW (ledger->parent), name, account_types,
-                                                               NULL, NULL);
-        g_list_free ( account_types );
-        if (!account)
-            return NULL;
-        *isnew = TRUE;
-    }
+        return NULL;
     
     /* Now have a new account. Update the cell with the name as created. */
     account_name = gnc_get_account_name_for_register (account);
@@ -133,7 +109,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     /* See if the account (either old or new) is a placeholder. */
     if (xaccAccountGetPlaceholder (account))
     {
-        gnc_error_dialog (GTK_WINDOW (ledger->parent), placeholder, name);
+        gnc_error_dialog_async (GTK_WINDOW (ledger->parent), placeholder, name);
     }
 
     /* Be seeing you. */
@@ -388,12 +364,38 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
 {
     if (!ledger) return;
 
+    gnc_entry_ledger_cancel_async_close_requests (ledger);
+    for (GList *node = ledger->async_requests; node; node = node->next)
+        ((GncEntryLedgerAsyncRequest *)node->data)->ledger = NULL;
+    g_clear_pointer (&ledger->async_requests, g_list_free);
+
     /* Destroy blank entry, etc. */
     gnc_entry_ledger_clear_blank_entry (ledger);
     gnc_entry_ledger_display_fini (ledger);
     gnc_table_destroy (ledger->table);
     qof_query_destroy (ledger->query);
     g_free (ledger);
+}
+
+void
+gnc_entry_ledger_async_request_track (GncEntryLedger *ledger,
+                                     GncEntryLedgerAsyncRequest *request)
+{
+    g_return_if_fail (ledger != NULL);
+    g_return_if_fail (request != NULL);
+    request->ledger = ledger;
+    ledger->async_requests = g_list_prepend (ledger->async_requests, request);
+}
+
+void
+gnc_entry_ledger_async_request_untrack (GncEntryLedgerAsyncRequest *request)
+{
+    if (!request)
+        return;
+    if (request->ledger)
+        request->ledger->async_requests = g_list_remove (
+            request->ledger->async_requests, request);
+    request->ledger = NULL;
 }
 
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger)
@@ -879,6 +881,73 @@ gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger)
     gnc_resume_gui_refresh ();
 }
 
+typedef struct
+{
+    GncEntryLedgerAsyncRequest base;
+    VirtualLocation source_loc;
+    GncGUID source_entry_guid;
+} EntryLedgerDuplicateRequest;
+
+static void
+entry_ledger_duplicate_request_free (EntryLedgerDuplicateRequest *request)
+{
+    gnc_entry_ledger_async_request_untrack (&request->base);
+    g_free (request);
+}
+
+static gboolean
+entry_ledger_duplicate_request_is_current (EntryLedgerDuplicateRequest *request)
+{
+    GncEntryLedger *ledger = request->base.ledger;
+    GncEntry *entry;
+    if (!ledger || qof_book_shutting_down (ledger->book) ||
+        ledger->table->current_cursor_loc.vcell_loc.virt_row != request->source_loc.vcell_loc.virt_row ||
+        ledger->table->current_cursor_loc.vcell_loc.virt_col != request->source_loc.vcell_loc.virt_col ||
+        ledger->table->current_cursor_loc.phys_row_offset != request->source_loc.phys_row_offset ||
+        ledger->table->current_cursor_loc.phys_col_offset != request->source_loc.phys_col_offset)
+        return FALSE;
+    entry = gnc_entry_ledger_get_current_entry (ledger);
+    return entry && guid_equal (gncEntryGetGUID (entry), &request->source_entry_guid);
+}
+
+static void
+entry_ledger_duplicate_entry (GncEntryLedger *ledger, GncEntry *entry)
+{
+    GncEntry *new_entry;
+    gnc_suspend_gui_refresh ();
+    new_entry = gncEntryCreate (ledger->book);
+    gncEntryCopy (entry, new_entry, TRUE);
+    gncEntrySetDateGDate (new_entry, &ledger->last_date_entered);
+    gncEntrySetDateEntered (new_entry, gnc_time (NULL));
+    ledger->hint_entry = new_entry;
+    gnc_resume_gui_refresh ();
+}
+
+static void
+entry_ledger_duplicate_committed (gboolean completed, gpointer user_data)
+{
+    EntryLedgerDuplicateRequest *request = user_data;
+    GncEntryLedger *ledger = request->base.ledger;
+    GncEntry *entry = NULL;
+    if (completed && entry_ledger_duplicate_request_is_current (request))
+        entry = gncEntryLookup (ledger->book, &request->source_entry_guid);
+    if (entry)
+        entry_ledger_duplicate_entry (ledger, entry);
+    entry_ledger_duplicate_request_free (request);
+}
+
+static void
+entry_ledger_duplicate_confirmed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    EntryLedgerDuplicateRequest *request = user_data;
+    if (response == GTK_RESPONSE_ACCEPT && parent &&
+        entry_ledger_duplicate_request_is_current (request))
+        gnc_entry_ledger_commit_entry_async (GTK_WIDGET (parent), request->base.ledger,
+                                             entry_ledger_duplicate_committed, request);
+    else
+        entry_ledger_duplicate_request_free (request);
+}
+
 void
 gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
 {
@@ -901,64 +970,32 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
     if (!changed && entry == gnc_entry_ledger_get_blank_entry (ledger))
         return;
 
-    gnc_suspend_gui_refresh ();
-
     /* If the cursor has been edited, we are going to have to commit
      * it before we can duplicate. Make sure the user wants to do that. */
     if (changed)
     {
-        const char *title = _("Save the current entry?");
-        const char *message =
+        EntryLedgerDuplicateRequest *request = g_new0 (EntryLedgerDuplicateRequest, 1);
+        GtkWidget *dialog;
+        request->source_loc = ledger->table->current_cursor_loc;
+        request->source_entry_guid = *gncEntryGetGUID (entry);
+        gnc_entry_ledger_async_request_track (ledger, &request->base);
+        dialog = gtk_message_dialog_new (GTK_WINDOW (ledger->parent),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                         "%s", _("Save the current entry?"));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s",
             _("The current transaction has been changed. Would you like to "
               "record the changes before duplicating this entry, or "
-              "cancel the duplication?");
-        GtkWidget *dialog;
-        gint response;
-
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_NONE,
-                                        "%s", title);
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                "%s", message);
-        gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               _("_Cancel"), GTK_RESPONSE_CANCEL,
-                               _("_Record"), GTK_RESPONSE_ACCEPT,
-                               NULL);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_DUP);
-        gtk_widget_destroy(dialog);
-
-        if (response != GTK_RESPONSE_ACCEPT)
-        {
-            gnc_resume_gui_refresh ();
-            return;
-        }
-
-        if (!gnc_entry_ledger_commit_entry (ledger))
-        {
-            gnc_resume_gui_refresh ();
-            return;
-        }
+              "cancel the duplication?"));
+        gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                _("_Record"), GTK_RESPONSE_ACCEPT, NULL);
+        gnc_dialog_run_async (GTK_DIALOG (dialog), GNC_PREF_WARN_INV_ENTRY_DUP,
+                              entry_ledger_duplicate_confirmed, request);
+        return;
     }
 
     /* Ok, we're ready to make the copy */
-    {
-        GncEntry * new_entry;
-
-        new_entry = gncEntryCreate (ledger->book);
-        gncEntryCopy (entry, new_entry, TRUE);
-        gncEntrySetDateGDate (new_entry, &ledger->last_date_entered);
-
-        /* We also must set a new DateEntered on the new entry
-         * because otherwise the ordering is not deterministic */
-        gncEntrySetDateEntered (new_entry, gnc_time (NULL));
-
-        /* Set the hint for where to display on the refresh */
-        ledger->hint_entry = new_entry;
-    }
-
-    gnc_resume_gui_refresh ();
+    entry_ledger_duplicate_entry (ledger, entry);
     return;
 }
 

@@ -454,7 +454,7 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
         table = item_edit->sheet->table;
         virt_loc = table->current_cursor_loc;
 
-        if (!gnc_table_confirm_change (table, virt_loc))
+        if (gnc_table_confirm_change (table, virt_loc) != GNC_TABLE_CONFIRM_ACCEPT)
         {
             g_signal_handlers_block_matched
                  (button, G_SIGNAL_MATCH_DATA,
@@ -920,8 +920,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
      * Without one the button would disappear behind the grid object. */
     item_edit->popup_toggle.ebox = gtk_event_box_new ();
     g_object_ref (item_edit->popup_toggle.ebox);
-    gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.ebox),
-                       item_edit->popup_toggle.tbutton);
+    gtk_box_append (GTK_BOX (item_edit->popup_toggle.ebox), item_edit->popup_toggle.tbutton);
 
     // This call back intercepts the right mouse button event to stop the
     // gnucash_sheet_button_press_event from running.
@@ -958,7 +957,7 @@ check_popup_height_is_true (GtkWidget    *widget,
     if (allocation->height != item_edit->popup_returned_height)
     {
         item_edit->popup_allocation_height = allocation->height;
-        gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+        gtk_widget_unparent (GTK_WIDGET (item_edit->popup_item));
 
         g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                         (GSourceFunc)gnc_item_edit_update, item_edit, NULL);
@@ -1102,7 +1101,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     if (gtk_widget_get_parent (GTK_WIDGET(item_edit->popup_item)) != GTK_WIDGET(item_edit->sheet))
         return;
 
-    gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+    gtk_widget_unparent (GTK_WIDGET (item_edit->popup_item));
 
     // set the popup arrow direction down
     item_edit->popup_toggle.arrow_down = TRUE;
@@ -1181,4 +1180,3 @@ gnc_item_edit_get_has_selection (GncItemEdit *item_edit)
     editable = GTK_EDITABLE(item_edit->editor);
     return gtk_editable_get_selection_bounds (editable, NULL, NULL);
 }
-

@@ -147,6 +147,7 @@ typedef void (*TableCursorRefreshCB) (Table *table,
 
 typedef void (*TableRedrawHelpCB) (Table *table);
 typedef void (*TableDestroyCB) (Table *table);
+typedef void (*GncTableConfirmReplayFunc) (Table *table, gpointer user_data);
 
 typedef struct
 {
@@ -178,6 +179,10 @@ struct table
 
     TableGUIHandlers gui_handlers;
     gpointer ui_data;
+    gboolean confirm_pending;
+    GncTableConfirmReplayFunc confirm_replay;
+    gpointer confirm_replay_data;
+    GDestroyNotify confirm_replay_destroy;
 };
 
 /** Color definitions used for table elements */
@@ -395,7 +400,12 @@ gboolean     gnc_table_enter_update(Table *table,
 
 void         gnc_table_leave_update(Table *table, VirtualLocation virt_loc);
 
-gboolean     gnc_table_confirm_change(Table *table, VirtualLocation virt_loc);
+GncTableConfirmResult gnc_table_confirm_change(Table *table, VirtualLocation virt_loc);
+void gnc_table_confirm_change_set_replay (Table *table,
+                                          GncTableConfirmReplayFunc replay,
+                                          gpointer user_data,
+                                          GDestroyNotify destroy);
+gboolean gnc_table_confirm_change_complete (Table *table, gboolean accepted);
 
 const char * gnc_table_modify_update(Table *table,
                                      VirtualLocation virt_loc,

@@ -495,6 +495,48 @@ xaccMallocTransaction (QofBook *book)
     return trans;
 }
 
+Transaction *
+gnc_transaction_from_transaction_info (const GncTransactionInfo *info)
+{
+    auto trans = xaccMallocTransaction (info->book);
+    xaccTransBeginEdit (trans);
+
+    xaccTransSetCurrency (trans, info->from_commodity);
+    xaccTransSetDatePostedSecsNormalized (trans, info->date);
+    xaccTransSetDescription (trans, info->description);
+
+    auto from_split = xaccMallocSplit (info->book);
+    xaccTransAppendSplit (trans, from_split);
+    auto to_split = xaccMallocSplit (info->book);
+    xaccTransAppendSplit (trans, to_split);
+
+    xaccAccountBeginEdit (info->from_account);
+    xaccAccountInsertSplit (info->from_account, from_split);
+    xaccAccountBeginEdit (info->to_account);
+    xaccAccountInsertSplit (info->to_account, to_split);
+
+    xaccSplitSetBaseValue (from_split, gnc_numeric_neg (info->amount),
+                           info->from_commodity);
+    xaccSplitSetBaseValue (to_split, info->amount, info->from_commodity);
+    xaccSplitSetBaseValue (to_split, info->to_amount, info->to_commodity);
+
+    if (info->number)
+    {
+        if (qof_book_use_split_action_for_num_field (info->book))
+            xaccSplitSetAction (from_split, info->number);
+        else
+            xaccTransSetNum (trans, info->number);
+    }
+    xaccTransSetNotes (trans, info->notes);
+    xaccSplitSetMemo (from_split, info->memo);
+    xaccSplitSetMemo (to_split, info->memo);
+
+    xaccTransCommitEdit (trans);
+    xaccAccountCommitEdit (info->from_account);
+    xaccAccountCommitEdit (info->to_account);
+    return trans;
+}
+
 #ifdef DUMP_FUNCTIONS
 /* Please don't delete this function.  Although it is not called by
    any other code in GnuCash, it is useful when debugging.  For example

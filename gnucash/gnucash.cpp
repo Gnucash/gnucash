@@ -134,6 +134,16 @@ struct t_file_spec {
 };
 
 static void
+startup_file_completed ([[maybe_unused]] gboolean opened,
+                         [[maybe_unused]] gpointer user_data)
+{
+    gnc_get_current_session ();
+    gnc_destroy_splash_screen ();
+    gnc_main_window_show_all_windows ();
+    gnc_hook_run (HOOK_UI_POST_STARTUP, nullptr);
+}
+
+static void
 scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto user_file_spec = static_cast<t_file_spec*>(data);
@@ -195,11 +205,16 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_run(HOOK_STARTUP, NULL);
 
     char* fn = nullptr;
+    bool loading_file = false;
     if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
     {
         auto msg = _("Loading data…");
         gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-        gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
+        loading_file = true;
+        /* A file response can outlive startup's stack. The main window owns
+         * that request; the splash is retired when the request completes. */
+        gnc_file_open_file_async (gnc_ui_get_main_window (nullptr), fn, FALSE,
+                                  startup_file_completed, nullptr);
         g_free(fn);
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
@@ -212,10 +227,8 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     /* Ensure temporary preferences are temporary */
     gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
 
-    gnc_destroy_splash_screen();
-    gnc_main_window_show_all_windows();
-
-    gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);
+    if (!loading_file)
+        startup_file_completed (FALSE, nullptr);
     gnc_ui_start_event_loop();
     gnc_hook_remove_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);
 

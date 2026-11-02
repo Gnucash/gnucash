@@ -592,6 +592,54 @@ teardown(PriceDBFixture *fixture, gconstpointer data)
     qof_book_destroy(book);
     g_free(fixture->com);
 }
+typedef struct
+{
+    PriceDBFixture prices;
+    QofBook *other_book;
+} PriceDBCacheFixture;
+
+static void
+setup_cache (PriceDBCacheFixture *fixture, gconstpointer data)
+{
+    setup (&fixture->prices, data);
+    fixture->other_book = qof_book_new ();
+}
+
+static void
+teardown_cache (PriceDBCacheFixture *fixture, gconstpointer data)
+{
+    qof_book_destroy (fixture->other_book);
+    teardown (&fixture->prices, data);
+}
+
+static void
+test_nth_price_database_isolation (PriceDBCacheFixture *fixture,
+                                   gconstpointer data [[maybe_unused]])
+{
+    GNCPriceDB *db = fixture->prices.pricedb;
+    gnc_commodity *commodity = fixture->prices.com->usd;
+    GNCPriceDB *other_db = gnc_pricedb_get_db (fixture->other_book);
+    GNCPrice *price = gnc_pricedb_nth_price (db, commodity, 0);
+
+    g_assert_nonnull (price);
+    g_assert_null (gnc_pricedb_nth_price (other_db, commodity, 0));
+    g_assert_true (gnc_pricedb_nth_price (db, commodity, 0) == price);
+}
+
+static void
+test_nth_price_removal_invalidates_cache (PriceDBFixture *fixture,
+                                        gconstpointer data [[maybe_unused]])
+{
+    GNCPriceDB *db = fixture->pricedb;
+    gnc_commodity *commodity = fixture->com->usd;
+    GNCPrice *first = gnc_pricedb_nth_price (db, commodity, 0);
+    GNCPrice *second = gnc_pricedb_nth_price (db, commodity, 1);
+
+    g_assert_nonnull (first);
+    g_assert_nonnull (second);
+    g_assert_true (gnc_pricedb_remove_price (db, first));
+    g_assert_true (gnc_pricedb_nth_price (db, commodity, 0) == second);
+}
 /* gnc_pricedb_init
 static void
 gnc_pricedb_init(GNCPriceDB* pdb)*/
@@ -1738,6 +1786,8 @@ GNC_TEST_ADD (suitename, "gnc price list equal", PriceDBFixture, NULL, setup, te
 // GNC_TEST_ADD (suitename, "gnc collection get pricedb", Fixture, NULL, setup, test_gnc_collection_get_pricedb, teardown);
 // GNC_TEST_ADD (suitename, "gnc pricedb get db", Fixture, NULL, setup, test_gnc_pricedb_get_db, teardown);
 // GNC_TEST_ADD (suitename, "num prices helper", Fixture, NULL, setup, test_num_prices_helper, teardown);
+    GNC_TEST_ADD (suitename, "nth price database isolation", PriceDBCacheFixture, NULL, setup_cache, test_nth_price_database_isolation, teardown_cache);
+    GNC_TEST_ADD (suitename, "nth price removal invalidates cache", PriceDBFixture, NULL, setup, test_nth_price_removal_invalidates_cache, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get num prices", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_num_prices, teardown);
 // GNC_TEST_ADD (suitename, "pricedb equal foreach pricelist", Fixture, NULL, setup, test_pricedb_equal_foreach_pricelist, teardown);
 // GNC_TEST_ADD (suitename, "pricedb equal foreach currencies hash", Fixture, NULL, setup, test_pricedb_equal_foreach_currencies_hash, teardown);

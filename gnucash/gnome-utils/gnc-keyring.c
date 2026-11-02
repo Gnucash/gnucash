@@ -164,16 +164,11 @@ void gnc_keyring_set_password (const gchar *access_method,
 }
 
 
-gboolean gnc_keyring_get_password ( GtkWidget *parent,
-                                    const gchar *access_method,
-                                    const gchar *server,
-                                    guint32 port,
-                                    const gchar *service,
-                                    gchar **user,
-                                    gchar **password)
+static gboolean
+keyring_lookup_password (const gchar *access_method, const gchar *server,
+                         guint32 port, const gchar *service,
+                         gchar **user, gchar **password)
 {
-    gboolean password_found = FALSE;
-    gchar *db_path, *heading;
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     char* libsecret_password;
@@ -343,43 +338,87 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 
-    /* If we got here, either no proper password store is
-     * available on this system, or we couldn't retrieve
-     * a password from it. In both cases, just ask the user
-     * to enter one
-     */
+    return FALSE;
+}
 
-    if ( port == 0 )
-        db_path = g_strdup_printf ( "%s://%s/%s", access_method, server, service );
-    else
-        db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
-    heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
-                                   like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes */
-        _("Enter a user name and password to connect to: %s"),
-        db_path );
+typedef struct
+{
+    GtkWindow *parent;
+    gchar *protocol;
+    gchar *server;
+    guint32 port;
+    gchar *service;
+    gchar *username;
+    GncKeyringPasswordCallback completed;
+    gpointer user_data;
+} KeyringRequest;
 
-    password_found = gnc_get_username_password ( parent, heading,
-                                                 *user, NULL,
-                                                 user, password );
-    g_free ( db_path );
-    g_free ( heading );
+static void
+keyring_request_free (KeyringRequest *request)
+{
+    g_clear_object (&request->parent);
+    g_free (request->protocol);
+    g_free (request->server);
+    g_free (request->service);
+    g_free (request->username);
+    g_free (request);
+}
 
-    if ( password_found )
+static void
+keyring_prompt_completed (gboolean accepted, gchar *username, gchar *password,
+                          gpointer user_data)
+{
+    KeyringRequest *request = user_data;
+    if (accepted)
+        gnc_keyring_set_password (request->protocol, request->server,
+                                  request->port, request->service,
+                                  username, password);
+    request->completed (accepted, username, password, request->user_data);
+    keyring_request_free (request);
+}
+
+void
+gnc_keyring_get_password_async (GtkWidget *parent,
+                                const gchar *access_method,
+                                const gchar *server, guint32 port,
+                                const gchar *service,
+                                const gchar *initial_user,
+                                const gchar *initial_password,
+                                GncKeyringPasswordCallback completed,
+                                gpointer user_data)
+{
+    KeyringRequest *request;
+    gchar *password = NULL;
+    gchar *username;
+    gchar *heading;
+
+    g_return_if_fail (completed != NULL);
+    g_return_if_fail (access_method && server && service);
+    request = g_new0 (KeyringRequest, 1);
+    request->parent = parent && GTK_IS_WINDOW (parent) ? GTK_WINDOW (g_object_ref (parent)) : NULL;
+    request->protocol = g_strdup (access_method);
+    request->server = g_strdup (server);
+    request->port = port;
+    request->service = g_strdup (service);
+    request->completed = completed;
+    request->user_data = user_data;
+    username = g_strdup (initial_user);
+    if (keyring_lookup_password (access_method, server, port, service,
+                                 &username, &password))
     {
-        /* User entered new user/password information
-         * Let's try to add it to a password store.
-         */
-        gchar *newuser = g_strdup( *user );
-        gchar *newpassword = g_strdup( *password );
-        gnc_keyring_set_password ( access_method,
-                                   server,
-                                   port,
-                                   service,
-                                   newuser,
-                                   newpassword );
-        g_free ( newuser );
-        g_free ( newpassword );
+        request->completed (TRUE, username, password, user_data);
+        keyring_request_free (request);
+        return;
     }
-
-    return password_found;
+    heading = port ? g_strdup_printf (_("Enter password for %s://%s@%s:%u/%s"),
+                                       access_method, username ? username : "",
+                                       server, port, service) :
+                     g_strdup_printf (_("Enter password for %s://%s@%s/%s"),
+                                       access_method, username ? username : "",
+                                       server, service);
+    gnc_get_username_password_async (request->parent, heading, username,
+                                     initial_password,
+                                     keyring_prompt_completed, request);
+    g_free (heading);
+    g_free (username);
 }

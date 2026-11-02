@@ -59,10 +59,17 @@ struct _accountpickerdialog
     GtkWidget       * ok_button;
     QIFImportWindow * qif_wind;
     SCM               map_entry;
+    SCM               original_name;
     gchar           * selected_name;
+    GtkBuilder      * builder;
+    GncGuiQueryResponseCallback completed;
+    gpointer          user_data;
+    gboolean          finished;
 };
 
 void gnc_ui_qif_account_picker_new_cb (GtkButton * w, gpointer user_data);
+static void qif_account_picker_completed (GtkWindow *parent, gint response,
+                                          gpointer user_data);
 
 /****************************************************************
  * acct_tree_add_accts
@@ -217,54 +224,54 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import)
  * This handler is invoked when the user wishes to create a new
  * account.
  ****************************************************************/
+typedef struct
+{
+    QIFAccountPickerDialog *wind;
+    GtkWidget *dialog;
+} QifAccountNameRequest;
+
+static void
+qif_account_name_received (GtkWindow *parent, gchar *name,
+                           gpointer user_data)
+{
+    QifAccountNameRequest *request = user_data;
+    QIFAccountPickerDialog *wind = request->wind;
+    if (request->dialog)
+    {
+        if (name && *name)
+        {
+            if (g_utf8_strlen (name, -1) > 250)
+                *g_utf8_offset_to_pointer (name, 250) = '\0';
+            SCM name_setter = scm_c_eval_string ("qif-map-entry:set-gnc-name!");
+            gchar *fullname = wind->selected_name && *wind->selected_name
+                ? g_strjoin (gnc_get_account_separator_string (),
+                             wind->selected_name, name, NULL)
+                : g_strdup (name);
+            g_free (wind->selected_name);
+            wind->selected_name = fullname;
+            scm_call_2 (name_setter, wind->map_entry,
+                       scm_from_utf8_string (fullname));
+        }
+        build_acct_tree (wind, wind->qif_wind);
+        gtk_widget_grab_focus (GTK_WIDGET (wind->treeview));
+        g_object_remove_weak_pointer (G_OBJECT (request->dialog),
+                                      (gpointer *)&request->dialog);
+    }
+    g_free (name);
+    g_free (request);
+}
+
 void
 gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 {
     QIFAccountPickerDialog * wind = user_data;
-    SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
-    const gchar *name;
-    int response;
-    gchar *fullname;
-    GtkWidget *dlg, *entry;
-
-    /* Create a dialog to get the new account name. */
-    dlg = gtk_message_dialog_new(GTK_WINDOW(wind->dialog),
-                                 GTK_DIALOG_DESTROY_WITH_PARENT,
-                                 GTK_MESSAGE_QUESTION,
-                                 GTK_BUTTONS_OK_CANCEL,
-                                 "%s", _("Enter a name for the account"));
-    gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
-    entry = gtk_entry_new();
-    gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
-    gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
-    gtk_widget_show(entry);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), entry);
-
-    /* Run the dialog to get the new account name. */
-    response = gtk_dialog_run(GTK_DIALOG(dlg));
-    name = gtk_entry_get_text(GTK_ENTRY(entry));
-
-    /* Did the user enter a name and click OK? */
-    if (response == GTK_RESPONSE_OK && name && *name)
-    {
-        /* If an account is selected, this will be a new subaccount. */
-        if (wind->selected_name && *(wind->selected_name))
-            /* We have the short name; determine the full name. */
-            fullname = g_strjoin(gnc_get_account_separator_string(),
-                                 wind->selected_name, name, (char *)NULL);
-        else
-            fullname = g_strdup(name);
-
-        /* Save the full name and update the map entry. */
-        g_free(wind->selected_name);
-        wind->selected_name = fullname;
-        scm_call_2(name_setter, wind->map_entry, scm_from_utf8_string(fullname));
-    }
-    gtk_widget_destroy(dlg);
-
-    /* Refresh the tree display and give it the focus. */
-    build_acct_tree(wind, wind->qif_wind);
-    gtk_widget_grab_focus(GTK_WIDGET(wind->treeview));
+    QifAccountNameRequest *request = g_new0 (QifAccountNameRequest, 1);
+    request->wind = wind;
+    request->dialog = wind->dialog;
+    g_object_add_weak_pointer (G_OBJECT (request->dialog),
+                               (gpointer *)&request->dialog);
+    gnc_input_dialog_async (wind->dialog, _("Enter a name for the account"),
+                            NULL, NULL, qif_account_name_received, request);
 }
 
 
@@ -367,11 +374,22 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
         gtk_tree_model_get (model, &iter,
                             ACCOUNT_COL_PLACEHOLDER, &placeholder, -1);
 
+    if (response_id == GNC_RESPONSE_NEW)
+    {
+        g_signal_stop_emission_by_name (dialog, "response");
+        gnc_ui_qif_account_picker_new_cb (NULL, wind);
+        return;
+    }
+
     if (response_id == GTK_RESPONSE_OK)
     {
         if (placeholder)
             g_signal_stop_emission_by_name (dialog, "response");
+        else
+            gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
     }
+    else
+        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
 }
 
 
@@ -380,17 +398,17 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
  *
  * Select an account from the ones that the engine knows about,
  * plus those that will be created by the QIF import.  If the
- * user clicks OK, map_entry is changed and TRUE is returned.
- * If the clicks Cancel instead, FALSE is returned. Modal.
+ * user clicks OK, map_entry is changed before the completion callback runs.
+ * Cancel and owner destruction restore the original mapping.
  ****************************************************************/
-gboolean
-qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map_entry)
+void
+qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind,
+                          SCM map_entry,
+                          GncGuiQueryResponseCallback completed,
+                          gpointer user_data)
 {
     QIFAccountPickerDialog * wind;
     SCM gnc_name     = scm_c_eval_string("qif-map-entry:gnc-name");
-    SCM set_gnc_name = scm_c_eval_string("qif-map-entry:set-gnc-name!");
-    SCM orig_acct    = scm_call_1(gnc_name, map_entry);
-    int response;
     GtkBuilder *builder;
 
     wind = g_new0(QIFAccountPickerDialog, 1);
@@ -398,12 +416,17 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
     /* Save the map entry. */
     wind->map_entry = map_entry;
     scm_gc_protect_object(wind->map_entry);
+    wind->original_name = scm_call_1 (gnc_name, map_entry);
+    scm_gc_protect_object (wind->original_name);
+    wind->completed = completed;
+    wind->user_data = user_data;
 
     /* Set the initial account to be selected. */
-    if (scm_is_string(orig_acct))
-        wind->selected_name = gnc_scm_to_utf8_string (orig_acct);
+    if (scm_is_string(wind->original_name))
+        wind->selected_name = gnc_scm_to_utf8_string (wind->original_name);
 
     builder = gtk_builder_new();
+    wind->builder = builder;
     gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "qif_import_account_picker_dialog");
 
     /* Connect all the signals */
@@ -477,25 +500,32 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
 
     g_signal_connect (wind->dialog, "response",
                       G_CALLBACK (dialog_response_cb), wind);
+    gtk_window_set_modal (GTK_WINDOW (wind->dialog), TRUE);
+    gnc_gui_query_bind_dialog_response (GTK_DIALOG (wind->dialog),
+                                       qif_account_picker_completed, wind);
+    gtk_widget_show (wind->dialog);
+}
 
-    do
+static void
+qif_account_picker_completed (GtkWindow *parent, gint response,
+                              gpointer user_data)
+{
+    QIFAccountPickerDialog *wind = user_data;
+    gboolean accepted = parent && response == GTK_RESPONSE_OK;
+    GncGuiQueryResponseCallback completed = wind->completed;
+    gpointer data = wind->user_data;
+
+    if (!accepted)
     {
-        response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+        SCM set_gnc_name = scm_c_eval_string ("qif-map-entry:set-gnc-name!");
+        scm_call_2 (set_gnc_name, wind->map_entry, wind->original_name);
     }
-    while (response == GNC_RESPONSE_NEW);
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));
-    gtk_widget_destroy(wind->dialog);
-    g_object_unref(G_OBJECT(builder));
-
-    scm_gc_unprotect_object(wind->map_entry);
-    g_free(wind->selected_name);
-    g_free(wind);
-
-    if (response == GTK_RESPONSE_OK)
-        return TRUE;
-
-    /* Restore the original mapping. */
-    scm_call_2(set_gnc_name, map_entry, orig_acct);
-
-    return FALSE;
+    scm_gc_unprotect_object (wind->map_entry);
+    scm_gc_unprotect_object (wind->original_name);
+    g_object_unref (wind->builder);
+    g_free (wind->selected_name);
+    g_free (wind);
+    if (completed)
+        completed (parent, accepted ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL,
+                   data);
 }

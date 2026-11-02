@@ -378,13 +378,13 @@ gnc_dense_cal_init (GncDenseCal *dcal)
 
         l = gtk_label_new (_("Date: "));
         gtk_widget_set_margin_start (l, 5);
-        gtk_container_add (GTK_CONTAINER(hbox), l);
+        gtk_box_append (GTK_BOX (hbox), l);
         l = gtk_label_new ("YY/MM/DD");
         g_object_set_data (G_OBJECT(dcal->transPopup), "dateLabel", l);
-        gtk_container_add (GTK_CONTAINER(hbox), l);
-        gtk_container_add (GTK_CONTAINER(vbox), hbox);
+        gtk_box_append (GTK_BOX (hbox), l);
+        gtk_box_append (GTK_BOX (vbox), hbox);
 
-        gtk_container_add (GTK_CONTAINER(vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+        gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
         tree_data = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
         tree_view = GTK_TREE_VIEW(gtk_tree_view_new_with_model (GTK_TREE_MODEL(tree_data)));
@@ -396,8 +396,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         g_object_set_data (G_OBJECT(dcal->transPopup), "model", tree_data);
         g_object_unref (tree_data);
 
-        gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tree_view));
-        gtk_container_add (GTK_CONTAINER(dcal->transPopup), vbox);
+        gtk_box_append (GTK_BOX (vbox), GTK_WIDGET(tree_view));
+        gtk_window_set_child (GTK_WINDOW(dcal->transPopup), vbox);
 
         gtk_window_set_resizable (GTK_WINDOW(dcal->transPopup), FALSE);
 

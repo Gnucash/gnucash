@@ -76,6 +76,23 @@ typedef struct
 
 typedef struct _GncABImExContextImport GncABImExContextImport;
 
+/** Called on the GTK thread when the exclusive AqBanking operation slot is
+ * granted. The token must be released after all AqBanking work and its GTK/QOF
+ * continuations, including gnc_AB_BANKING_fini(), have completed. */
+typedef void (*GncABOperationAcquired) (guint token, gpointer user_data);
+
+/** Queue an exclusive AqBanking operation. Calls must originate on the GTK
+ * thread. The callback is always dispatched asynchronously on that thread,
+ * once, in FIFO order. The caller must keep its request/session lease alive
+ * until the callback has completed and release has been called. */
+void gnc_ab_operation_acquire_async (GncABOperationAcquired acquired,
+                                     gpointer user_data);
+
+/** Release the active operation token on the GTK thread. Unknown or already
+ * released tokens are ignored. The next queued callback is dispatched by a
+ * later main-context iteration. */
+void gnc_ab_operation_release (guint token);
+
 #define AWAIT_BALANCES      1 << 1
 #define FOUND_BALANCES      1 << 2
 #define IGNORE_BALANCES     1 << 3
@@ -208,40 +225,28 @@ gchar *gnc_ab_memo_to_gnc (const AB_TRANSACTION *ab_trans);
  */
 Transaction *gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
-/**
- * Import balances and transactions found in a AB_IMEXPORTER_CONTEXT into
- * GnuCash.  By using @a awaiting the caller can specify what the user will
- * expect to receive.  By using @a execute_txns, transactions in @a context can
- * be used to generate corresponding AqBanking jobs, e.g. after a file import.
- *
- * @param context AB_IMEXPORTER_CONTEXT to import
- *
- * @param awaiting Information the caller expects to receive or wants to ignore,
- * bitmask of AWAIT_* or IGNORE_* values
- *
- * @param execute_txns If @a awaiting contains AWAIT_TRANSACTIONS, whether to
- * create an aqbanking job for each of the transactions found
- *
- * @param api If @a execute_txns is TRUE, the AB_BANKING to get
- * GNC_AB_ACCOUNT_SPECs from
- *
- * @param parent Widget to set new dialogs transient for, may be NULL
- *
- * @return A new GncABImExContextImport object which must be freed with
- * g_free(), or NULL otherwise.  If execute_txns is TRUE, additionally
- * gnc_ab_ieci_get_job_list() must be called and the result freed with
- * AB_Job_List2_FreeAll()
- */
-GncABImExContextImport *gnc_ab_import_context (AB_IMEXPORTER_CONTEXT *context,
-                                               guint awaiting,
-                                               gboolean execute_txns,
-                                               AB_BANKING *api,
-                                               GtkWidget *parent);
+/** Complete the import-context traversal without nested GTK loops. The caller
+ * retains ownership of the AqBanking context and must keep it alive until
+ * @a completed is called. Completion runs exactly once on GTK's main thread.
+ * Ownership of a non-NULL GncABImExContextImport transfers to the callback;
+ * release it with gnc_ab_ieci_free() after matcher completion. The job list
+ * transfers out through gnc_ab_ieci_get_job_list() and remains caller-owned.
+ * A NULL result means the import was cancelled. */
+typedef void (*GncABImportContextDoneCallback) (
+    GncABImExContextImport *ieci, gpointer user_data);
+void gnc_ab_import_context_async (AB_IMEXPORTER_CONTEXT *context,
+                                  guint awaiting,
+                                  gboolean execute_txns,
+                                  AB_BANKING *api,
+                                  GtkWidget *parent,
+                                  GncABImportContextDoneCallback completed,
+                                  gpointer user_data);
+void gnc_ab_ieci_free (GncABImExContextImport *ieci);
 
 /**
  * Extract awaiting from @a data.
  *
- * @param ieci The return value of gnc_ab_import_context()
+ * @param ieci The value received by the async completion callback
  * @return The initial awaiting bitmask plus IGNORE_* for unexpected and then
  * ignored items, and FOUND_* for non-empty items
  */
@@ -250,23 +255,28 @@ guint gnc_ab_ieci_get_found (GncABImExContextImport *ieci);
 /**
  * Extract the job list from @a data.
  *
- * @param ieci The return value of gnc_ab_import_context()
+ * @param ieci The value received by the async completion callback
  * @return The list of jobs, freeable with AB_Job_List2_FreeAll()
  */
 GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list (GncABImExContextImport *ieci);
 
 /**
- * Run the generic transaction matcher dialog.
+ * Present the generic transaction matcher dialog.
  *
- * @param ieci The return value of gnc_ab_import_context()
- * @return The return value of gnc_gen_trans_list_run().
+ * @param ieci The value received by the async completion callback
+ * @param completed Called after the dialog and importer state have been closed.
  */
-gboolean gnc_ab_ieci_run_matcher (GncABImExContextImport *ieci);
+typedef void (*GncABMatcherDoneCallback)(gboolean accepted, gpointer user_data);
+void gnc_ab_ieci_run_matcher_async (GncABImExContextImport *ieci,
+                                    GncABMatcherDoneCallback completed,
+                                    gpointer user_data);
 
 
 /**
  * get the GWEN_DB_NODE from AqBanking configuration files
  *
+ * This synchronous helper may only touch AB_BANKING while the caller owns the
+ * exclusive operation token; outside an operation it returns NULL.
  * @return a GWEN_DB containing all permanently accepted SSL certificates (hashed).
  */
 GWEN_DB_NODE *gnc_ab_get_permanent_certs (void);

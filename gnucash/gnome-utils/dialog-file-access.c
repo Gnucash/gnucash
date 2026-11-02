@@ -167,7 +167,10 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
-            gnc_file_do_save_as (GTK_WINDOW(dialog), url);
+            /* The access dialog is destroyed below. Own subsequent overwrite
+             * questions with its persistent parent, not this short-lived chooser. */
+            GtkWindow *owner = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+            gnc_file_do_save_as_async (owner, url, NULL, NULL);
         }
         else if ( faw->type == FILE_ACCESS_EXPORT )
         {
@@ -400,7 +403,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
 
     uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
     faw->cb_uri_type = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-    gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
+    gtk_box_append( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
     gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
                                /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
     g_object_connect( G_OBJECT(faw->cb_uri_type),

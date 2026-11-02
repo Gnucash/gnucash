@@ -1709,7 +1709,8 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
             {
                 GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-                if (gnc_table_confirm_change (sheet->table, cur_virt_loc))
+                if (gnc_table_confirm_change (sheet->table, cur_virt_loc) ==
+                    GNC_TABLE_CONFIRM_ACCEPT)
                     gnc_item_edit_show_popup (item_edit);
 
                 /* Clear the saved selection for the new cell. */

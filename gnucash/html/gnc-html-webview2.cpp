@@ -106,7 +106,6 @@ static void show_url (GncHtml* self, URLType type,
                                     const gchar* location, const gchar* label,
                                     gboolean new_window);
 static void show_data (GncHtml* self, const gchar* data, int datalen);
-static void load_html_string (GncHtml* self, const gchar* html_str);
 static void reload (GncHtml* self, gboolean force_rebuild);
 static void copy_to_clipboard (GncHtml* self);
 static gboolean export_to_file (GncHtml* self, const gchar* filepath);
@@ -456,33 +455,6 @@ GncWebView2EnvironmentHandler::Invoke (HRESULT result, ICoreWebView2Environment*
     return S_OK;
 }
 
-/* GTK allocations are in logical units; WebView2 wants physical pixels
- * relative to the parent HWND. */
-static void
-update_controller_bounds (GncHtmlWebview2* self)
-{
-    auto priv = GNC_HTML_WEBVIEW2_GET_PRIVATE (self);
-    if (!priv->controller || !priv->socket)
-        return;
-
-    GdkWindow* gdkwin = gtk_widget_get_window (priv->socket);
-    if (!gdkwin)
-        return;
-
-    HWND hwnd = static_cast<HWND> (GDK_WINDOW_HWND (gdkwin));
-    RECT bounds;
-    if (!GetClientRect (hwnd, &bounds))
-        return;
-
-    DEBUG ("alloc %dx%d scale %d -> HWND client %ldx%ld",
-           gtk_widget_get_allocated_width (priv->socket),
-           gtk_widget_get_allocated_height (priv->socket),
-           gtk_widget_get_scale_factor (priv->socket),
-           bounds.right, bounds.bottom);
-
-    priv->controller->put_Bounds (bounds);
-}
-
 static void
 controller_created (GncHtmlWebview2* self, HRESULT result,
                                   ICoreWebView2Controller* controller)
@@ -506,7 +478,10 @@ controller_created (GncHtmlWebview2* self, HRESULT result,
     controller->AddRef ();
     controller->get_CoreWebView2 (&priv->webview);
 
-    update_controller_bounds (self);
+    GtkAllocation alloc;
+    gtk_widget_get_allocation (priv->socket, &alloc);
+    RECT bounds { 0, 0, alloc.width, alloc.height };
+    priv->controller->put_Bounds (bounds);
     priv->controller->put_IsVisible (gtk_widget_get_mapped (priv->socket));
 
     gdouble zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
@@ -836,15 +811,14 @@ socket_realize_cb (GtkWidget* socket, gpointer user_data)
 }
 
 static void
-socket_scale_changed_cb (GObject*, GParamSpec*, gpointer user_data)
-{
-    update_controller_bounds (GNC_HTML_WEBVIEW2 (user_data));
-}
-
-static void
 socket_size_allocate_cb (GtkWidget* socket, GtkAllocation* allocation, gpointer user_data)
 {
-    update_controller_bounds (GNC_HTML_WEBVIEW2 (user_data));
+    auto priv = GNC_HTML_WEBVIEW2_GET_PRIVATE (GNC_HTML_WEBVIEW2 (user_data));
+    if (priv->controller)
+    {
+        RECT bounds { 0, 0, allocation->width, allocation->height };
+        priv->controller->put_Bounds (bounds);
+    }
 }
 
 static void
@@ -897,8 +871,8 @@ gnc_html_webview2_init (GncHtmlWebview2* self)
      priv->socket = gtk_event_box_new ();
      gtk_widget_set_can_focus (priv->socket, TRUE);
 
-     gtk_container_add (GTK_CONTAINER(priv->base.container),
-                        priv->socket);
+     gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container),
+                                     priv->socket);
 
      g_object_ref_sink (priv->base.container);
 
@@ -910,8 +884,6 @@ gnc_html_webview2_init (GncHtmlWebview2* self)
                        G_CALLBACK (socket_map_cb), self);
      g_signal_connect (priv->socket, "unmap",
                        G_CALLBACK (socket_unmap_cb), self);
-     g_signal_connect (priv->socket, "notify::scale-factor",
-                       G_CALLBACK (socket_scale_changed_cb), self);
 
      gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
                             GNC_PREF_RPT_DFLT_ZOOM,
@@ -932,7 +904,6 @@ gnc_html_webview2_class_init (GncHtmlWebview2Class* klass)
 
      html_class->show_url = show_url;
      html_class->show_data = show_data;
-     html_class->load_html_string = load_html_string;
      html_class->reload = reload;
      html_class->copy_to_clipboard = copy_to_clipboard;
      html_class->export_to_file = export_to_file;
@@ -994,8 +965,7 @@ gnc_html_webview2_dispose (GObject* obj)
 
      if (priv->socket != nullptr)
      {
-          gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                                priv->socket);
+          gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container), NULL);
 
           priv->socket = nullptr;
      }
@@ -1345,33 +1315,6 @@ show_data (GncHtml* self, const gchar* data, int datalen)
      DEBUG("Loading uri '%s'", uri);
      navigate_uri (GNC_HTML_WEBVIEW2(self), uri);
      g_free (uri);
-
-     LEAVE("");
-}
-
-/********************************************************************
- * gnc_html_load_html_string
- * render a self-contained HTML string in memory (no temp file / file://).
- ********************************************************************/
-
-static void
-load_html_string (GncHtml* self, const gchar* html_str)
-{
-     g_return_if_fail (self != nullptr);
-     g_return_if_fail (GNC_IS_HTML_WEBVIEW2(self));
-
-     auto priv = GNC_HTML_WEBVIEW2_GET_PRIVATE (self);
-
-     ENTER ("html_str %20.20s", html_str ? html_str : "(null)");
-
-     /* Keep a copy so export-to-file and print still work. */
-     g_free (priv->html_string);
-     priv->html_string = g_strdup (html_str ? html_str : "");
-
-     /* The string is self-contained (no external/local resources), so hand it
-        straight to NavigateToString rather than the temp-file file:// path that
-        show_data() uses for report-embedded local images. */
-     navigate_string (GNC_HTML_WEBVIEW2(self), priv->html_string);
 
      LEAVE("");
 }

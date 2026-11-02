@@ -153,8 +153,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
     gdf->table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
     g_object_ref (G_OBJECT(gdf->table));
-    gtk_container_remove (GTK_CONTAINER(dialog), gdf->table);
-    gtk_container_add (GTK_CONTAINER(gdf), gdf->table);
+    gtk_window_set_child (GTK_WINDOW(dialog), NULL);
+    gtk_box_append (GTK_BOX(gdf), gdf->table);
     g_object_unref (G_OBJECT(gdf->table));
 
     g_object_unref(G_OBJECT(builder));

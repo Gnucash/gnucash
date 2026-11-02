@@ -28,6 +28,7 @@
 */
 
 #include <guid.hpp>
+#include "gnc-gtk-utils.h"
 
 #include "config.h"
 
@@ -39,6 +40,7 @@
 #include "gnc-ui.h"
 #include "gnc-uri.hpp"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include "dialog-utils.h"
 
 #include "gnc-component-manager.h"
@@ -103,6 +105,7 @@ public:
 
     void preview_settings_delete ();
     void preview_settings_save ();
+    void preview_settings_save_ready ();
     void preview_settings_name (GtkEntry* entry);
     void preview_settings_load ();
     void preview_update_skipped_rows ();
@@ -581,7 +584,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_settings_sel_changed_cb), this);
 
         // Additionally connect to the changed signal of the embedded GtkEntry
-        auto emb_entry = gtk_bin_get_child (GTK_BIN (settings_combo));
+        auto emb_entry = gtk_combo_box_get_child (GTK_COMBO_BOX(settings_combo));
         g_signal_connect (G_OBJECT(emb_entry), "changed",
                          G_CALLBACK(csv_price_imp_preview_settings_text_changed_cb), this);
         g_signal_connect (G_OBJECT(emb_entry), "insert-text",
@@ -637,7 +640,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_enc_sel_cb), this);
 
         auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
-        gtk_container_add (encoding_container, GTK_WIDGET(encselector));
+        gtk_box_append (GTK_BOX(encoding_container), GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
         gtk_widget_show_all (GTK_WIDGET(encoding_container));
 
@@ -669,7 +672,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add it to the assistant. */
         auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
-        gtk_container_add (date_format_container, GTK_WIDGET(date_format_combo));
+        gtk_box_append (GTK_BOX(date_format_container), GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
         gtk_widget_show_all (GTK_WIDGET(date_format_container));
 
@@ -686,7 +689,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add it to the assistant. */
         auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
-        gtk_container_add (currency_format_container, GTK_WIDGET(currency_format_combo));
+        gtk_box_append (GTK_BOX(currency_format_container), GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
         gtk_widget_show_all (GTK_WIDGET(currency_format_container));
 
@@ -825,7 +828,7 @@ void CsvImpPriceAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
     GtkTreeIter iter;
     auto can_delete = false;
     auto can_save = false;
-    auto entry = gtk_bin_get_child (GTK_BIN(combo));
+    auto entry = gtk_combo_box_get_child (GTK_COMBO_BOX(combo));
     auto entry_text = gtk_entry_get_text (GTK_ENTRY(entry));
     /* Handle sensitivity of the delete and save button */
     if (gtk_combo_box_get_active_iter (combo, &iter))
@@ -895,25 +898,44 @@ CsvImpPriceAssist::preview_settings_load ()
 void
 CsvImpPriceAssist::preview_settings_delete ()
 {
-    // Get the Active Selection
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
+    if (g_object_get_data (G_OBJECT (csv_imp_asst), "csv-settings-pending"))
         return;
-
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter (settings_combo, &iter)) return;
     CsvPriceImpSettings *preset = nullptr;
-    auto model = gtk_combo_box_get_model (settings_combo);
-    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-    auto response = gnc_ok_cancel_dialog (GTK_WINDOW(csv_imp_asst),
-                                GTK_RESPONSE_CANCEL,
-                                "%s", _("Delete the Import Settings."));
-    if (response == GTK_RESPONSE_OK)
-    {
-        preset->remove();
-        preview_populate_settings_combo();
-        gtk_combo_box_set_active (settings_combo, 0); // Default
-        preview_refresh (); // Reset the widgets
-    }
+    gtk_tree_model_get (gtk_combo_box_get_model (settings_combo), &iter,
+                        SET_GROUP, &preset, -1);
+    if (!preset) return;
+    struct Request { CsvImpPriceAssist *owner; std::string name; };
+    auto request = new Request {this, preset->m_name};
+    g_object_set_data (G_OBJECT (csv_imp_asst), "csv-settings-pending", request);
+    gtk_widget_set_sensitive (GTK_WIDGET (csv_imp_asst), FALSE);
+    gnc_ok_cancel_dialog_async (GTK_WINDOW (csv_imp_asst), GTK_RESPONSE_CANCEL,
+        +[](GtkWindow *parent, gint response, gpointer data)
+        {
+            std::unique_ptr<Request> request (static_cast<Request *> (data));
+            if (!parent) return;
+            g_object_set_data (G_OBJECT (parent), "csv-settings-pending", nullptr);
+            gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+            if (response != GTK_RESPONSE_OK) return;
+            auto self = request->owner;
+            auto model = gtk_combo_box_get_model (self->settings_combo);
+            GtkTreeIter iter;
+            for (bool valid = gtk_tree_model_get_iter_first (model, &iter); valid;
+                 valid = gtk_tree_model_iter_next (model, &iter))
+            {
+                CsvPriceImpSettings *preset = nullptr;
+                gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+                if (preset && preset->m_name == request->name)
+                {
+                    preset->remove ();
+                    self->preview_populate_settings_combo ();
+                    gtk_combo_box_set_active (self->settings_combo, 0);
+                    self->preview_refresh ();
+                    break;
+                }
+            }
+        }, request, "%s", _("Delete the Import Settings."));
 }
 
 /* Callback to save the current settings to the gnucash state file.
@@ -921,35 +943,44 @@ CsvImpPriceAssist::preview_settings_delete ()
 void
 CsvImpPriceAssist::preview_settings_save ()
 {
-    auto new_name = price_imp->settings_name();
-
-    /* Check if the entry text matches an already existing preset */
+    if (g_object_get_data (G_OBJECT (csv_imp_asst), "csv-settings-pending"))
+        return;
+    auto name = price_imp->settings_name ();
     GtkTreeIter iter;
     if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
     {
-
         auto model = gtk_combo_box_get_model (settings_combo);
-        bool valid = gtk_tree_model_get_iter_first (model, &iter);
-        while (valid)
+        for (bool valid = gtk_tree_model_get_iter_first (model, &iter); valid;
+             valid = gtk_tree_model_iter_next (model, &iter))
         {
-            // Walk through the list, reading each row
-            CsvPriceImpSettings *preset;
+            CsvPriceImpSettings *preset = nullptr;
             gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-            if (preset && (preset->m_name == std::string(new_name)))
-            {
-                auto response = gnc_ok_cancel_dialog (GTK_WINDOW(csv_imp_asst),
-                        GTK_RESPONSE_OK,
-                        "%s", _("Setting name already exists, overwrite?"));
-                if (response != GTK_RESPONSE_OK)
-                    return;
-
-                break;
-            }
-            valid = gtk_tree_model_iter_next (model, &iter);
+            if (!preset || preset->m_name != name) continue;
+            struct Request { CsvImpPriceAssist *owner; std::string name; };
+            auto request = new Request {this, name};
+            g_object_set_data (G_OBJECT (csv_imp_asst), "csv-settings-pending", request);
+            gtk_widget_set_sensitive (GTK_WIDGET (csv_imp_asst), FALSE);
+            gnc_ok_cancel_dialog_async (GTK_WINDOW (csv_imp_asst), GTK_RESPONSE_OK,
+                +[](GtkWindow *parent, gint response, gpointer data)
+                {
+                    std::unique_ptr<Request> request (static_cast<Request *> (data));
+                    if (!parent) return;
+                    g_object_set_data (G_OBJECT (parent), "csv-settings-pending", nullptr);
+                    gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+                    if (response == GTK_RESPONSE_OK &&
+                        request->owner->price_imp->settings_name () == request->name)
+                        request->owner->preview_settings_save_ready ();
+                }, request, "%s", _("Setting name already exists, overwrite?"));
+            return;
         }
     }
+    preview_settings_save_ready ();
+}
 
+void
+CsvImpPriceAssist::preview_settings_save_ready ()
+{
+    auto new_name = price_imp->settings_name ();
     /* All checks passed, let's save this preset */
     if (!price_imp->save_settings())
     {
@@ -980,6 +1011,7 @@ CsvImpPriceAssist::preview_settings_save ()
     else
         gnc_error_dialog (GTK_WINDOW(csv_imp_asst),
             "%s", _("There was a problem saving the settings, please try again."));
+
 }
 
 /* Callback triggered when user adjusts skip start lines
@@ -2026,7 +2058,8 @@ void
 gnc_file_csv_price_import(void)
 {
     auto info = new CsvImpPriceAssist;
-    gnc_register_gui_component (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS,
+    auto component = gnc_register_gui_component (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS,
                                 nullptr, csv_price_imp_close_handler,
                                 info);
+    gnc_gui_component_set_session (component, gnc_get_current_session ());
 }

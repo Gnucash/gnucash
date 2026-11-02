@@ -539,13 +539,11 @@ static void  process_trans_record(  FILE *log_file)
     }
 }
 
-void gnc_file_log_replay (GtkWindow *parent)
+static void gnc_file_log_replay_file (char *selected_filename)
 {
-    char *selected_filename;
     char *default_dir;
     char read_buf[256];
     char *read_retval;
-    GtkFileFilter *filter;
     FILE *log_file;
     const char * record_start_str = "===== START";
     /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
@@ -556,23 +554,10 @@ void gnc_file_log_replay (GtkWindow *parent)
     // qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
     ENTER(" ");
 
-    /* Don't log the log replay. This would only result in redundant logs */
-    xaccLogDisable();
-
-    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
-
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, "*.log");
-    gtk_file_filter_add_pattern(filter, "*.[Ll][Oo][Gg]");
-    selected_filename = gnc_file_dialog(parent,
-                                        _("Select a .log file to replay"),
-                                        g_list_prepend(NULL, filter),
-                                        default_dir,
-                                        GNC_FILE_DIALOG_OPEN);
-    g_free(default_dir);
-
     if (selected_filename != NULL)
     {
+        /* Don't log the log replay. This would only result in redundant logs. */
+        xaccLogDisable();
         /* Remember the directory as the default. */
         default_dir = g_path_get_dirname(selected_filename);
         gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
@@ -645,6 +630,27 @@ void gnc_file_log_replay (GtkWindow *parent)
     xaccLogEnable();
 
     LEAVE("");
+}
+
+static void
+gnc_file_log_replay_selected (GSList *filenames, gpointer user_data)
+{
+    if (filenames)
+        gnc_file_log_replay_file (static_cast<char*>(filenames->data));
+    g_slist_free_full (filenames, g_free);
+}
+
+void gnc_file_log_replay (GtkWindow *parent)
+{
+    gchar *default_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
+    GtkFileFilter *filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, "*.log");
+    gtk_file_filter_add_pattern (filter, "*.[Ll][Oo][Gg]");
+    gnc_file_dialog_async (parent, _("Select a .log file to replay"),
+                          g_list_prepend (NULL, filter), default_dir,
+                          GNC_FILE_DIALOG_OPEN, FALSE,
+                          gnc_file_log_replay_selected, NULL, NULL);
+    g_free (default_dir);
 }
 
 

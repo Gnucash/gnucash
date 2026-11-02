@@ -66,6 +66,27 @@ typedef enum
 /** @name Commodity Selection */
 /** @{ */
 
+/** Completion callback for asynchronous commodity dialogs. The book and
+ *  commodity are borrowed and are non-NULL only when the operation completed
+ *  successfully while its original book is still current and open.
+ */
+typedef void (*GncCommodityDialogCallback) (QofBook *book,
+                                           gnc_commodity *commodity,
+                                           gpointer user_data);
+
+/** Show the commodity selector without running a nested GTK loop. Cancel,
+ *  parent destruction, book change, or an invalid selection completes with
+ *  NULL book and commodity. */
+void gnc_ui_select_commodity_async_full (gnc_commodity *orig_sel,
+                                         GtkWidget *parent,
+                                         dialog_commodity_mode mode,
+                                         const char *user_message,
+                                         const char *cusip,
+                                         const char *fullname,
+                                         const char *mnemonic,
+                                         GncCommodityDialogCallback callback,
+                                         gpointer user_data);
+
 /** Ask the user to select a commodity from the existing set of
  *  commodities.  Arguments to this function determine the message
  *  placed at the top of the dialog but force no restriction on the
@@ -102,14 +123,6 @@ typedef enum
  *  @return The commodity selected.  May or may not be a newly created
  *  commodity.
  */
-gnc_commodity *
-gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
-                                   GtkWidget * parent,
-                                   dialog_commodity_mode mode,
-                                   const char * user_message,
-                                   const char * cusip,
-                                   const char * fullname,
-                                   const char * mnemonic);
 
 
 /** Ask the user to select a commodity from the existing set of
@@ -129,15 +142,31 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
  *  @return The commodity selected.  May or may not be a newly created
  *  commodity.
  */
-gnc_commodity *
-gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
-                              GtkWidget * parent,
-                              dialog_commodity_mode mode);
 /** @} */
 
 
 /** @name Commodity Creation or Modification */
 /** @{ */
+
+/** Create a commodity asynchronously. A NULL result means cancel, parent or
+ *  book destruction, or loss of the original current book. */
+void gnc_ui_new_commodity_async_full (const char *name_space,
+                                      GtkWidget *parent,
+                                      const char *cusip,
+                                      const char *fullname,
+                                      const char *mnemonic,
+                                      const char *user_symbol,
+                                      int fraction,
+                                      GncCommodityDialogCallback callback,
+                                      gpointer user_data);
+
+/** Edit a commodity asynchronously. The callback receives the edited
+ *  commodity only after a successful commit; cancel or lost context returns
+ *  NULL. */
+void gnc_ui_edit_commodity_async (gnc_commodity *commodity,
+                                  GtkWidget *parent,
+                                  GncCommodityDialogCallback callback,
+                                  gpointer user_data);
 
 /** Ask the user to provide the information necessary to create a new
  *  commodity.
@@ -165,14 +194,6 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
-gnc_commodity *
-gnc_ui_new_commodity_modal_full(const char * name_space,
-                                GtkWidget * parent,
-                                const char * cusip,
-                                const char * fullname,
-                                const char * mnemonic,
-                                const char * user_symbol,
-                                int fraction);
 
 /** Ask the user to provide the information necessary to create a new
  *  commodity.
@@ -185,9 +206,6 @@ gnc_ui_new_commodity_modal_full(const char * name_space,
  *
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
-gnc_commodity *
-gnc_ui_new_commodity_modal(const char * default_namespace,
-                           GtkWidget * parent);
 
 /** Allow the user to edit the information about a commodity.  For
  *  currencies, only the price quote information may be changed.  For
@@ -203,9 +221,6 @@ gnc_ui_new_commodity_modal(const char * default_namespace,
  *
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
-gboolean
-gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
-                            GtkWidget * parent);
 /** @} */
 
 

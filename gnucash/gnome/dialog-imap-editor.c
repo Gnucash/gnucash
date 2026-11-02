@@ -352,6 +352,42 @@ gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
     g_list_free (rr_list);
 }
 
+typedef struct
+{
+    ImapDialog *owner;
+    GWeakRef book;
+    GncListType type;
+} InvalidMapRequest;
+
+static void
+invalid_maps_decided (GtkWindow *parent, gint response, gpointer user_data)
+{
+    InvalidMapRequest *request = user_data;
+    QofBook *book = g_weak_ref_get (&request->book);
+    if (parent)
+        g_object_set_data (G_OBJECT (parent), "gnc-invalid-map-pending", NULL);
+    if (parent && book && gnc_current_session_exist () &&
+        gnc_get_current_book () == book && request->owner->type == request->type)
+    {
+        ImapDialog *owner = request->owner;
+        if (response == GTK_RESPONSE_YES && !qof_book_is_readonly (book))
+        {
+            gnc_imap_remove_invalid_maps (owner);
+            gtk_widget_hide (owner->remove_button);
+        }
+        else
+        {
+            gtk_widget_show (owner->remove_button);
+            if (owner->type == BAYES) owner->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
+            if (owner->type == NBAYES) owner->inv_dialog_shown.inv_dialog_shown_nbayes = TRUE;
+            if (owner->type == ONLINE) owner->inv_dialog_shown.inv_dialog_shown_online = TRUE;
+        }
+    }
+    g_clear_object (&book);
+    g_weak_ref_clear (&request->book);
+    g_free (request);
+}
+
 static void
 gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
 {
@@ -369,21 +405,15 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
 
         gchar *text = g_strdup_printf ("%s\n\n%s\n\n%s", message, message2, _("(Note, if there is a large number, it may take a while)"));
 
-        if (gnc_verify_dialog (GTK_WINDOW (imap_dialog->dialog), FALSE, "%s", text))
+        if (!g_object_get_data (G_OBJECT (imap_dialog->dialog), "gnc-invalid-map-pending"))
         {
-            gnc_imap_remove_invalid_maps (imap_dialog);
-            gtk_widget_hide (imap_dialog->remove_button);
-        }
-        else
-        {
-            gtk_widget_show (imap_dialog->remove_button);
-
-            if (imap_dialog->type == BAYES)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
-            if (imap_dialog->type == NBAYES)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes = TRUE;
-            if (imap_dialog->type == ONLINE)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_online = TRUE;
+            InvalidMapRequest *request = g_new0 (InvalidMapRequest, 1);
+            request->owner = imap_dialog;
+            request->type = imap_dialog->type;
+            g_weak_ref_init (&request->book, gnc_get_current_book ());
+            g_object_set_data (G_OBJECT (imap_dialog->dialog), "gnc-invalid-map-pending", request);
+            gnc_verify_dialog_async (GTK_WINDOW (imap_dialog->dialog), FALSE,
+                invalid_maps_decided, request, "%s", text);
         }
         g_free (message);
         g_free (message2);

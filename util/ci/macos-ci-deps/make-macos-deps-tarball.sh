@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 fn=$1
 if [[ "x$fn" = "x" ]]; then
@@ -22,4 +23,6 @@ for i in 'bin' 'include' 'lib' 'share'; do
     done
 done
 
-tar -cJf $DIR/$fn inst
+"$PREFIX/bin/glib-compile-schemas" --strict "$PREFIX/share/glib-2.0/schemas"
+sh "$DIR/util/ci/macos-ci-deps/verify-macos-deps.sh" "$PREFIX"
+tar -cJf "$DIR/$fn" -C "$PREFIX" .

@@ -888,15 +888,15 @@ gnc_ui_sx_creation_error_dialog (GList **creation_errors)
     if (*creation_errors == NULL) return;
     message = gnc_g_list_stringjoin (*creation_errors, "\n");
     g_list_free_full (*creation_errors, g_free);
-    creation_errors = NULL;
-    dialog = gtk_message_dialog_new (NULL, 0,
+    *creation_errors = NULL;
+    dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
                                      "\t%s\t", _("Invalid Transactions"));
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
     g_signal_connect_swapped (dialog, "response",
                               G_CALLBACK(gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG(dialog));
+    gtk_widget_show (dialog);
     g_free (message);
 }
 

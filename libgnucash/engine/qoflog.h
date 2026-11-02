@@ -135,22 +135,6 @@ void qof_log_set_file (FILE *outfile);
 /** Specify a filename for log output. **/
 void qof_log_init_filename (const gchar* logfilename);
 
-/** Callback for qof_log_foreach_line. @a line is NUL-terminated, has no
- *  trailing newline, and is valid only during the call (copy it to keep
- *  it). Return TRUE to continue, FALSE to stop.
- *  @a fraction is the approximate portion of the file read so far in the
- *  range [0, 1].
- *  **/
-typedef gboolean (*QofLogCB) (const char *line, double fraction,
-                              gpointer user_data);
-
-/** Return the qof_log current size, or zero if unable to return **/
-size_t qof_log_get_size (void);
-
-/** Call @a line_func for each line of the current trace log, oldest first.
- *  Returns FALSE if logging is not going to a regular file (stderr/stdout
- *  or none), TRUE otherwise. **/
-gboolean qof_log_foreach_line (QofLogCB line_func, gpointer user_data);
 /**
  * If @a log_to_filename is "stderr" or "stdout" (exactly,
  * case-insensitive), then those special files are used; otherwise, the
@@ -186,18 +170,6 @@ const gchar * qof_log_prettify (const gchar *name);
 /** Check to see if the given @a log_module is configured to log at the given
  * @a log_level.  This implements the "log.path.hierarchy" logic. **/
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
-
-/** Callback type for the log-alert hook; see qof_log_set_alert_callback(). */
-typedef void (*QofLogAlertFunc) (QofLogLevel level);
-
-/** Register a callback invoked whenever a message at WARNING or more severe
- *  (WARNING/ERROR/FATAL, i.e. PWARN/PERR/FATAL) is actually written to the
- *  log; pass NULL to clear.  This lets a GUI surface that something noteworthy
- *  was logged without the (GUI-less) engine knowing anything about the GUI.
- *  The callback runs on whatever thread emitted the message, so an
- *  implementation that touches the GUI must marshal to the main thread
- *  itself. **/
-void qof_log_set_alert_callback (QofLogAlertFunc func);
 
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 

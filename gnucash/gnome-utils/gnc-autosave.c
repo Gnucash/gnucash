@@ -40,6 +40,7 @@
 #define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave-show-explanation"
 #define GNC_PREF_AUTOSAVE_INTERVAL         "autosave-interval-minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
+#define AUTOSAVE_CONFIRMATION "autosave_confirmation"
 
 #ifdef G_LOG_DOMAIN
 # undef G_LOG_DOMAIN
@@ -49,6 +50,258 @@ static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void
 autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
+static void gnc_autosave_add_timer (QofBook *book);
+static void autosave_confirmation_book_destroyed (QofBook *book,
+                                                   gpointer key,
+                                                   gpointer user_data);
+
+typedef struct
+{
+    QofBook *book; /* weak: cleared by the book data finalizer */
+    GWeakRef toplevel;
+    GWeakRef dialog;
+    gboolean responding;
+    gboolean parent_destroyed;
+} AutosaveConfirmation;
+
+static gboolean
+autosave_book_is_current (QofBook *book)
+{
+    return book && !qof_book_shutting_down (book) &&
+           gnc_current_session_exist () &&
+           qof_session_get_book (gnc_get_current_session ()) == book;
+}
+
+static void
+autosave_confirmation_free (AutosaveConfirmation *confirmation)
+{
+    GtkWindow *parent = g_weak_ref_get (&confirmation->toplevel);
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data (parent, confirmation);
+        g_object_unref (parent);
+    }
+    g_weak_ref_clear (&confirmation->toplevel);
+    g_weak_ref_clear (&confirmation->dialog);
+    g_free (confirmation);
+}
+
+static void
+autosave_confirmation_detach (AutosaveConfirmation *confirmation)
+{
+    QofBook *book = confirmation->book;
+    if (book &&
+        qof_book_get_data (book, AUTOSAVE_CONFIRMATION) == confirmation)
+        /* A book-destroy event can close the dialog before book finalizers
+         * run. Clear its data without changing the finalizer iteration. */
+        qof_book_set_data_fin (book, AUTOSAVE_CONFIRMATION, NULL,
+                               NULL);
+}
+
+static void
+autosave_confirmation_destroyed (GtkWidget *dialog, gpointer user_data)
+{
+    AutosaveConfirmation *confirmation = user_data;
+    QofBook *book;
+
+    if (confirmation->responding)
+        return;
+    confirmation->responding = TRUE;
+    g_signal_handlers_disconnect_by_data (dialog, confirmation);
+    gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL,
+                        GNC_PREF_AUTOSAVE_SHOW_EXPLANATION, TRUE);
+    book = confirmation->book;
+    if (autosave_book_is_current (book) &&
+        qof_book_get_data (book, AUTOSAVE_CONFIRMATION) == confirmation)
+    {
+        if (!qof_book_is_readonly (book) && qof_book_session_not_saved (book))
+        {
+            gnc_autosave_remove_timer (book);
+            gnc_autosave_add_timer (book);
+        }
+    }
+    autosave_confirmation_detach (confirmation);
+    autosave_confirmation_free (confirmation);
+}
+
+static void
+autosave_confirmation_book_destroyed ([[maybe_unused]] QofBook *book,
+                                      [[maybe_unused]] gpointer key,
+                                      gpointer user_data)
+{
+    AutosaveConfirmation *confirmation = user_data;
+    GtkWidget *dialog;
+    if (!confirmation)
+        return;
+    confirmation->book = NULL;
+    if (confirmation->responding)
+        return; /* The response/destroy callback owns its cleanup. */
+    confirmation->responding = TRUE;
+    dialog = g_weak_ref_get (&confirmation->dialog);
+    if (dialog)
+    {
+        g_signal_handlers_disconnect_by_data (dialog, confirmation);
+        gtk_widget_destroy (dialog);
+        g_object_unref (dialog);
+    }
+    autosave_confirmation_free (confirmation);
+}
+
+static void
+autosave_save_now (QofBook *book, GtkWindow *parent)
+{
+    if (!autosave_book_is_current (book) || qof_book_is_readonly (book) ||
+        gnc_file_save_in_progress ())
+        return;
+
+    if (GNC_IS_MAIN_WINDOW (parent))
+        gnc_main_window_set_progressbar_window (GNC_MAIN_WINDOW (parent));
+    if (GNC_IS_WINDOW (parent))
+        gnc_window_set_progressbar_window (GNC_WINDOW (parent));
+    gnc_file_save (parent);
+    gnc_main_window_set_progressbar_window (NULL);
+}
+
+static void
+autosave_confirmation_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                        AutosaveConfirmation *confirmation)
+{
+    confirmation->parent_destroyed = TRUE;
+}
+
+static void
+autosave_confirmation_response (GtkDialog *dialog, gint response,
+                                gpointer user_data)
+{
+    AutosaveConfirmation *confirmation = user_data;
+    QofBook *book;
+    gboolean save_now = FALSE, switch_off = FALSE;
+    gboolean show_again = TRUE;
+    GtkWindow *parent;
+
+    parent = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+    g_weak_ref_set (&confirmation->toplevel, parent);
+    if (parent)
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (autosave_confirmation_parent_destroyed),
+                          confirmation);
+
+    /* Destroy before any save can re-enter. Keep the book finalizer installed
+     * through destruction: a destroy handler may close the session. */
+    confirmation->responding = TRUE;
+    g_signal_handlers_disconnect_by_data (dialog, confirmation);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    if (confirmation->parent_destroyed)
+        response = GTK_RESPONSE_NONE;
+    book = confirmation->book;
+    if (!autosave_book_is_current (book) || qof_book_is_readonly (book))
+    {
+        if (autosave_book_is_current (book) && qof_book_session_not_saved (book))
+        {
+            gnc_autosave_remove_timer (book);
+            gnc_autosave_add_timer (book);
+        }
+        autosave_confirmation_detach (confirmation);
+        autosave_confirmation_free (confirmation);
+        return;
+    }
+
+    switch (response)
+    {
+    case 1: /* Yes, this time */
+        save_now = TRUE;
+        break;
+    case 2: /* Yes, always */
+        save_now = TRUE;
+        show_again = FALSE;
+        break;
+    case 3: /* No, never */
+        switch_off = TRUE;
+        show_again = FALSE;
+        break;
+    default: /* No, not this time, close, or parent destruction */
+        break;
+    }
+
+    gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL,
+                        GNC_PREF_AUTOSAVE_SHOW_EXPLANATION, show_again);
+    if (switch_off)
+        gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL,
+                             GNC_PREF_AUTOSAVE_INTERVAL, 0);
+
+    /* Preference callbacks may change or destroy the session. The book
+     * finalizer stays installed until the original context is revalidated. */
+    book = confirmation->book;
+    if (!autosave_book_is_current (book) || qof_book_is_readonly (book))
+    {
+        autosave_confirmation_detach (confirmation);
+        autosave_confirmation_free (confirmation);
+        return;
+    }
+    autosave_confirmation_detach (confirmation);
+
+    if (save_now && !confirmation->parent_destroyed)
+    {
+        parent = g_weak_ref_get (&confirmation->toplevel);
+        autosave_save_now (book, parent);
+        g_clear_object (&parent);
+    }
+    else if (!switch_off && qof_book_session_not_saved (book))
+    {
+        gnc_autosave_remove_timer (book);
+        gnc_autosave_add_timer (book);
+    }
+    autosave_confirmation_free (confirmation);
+}
+
+static void
+autosave_confirm_async (QofBook *book, GtkWindow *toplevel)
+{
+    guint interval_mins = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_AUTOSAVE_INTERVAL);
+    AutosaveConfirmation *confirmation;
+    GtkWidget *dialog;
+
+    if (qof_book_get_data (book, AUTOSAVE_CONFIRMATION))
+        return;
+    confirmation = g_new0 (AutosaveConfirmation, 1);
+    confirmation->book = book;
+    g_weak_ref_init (&confirmation->toplevel, toplevel);
+    g_weak_ref_init (&confirmation->dialog, NULL);
+    qof_book_set_data_fin (book, AUTOSAVE_CONFIRMATION, confirmation,
+                           autosave_confirmation_book_destroyed);
+
+    dialog = gtk_message_dialog_new (toplevel,
+        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s",
+        _("Save file automatically?"));
+    gtk_widget_set_name (dialog, "gnc-id-auto-save");
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+        ngettext ("Your data file needs to be saved to your hard disk to save your changes. "
+                  "GnuCash has a feature to save the file automatically every %d minute, "
+                  "just as if you had pressed the \"Save\" button each time.\n\n"
+                  "You can change the time interval or turn off this feature under "
+                  "Edit->Preferences->General->Auto-save time interval.\n\n"
+                  "Should your file be saved automatically?",
+                  "Your data file needs to be saved to your hard disk to save your changes. "
+                  "GnuCash has a feature to save the file automatically every %d minutes, "
+                  "just as if you had pressed the \"Save\" button each time.\n\n"
+                  "You can change the time interval or turn off this feature under "
+                  "Edit->Preferences->General->Auto-save time interval.\n\n"
+                  "Should your file be saved automatically?", interval_mins),
+        interval_mins);
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Yes, this time"), 1,
+                            _("Yes, _always"), 2, _("No, n_ever"), 3,
+                            _("_No, not this time"), 4, NULL);
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), 4);
+    g_weak_ref_set (&confirmation->dialog, dialog);
+    g_signal_connect (
+        dialog, "destroy", G_CALLBACK (autosave_confirmation_destroyed),
+        confirmation);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (autosave_confirmation_response), confirmation);
+    gtk_widget_show (dialog);
+}
 
 /* Here's how autosave works:
  *
@@ -64,13 +317,11 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
  * "undirty".
  *
  * - Or the auto-save timer hits its timeout, hence calling
- * autosave_timeout_cb(). In this case gnc_file_save() is invoked, the
- * auto-save timer is removed, and all returns to the initial state
- * with the book "undirty".  (As an exceptional addition to this, on
- * the very first call to autosave_timeout_cb, if the key
- * autosave_show_explanation is true, an explanation dialog of this
- * feature is shown to the user, and the key autosave_show_explanation
- * is set to false to not show this dialog again.)
+ * autosave_timeout_cb(). If the explanation preference is enabled, an
+ * asynchronous dialog is shown and the timer is cleared while the response
+ * is pending. A negative response installs a fresh timer for a still-dirty
+ * book; an affirmative response saves the original current book. Otherwise
+ * the save starts immediately and the timer is removed.
  *
  * - As a third possibility, the book can also change state to
  * "closing", in which case the autosave_remove_timer_cb is called
@@ -78,158 +329,34 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
  * state with the book "undirty".
  */
 
-static gboolean autosave_confirm(GtkWidget *toplevel)
-{
-    GtkWidget *dialog;
-    guint interval_mins =
-        gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL);
-    gboolean switch_off_autosave, show_expl_again, save_now;
-    gint response;
-
-#define YES_THIS_TIME 1
-#define YES_ALWAYS 2
-#define NO_NEVER 3
-#define NO_NOT_THIS_TIME 4
-    /* The autosave timeout has occurred, and we should show the
-       explanation dialog. */
-    dialog =
-        gtk_message_dialog_new(GTK_WINDOW(toplevel),
-                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                               GTK_MESSAGE_QUESTION,
-                               GTK_BUTTONS_NONE,
-                               "%s",
-                               _("Save file automatically?"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-auto-save");
-
-    gtk_message_dialog_format_secondary_text
-    (GTK_MESSAGE_DIALOG(dialog),
-     ngettext("Your data file needs to be saved to your hard disk to save your changes. "
-              "GnuCash has a feature to save the file automatically every %d minute, "
-              "just as if you had pressed the \"Save\" button each time.\n\n"
-              "You can change the time interval or turn off this feature under "
-              "Edit->Preferences->General->Auto-save time interval.\n\n"
-              "Should your file be saved automatically?",
-              "Your data file needs to be saved to your hard disk to save your changes. "
-              "GnuCash has a feature to save the file automatically every %d minutes, "
-              "just as if you had pressed the \"Save\" button each time.\n\n"
-              "You can change the time interval or turn off this feature under "
-              "Edit->Preferences->General->Auto-save time interval.\n\n"
-              "Should your file be saved automatically?",
-              interval_mins),
-     interval_mins);
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           _("_Yes, this time"), YES_THIS_TIME,
-                           _("Yes, _always"), YES_ALWAYS,
-                           _("No, n_ever"), NO_NEVER,
-                           _("_No, not this time"), NO_NOT_THIS_TIME,
-                           NULL);
-    gtk_dialog_set_default_response( GTK_DIALOG(dialog), NO_NOT_THIS_TIME);
-
-    /* Run the modal dialog */
-    response = gtk_dialog_run( GTK_DIALOG( dialog ) );
-    gtk_widget_destroy( dialog );
-
-    /* Evaluate the response */
-    switch (response)
-    {
-    case YES_THIS_TIME:
-        switch_off_autosave = FALSE;
-        show_expl_again = TRUE;
-        save_now = TRUE;
-        break;
-    case YES_ALWAYS:
-        switch_off_autosave = FALSE;
-        show_expl_again = FALSE;
-        save_now = TRUE;
-        break;
-    case NO_NEVER:
-        switch_off_autosave = TRUE;
-        show_expl_again = FALSE;
-        save_now = FALSE;
-        break;
-    default:
-    case NO_NOT_THIS_TIME:
-        switch_off_autosave = FALSE;
-        show_expl_again = TRUE;
-        save_now = FALSE;
-    };
-
-    /* Should we show this explanation again? */
-    gnc_prefs_set_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_SHOW_EXPLANATION, show_expl_again);
-    DEBUG("autosave_timeout_cb: Show explanation again=%s\n",
-            (show_expl_again ? "TRUE" : "FALSE"));
-
-    /* Should we switch off autosave? */
-    if (switch_off_autosave)
-    {
-        gnc_prefs_set_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL, 0);
-        DEBUG("autosave_timeout_cb: User chose to disable auto-save.\n");
-    }
-
-    return save_now;
-}
-
-
 static gboolean autosave_timeout_cb(gpointer user_data)
 {
     QofBook *book = user_data;
-    gboolean show_explanation;
-    gboolean save_now = TRUE;
-    GtkWidget *toplevel;
+    GtkWindow *toplevel;
 
     DEBUG("autosave_timeout_cb called\n");
+
+    /* This one-shot source is consumed even when saving is no longer valid. */
+    qof_book_set_data_fin (book, AUTOSAVE_SOURCE_ID, GUINT_TO_POINTER (0),
+                           autosave_remove_timer_cb);
 
     /* Is there already a save in progress? If yes, return FALSE so that
        the timeout is automatically destroyed and the function will not
        be called again. */
-    if (gnc_file_save_in_progress() || !gnc_current_session_exist()
-            || qof_book_is_readonly(book))
+    if (!autosave_book_is_current (book) || gnc_file_save_in_progress () ||
+        qof_book_is_readonly (book))
         return FALSE;
 
-    /* Store the current toplevel window for later use. */
-    toplevel = GTK_WIDGET (gnc_ui_get_main_window (NULL));
-
-    /* Lookup preference to show an explanatory dialog, if wanted. */
-    show_explanation =
-        gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_SHOW_EXPLANATION);
-    if (show_explanation)
-    {
-        save_now = autosave_confirm(toplevel);
-    }
-
-    if (save_now)
-    {
-        DEBUG("autosave_timeout_cb: Really trigger auto-save now.\n");
-
-        /* Timeout has passed - save the file. */
-        if (GNC_IS_MAIN_WINDOW(toplevel))
-            gnc_main_window_set_progressbar_window( GNC_MAIN_WINDOW( toplevel ) );
-        else
-            DEBUG("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
-        if (GNC_IS_WINDOW(toplevel))
-            gnc_window_set_progressbar_window( GNC_WINDOW( toplevel ) );
-        else
-            DEBUG("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
-
-        gnc_file_save (GTK_WINDOW (toplevel));
-
-        gnc_main_window_set_progressbar_window(NULL);
-
-        /* Return FALSE so that the timeout is automatically destroyed and
-           the function will not be called again. However, at least in my
-           glib-2.12.4 the timer event source still exists after returning
-           FALSE?! */
-        return FALSE;
-    }
+    toplevel = gnc_ui_get_main_window (NULL);
+    if (toplevel)
+        g_object_ref (toplevel);
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                            GNC_PREF_AUTOSAVE_SHOW_EXPLANATION))
+        autosave_confirm_async (book, toplevel);
     else
-    {
-        DEBUG("autosave_timeout_cb: No auto-save this time, let the timeout run again.\n");
-        /* Return TRUE so that the timeout is not removed but will be
-           triggered again after the next time interval. */
-        return TRUE;
-    }
+        autosave_save_now (book, toplevel);
+    g_clear_object (&toplevel);
+    return FALSE;
 }
 
 static void

@@ -59,7 +59,9 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
 void
 gnc_import_match_picker_run_and_close (GtkWidget *parent,
                                        GNCImportTransInfo *transaction_info,
-                                       GNCImportPendingMatches *pending_matches);
+                                       GNCImportPendingMatches *pending_matches,
+                                       void (*completed)(gboolean accepted, gpointer user_data),
+                                       gpointer user_data);
 /**@}*/
 
 
