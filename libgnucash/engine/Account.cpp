@@ -5257,9 +5257,53 @@ gnc_account_imap_delete_account (Account *acc,
  * The log scores are normalised to probabilities summing to 1 over all
  * accounts, and the best account is proposed if its probability reaches
  * bayes_threshold.
+ *
+ * All tokens are normalised (see normalize_token) when they are learned, when
+ * they are looked up, and when stored tokens are read. Tokens stored by older
+ * versions, like "RENT;", therefore still count for "rent", and the stored
+ * data does not need to be converted.
  */
 static constexpr double bayes_smoothing = 0.1;   /* alpha */
 static constexpr double bayes_threshold = 0.90;  /* minimum probability to propose an account */
+
+/** Splits a token into normalised tokens: lower case, separated at every
+ *  character that is not a letter or a digit.
+ *  "RENT;" -> "rent", "EREF:123/2026" -> "eref", "123", "2026" */
+static std::vector<std::string>
+normalize_token (const char * token)
+{
+    std::vector<std::string> words;
+    auto valid = g_utf8_make_valid (token, -1);
+    auto lower = g_utf8_strdown (valid, -1);
+    std::string word;
+    for (auto p = lower; *p; p = g_utf8_next_char (p))
+    {
+        if (g_unichar_isalnum (g_utf8_get_char (p)))
+            word.append (p, g_utf8_next_char (p) - p);
+        else if (!word.empty())
+        {
+            words.push_back (word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+        words.push_back (word);
+    g_free (lower);
+    g_free (valid);
+    return words;
+}
+
+/** The normalised tokens of a token list, each one once. */
+static std::unordered_set<std::string>
+normalize_tokens (GList * tokens)
+{
+    std::unordered_set<std::string> result;
+    for (auto node = tokens; node; node = node->next)
+        if (node->data)
+            for (auto & word : normalize_token (static_cast<const char *> (node->data)))
+                result.insert (std::move (word));
+    return result;
+}
 
 /** The training data of one bank account, see above. */
 struct BayesTrainingData
@@ -5273,8 +5317,9 @@ struct BayesTrainingData
 };
 
 /** Adds one slot "import-map-bayes/<token>/<account guid>" to the training
- *  data. suffix is the part after "import-map-bayes"; the token itself may
- *  contain '/', so the guid is taken from the end. */
+ *  data, with the token normalised. suffix is the part after
+ *  "import-map-bayes"; the token itself may contain '/', so the guid is
+ *  taken from the end. */
 static void
 add_bayes_slot (char const * suffix, KvpValue * value, BayesTrainingData & data)
 {
@@ -5287,9 +5332,15 @@ add_bayes_slot (char const * suffix, KvpValue * value, BayesTrainingData & data)
         return;
     std::string token {suffix + 1, length - GUID_ENCODING_LENGTH - 2};
     std::string account_guid {suffix + length - GUID_ENCODING_LENGTH};
-    data.token_counts[token][account_guid] += count;
-    data.account_totals[account_guid] += count;
-    data.total += count;
+    /* a stored token like "x/2026/2026" was learned from one transaction at
+       a time, so each of its words counts once, as when learning */
+    auto words = normalize_token (token.c_str());
+    for (auto const & word : std::unordered_set<std::string> (words.begin(), words.end()))
+    {
+        data.token_counts[word][account_guid] += count;
+        data.account_totals[account_guid] += count;
+        data.total += count;
+    }
 }
 
 static BayesTrainingData
@@ -5303,12 +5354,13 @@ get_bayes_training_data (Account * acc)
 /** The account with the highest posterior probability P(a|tokens), and that
  *  probability. Returns an empty guid if none of the tokens is known. */
 static std::pair<std::string, double>
-most_probable_account (BayesTrainingData const & data, GList * tokens)
+most_probable_account (BayesTrainingData const & data,
+                       std::unordered_set<std::string> const & tokens)
 {
     std::vector<std::unordered_map<std::string, int64_t> const *> known_tokens;
-    for (auto node = tokens; node; node = node->next)
+    for (auto const & token : tokens)
     {
-        auto it = data.token_counts.find (static_cast<char const *> (node->data));
+        auto it = data.token_counts.find (token);
         if (it != data.token_counts.end())
             known_tokens.push_back (&it->second);
     }
@@ -5513,7 +5565,8 @@ gnc_account_imap_find_account_bayes (Account *acc, GList *tokens)
         return nullptr;
     auto book = gnc_account_get_book(acc);
     check_import_map_data (book);
-    auto [account_guid, probability] = most_probable_account (get_bayes_training_data (acc), tokens);
+    auto [account_guid, probability] = most_probable_account (get_bayes_training_data (acc),
+                                                              normalize_tokens (tokens));
     if (account_guid.empty() || probability < bayes_threshold)
         return nullptr;
     gnc::GUID guid;
@@ -5549,8 +5602,6 @@ gnc_account_imap_add_account_bayes (Account *acc,
                                     GList *tokens,
                                     Account *added_acc)
 {
-    GList *current_token;
-    gint64 token_count;
     char *account_fullname;
     char *guid_string;
 
@@ -5570,23 +5621,13 @@ gnc_account_imap_add_account_bayes (Account *acc,
 
     guid_string = guid_to_string (xaccAccountGetGUID (added_acc));
 
-    /* process each token in the list */
-    for (current_token = g_list_first(tokens); current_token;
-            current_token = current_token->next)
+    /* count each normalised token once; empty tokens are dropped by
+       normalize_tokens */
+    for (auto const & token : normalize_tokens (tokens))
     {
-        char* token = static_cast<char*>(current_token->data);
-        /* Jump to next iteration if the pointer is not valid or if the
-                 string is empty. In HBCI import we almost always get an empty
-                 string, which doesn't work in the kvp loopkup later. So we
-                 skip this case here. */
-        if (!token || !token[0])
-            continue;
-        /* start off with one token for this account */
-        token_count = 1;
-        PINFO("adding token '%s'", token);
+        PINFO("adding token '%s'", token.c_str());
         auto path = std::string {IMAP_FRAME_BAYES} + '/' + token + '/' + guid_string;
-        /* change the imap entry for the account */
-        change_imap_entry (acc, path, token_count);
+        change_imap_entry (acc, path, 1);
     }
     /* free up the account fullname and guid string */
     xaccAccountCommitEdit (acc);

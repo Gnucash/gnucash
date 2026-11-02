@@ -275,9 +275,12 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + waldo + "/" + acct2_guid}, new KvpValue{*value});
     account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
+    // a stored token containing a delimiter is read as separate tokens:
+    // "pepper/waldo" counts for "pepper" and for "waldo", so "pepper" is now
+    // equally associated with both accounts
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + waldo + "/" + acct2_guid}, new KvpValue{*value});
     account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
-    EXPECT_EQ(t_expense_account1, account);
+    EXPECT_EQ(nullptr, account);
     g_free (acct1_guid);
     g_free (acct2_guid);
 }
@@ -350,6 +353,57 @@ TEST_F(ImapBayesTest, CombinationOfTokensDecides)
     auto unknown = token_list ({"unknown"});
     EXPECT_EQ (nullptr, gnc_account_imap_find_account_bayes (t_acc, unknown));
     g_list_free (unknown);
+}
+
+/* Tokens are lower-cased and split at every character that is not a letter
+ * or a digit, when learning, when looking up, and when reading tokens stored
+ * by older versions. */
+TEST_F(ImapBayesTest, NormalizedTokens)
+{
+    auto root = qof_instance_get_slots (QOF_INSTANCE (t_bank_account));
+    auto acct1_guid = guid_to_string (xaccAccountGetGUID (t_expense_account1));
+    auto slot = [&](const char* token) {
+        auto value = root->get_slot ({std::string{IMAP_FRAME_BAYES} + "/" + token + "/" + acct1_guid});
+        return value ? value->get<int64_t>() : 0;
+    };
+
+    qof_instance_increase_editlevel (QOF_INSTANCE (t_bank_account));
+    auto learned = token_list ({"RENT;", "Rent", "CAFÉ,", "EREF:123/2026"});
+    gnc_account_imap_add_account_bayes (t_acc, learned, t_expense_account1);
+    g_list_free (learned);
+    qof_instance_reset_editlevel (QOF_INSTANCE (t_bank_account));
+
+    EXPECT_EQ (1, slot ("rent"));    // counted once per transaction
+    EXPECT_EQ (1, slot ("café"));    // non-ASCII letters are lower-cased too
+    EXPECT_EQ (1, slot ("eref"));
+    EXPECT_EQ (1, slot ("123"));
+    EXPECT_EQ (1, slot ("2026"));
+    EXPECT_EQ (0, slot ("RENT;"));
+
+    // tokens stored by an older version are normalised when read
+    set_bayes_count (t_acc, "DONATION;", t_expense_account2, 5);
+    auto lookup = token_list ({"Donation"});
+    EXPECT_EQ (t_expense_account2, gnc_account_imap_find_account_bayes (t_acc, lookup));
+    g_list_free (lookup);
+
+    // and the new learned tokens are found with differently written input
+    lookup = token_list ({"(Rent)"});
+    EXPECT_EQ (t_expense_account1, gnc_account_imap_find_account_bayes (t_acc, lookup));
+    g_list_free (lookup);
+    g_free (acct1_guid);
+}
+
+/* A stored token whose normalised words repeat, like "X/X", counts once for
+ * each word, as it would if learned now. With a single token, P(a|x) is the
+ * share of a in the counts of "x": 92 / (92 + 8) = 0.92 reaches the
+ * threshold. Counting "X/X" twice would give 92 / (92 + 16) = 0.85. */
+TEST_F(ImapBayesTest, StoredTokenWithRepeatedWord)
+{
+    set_bayes_count (t_acc, "x", t_expense_account1, 92);
+    set_bayes_count (t_acc, "X/X", t_expense_account2, 8);
+    auto tokens = token_list ({"x"});
+    EXPECT_EQ (t_expense_account1, gnc_account_imap_find_account_bayes (t_acc, tokens));
+    g_list_free (tokens);
 }
 
 TEST_F(ImapBayesTest, AddAccountBayes)
@@ -462,7 +516,8 @@ TEST_F (ImapBayesTest, get_bayes_info)
 {
     GList * tokens {nullptr};
     tokens = g_list_prepend (tokens, const_cast <char*> ("one/two/three"));
-    gnc_account_imap_add_account_bayes(t_acc, tokens, t_expense_account1);
+    // a token with delimiters, as stored by versions before token normalisation
+    set_bayes_count (t_acc, "one/two/three", t_expense_account1, 1);
     auto account = gnc_account_imap_find_account_bayes (t_acc, tokens);
     EXPECT_EQ (account, t_expense_account1);
     auto infos = gnc_account_imap_get_info_bayes (t_bank_account);
