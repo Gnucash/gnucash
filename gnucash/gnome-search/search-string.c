@@ -160,8 +160,9 @@ gncs_validate (GNCSearchCoreType *fe)
                                          GTK_BUTTONS_OK,
                                          "%s",
                                          _("You need to enter some search text."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
+        g_signal_connect_swapped (dialog, "response",
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_widget_show_all (dialog);
         return FALSE;
     }
 
@@ -197,8 +198,9 @@ gncs_validate (GNCSearchCoreType *fe)
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_OK,
                                              "%s", errmsg);
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy(dialog);
+            g_signal_connect_swapped (dialog, "response",
+                                      G_CALLBACK (gtk_widget_destroy), dialog);
+            gtk_widget_show_all (dialog);
             g_free (errmsg);
             valid = FALSE;
         }
