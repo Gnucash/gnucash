@@ -135,6 +135,37 @@ gnc_search_account_matchall_new (void)
     return o;
 }
 
+GList *
+gnc_search_account_get_selected_accounts (GNCSearchAccount *fi)
+{
+    GNCSearchAccountPrivate *priv;
+
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), NULL);
+
+    priv = _PRIVATE(fi);
+    return priv->selected_accounts;
+}
+
+void
+gnc_search_account_set_selected_accounts (GNCSearchAccount *fi, GList *accounts)
+{
+    GNCSearchAccountPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (GNC_IS_SEARCH_ACCOUNT (fi));
+
+    priv = _PRIVATE(fi);
+    if (priv->selected_accounts)
+    {
+        g_list_free (priv->selected_accounts);
+        priv->selected_accounts = NULL;
+    }
+
+    if (accounts)
+        priv->selected_accounts = g_list_copy (accounts);
+}
+
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
@@ -251,11 +282,9 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     /* Now run the dialog */
     if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
     {
-        if (priv->selected_accounts)
-            g_list_free (priv->selected_accounts);
-
-        priv->selected_accounts =
-            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+        GList *selected = gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+        gnc_search_account_set_selected_accounts (fi, selected);
+        g_list_free (selected);
 
         desc = describe_button (fi);
         gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
