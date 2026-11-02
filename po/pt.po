@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-11-02 08:51+0000\n"
+"PO-Revision-Date: 2026-11-02 11:51+0000\n"
 "Last-Translator: Pedro Albuquerque "
 "<pedroalbuquerque@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -29202,7 +29202,7 @@ msgstr "Abrir o tutorial do GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:512
 msgid "_Contents"
-msgstr "Índi_ce"
+msgstr "Man_ual"
 
 #: gnucash/ui/gnc-main-window.ui:515
 msgid "Open the GnuCash Help"
