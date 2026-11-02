@@ -282,6 +282,76 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     g_free (acct2_guid);
 }
 
+/* Helpers for the tests below: store a token count for an account, and
+ * build a token list. */
+static void
+set_bayes_count (Account* bank, const char* token, Account* account, int64_t count)
+{
+    auto guid = guid_to_string (xaccAccountGetGUID (account));
+    qof_instance_get_slots (QOF_INSTANCE (bank))->set_path (
+        {std::string{IMAP_FRAME_BAYES} + "/" + token + "/" + guid}, new KvpValue{count});
+    g_free (guid);
+}
+
+static GList*
+token_list (std::initializer_list<const char*> tokens)
+{
+    GList* list = nullptr;
+    for (auto token : tokens)
+        list = g_list_prepend (list, const_cast<char*>(token));
+    return list;
+}
+
+/* A recurring payment is identified by its tokens "smith" and "iban", but both
+ * were once assigned to another account by mistake. The transaction also
+ * contains very common tokens ("account", "bank") that occur with many accounts.
+ * The old spam-filter formula reached only 25% here and proposed nothing. */
+TEST_F(ImapBayesTest, StrayEntryAndCommonTokens)
+{
+    auto donations = t_expense_account1, other = t_expense_account2, third = t_expense_account;
+    set_bayes_count (t_acc, "smith", donations, 36);
+    set_bayes_count (t_acc, "smith", other, 2);
+    set_bayes_count (t_acc, "iban", donations, 36);
+    set_bayes_count (t_acc, "iban", other, 2);
+    set_bayes_count (t_acc, "account", donations, 36);
+    set_bayes_count (t_acc, "account", other, 600);
+    set_bayes_count (t_acc, "account", third, 700);
+    set_bayes_count (t_acc, "bank", donations, 36);
+    set_bayes_count (t_acc, "bank", other, 500);
+    set_bayes_count (t_acc, "bank", third, 450);
+
+    auto tokens = token_list ({"smith", "iban", "account", "bank"});
+    EXPECT_EQ (donations, gnc_account_imap_find_account_bayes (t_acc, tokens));
+    g_list_free (tokens);
+}
+
+/* The same person makes donations and gets reimbursements. Only the
+ * combination of the name with "donation" or "refund" tells them apart.
+ * The old formula proposed nothing for the donation. */
+TEST_F(ImapBayesTest, CombinationOfTokensDecides)
+{
+    auto donations = t_expense_account1, reimbursements = t_expense_account2,
+        other_donations = t_expense_account;
+    set_bayes_count (t_acc, "miller", donations, 10);
+    set_bayes_count (t_acc, "miller", reimbursements, 4);
+    set_bayes_count (t_acc, "donation", donations, 10);
+    set_bayes_count (t_acc, "donation", other_donations, 10);
+    set_bayes_count (t_acc, "refund", reimbursements, 4);
+
+    auto donation = token_list ({"donation", "miller"});
+    EXPECT_EQ (donations, gnc_account_imap_find_account_bayes (t_acc, donation));
+    g_list_free (donation);
+
+    auto reimbursement = token_list ({"refund", "miller"});
+    EXPECT_EQ (reimbursements, gnc_account_imap_find_account_bayes (t_acc, reimbursement));
+    g_list_free (reimbursement);
+
+    // a token never seen before carries no information
+    auto unknown = token_list ({"unknown"});
+    EXPECT_EQ (nullptr, gnc_account_imap_find_account_bayes (t_acc, unknown));
+    g_list_free (unknown);
+}
+
 TEST_F(ImapBayesTest, AddAccountBayes)
 {
     // prevent the embedded beginedit/committedit from doing anything
