@@ -2,6 +2,7 @@
 set (gnome_search_SOURCES
   gnc-general-search.c
   dialog-search.c
+  dialog-search-account.c
   search-account.c
   search-boolean.c
   search-core-type.c
@@ -16,6 +17,7 @@ set (gnome_search_SOURCES
 
 set (gnome_search_HEADERS
   dialog-search.h
+  dialog-search-account.h
   gnc-general-search.h
 )
 
