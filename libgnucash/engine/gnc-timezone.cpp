@@ -540,14 +540,18 @@ namespace DSTRule
 
     DSTRule::DSTRule (TZInfoIter info1, TZInfoIter info2,
 		      ptime date1, ptime date2) :
-	to_std(), to_dst(), to_std_time {}, to_dst_time {},
+	to_std((date1 + boost::posix_time::seconds(info2->info.gmtoff)).date()),
+	to_dst((date2 + boost::posix_time::seconds(info1->info.gmtoff)).date()),
+	to_std_time((date1 + boost::posix_time::seconds(info2->info.gmtoff)).time_of_day()),
+	to_dst_time((date2 + boost::posix_time::seconds(info1->info.gmtoff)).time_of_day()),
 	std_info(info1), dst_info(info2)
     {
 	if (info1->info.isdst == info2->info.isdst)
 	    throw(std::invalid_argument("Both infos have the same dst value."));
 	if (info1->info.isdst && !info2->info.isdst)
 	{
-	    std::swap(date1, date2);
+	    std::swap(to_std, to_dst);
+	    std::swap(to_std_time, to_dst_time);
 	    std::swap(std_info, dst_info);
 	}
 
@@ -576,15 +580,11 @@ namespace DSTRule
          * date, not its UTC date: in zones east of UTC a transition
          * early on a Sunday morning local time is still Saturday in
          * UTC, and a rule built from the UTC date picks the wrong
-         * Sunday in other years.
+         * Sunday in other years. date1 and date2 are the UTC times at
+         * which info1 and info2 take effect, so each is converted
+         * with the other info's offset, the one in force until then.
          */
 
-        auto dst_start = date2 + boost::posix_time::seconds(std_info->info.gmtoff);
-        auto dst_end = date1 + boost::posix_time::seconds(dst_info->info.gmtoff);
-        to_dst = Transition(dst_start.date());
-        to_dst_time = dst_start.time_of_day();
-        to_std = Transition(dst_end.date());
-        to_std_time = dst_end.time_of_day();
         if (std_info->isstd) //if isstd always use standard time
             to_std_time += boost::posix_time::seconds(std_info->info.gmtoff -
                                                       dst_info->info.gmtoff);
