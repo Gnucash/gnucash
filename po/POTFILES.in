@@ -124,6 +124,7 @@ gnucash/gnome-search/search-account.c
 gnucash/gnome-search/search-boolean.c
 gnucash/gnome-search/search-core-type.c
 gnucash/gnome-search/search-core-utils.c
+gnucash/gnome-search/search-currency.cpp
 gnucash/gnome-search/search-date.c
 gnucash/gnome-search/search-double.c
 gnucash/gnome-search/search-int64.c

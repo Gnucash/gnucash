@@ -39,6 +39,7 @@
 #include "search-numeric.h"
 #include "search-boolean.h"
 #include "search-account.h"
+#include "search-currency.h"
 
 static void grab_focus (GNCSearchCoreType *fe);
 static void editable_enters (GNCSearchCoreType *fe);
@@ -236,6 +237,8 @@ gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
 static void
 init_table (void)
 {
+    gnc_search_core_register_type (CURRENCY_MATCH_TYPE,
+                                   (GNCSearchCoreNew) gnc_search_currency_new);
     gnc_search_core_register_type (QOF_TYPE_STRING,
                                    (GNCSearchCoreNew) gnc_search_string_new);
     gnc_search_core_register_type (QOF_TYPE_NATURAL,
