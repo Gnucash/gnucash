@@ -1,3 +1,4 @@
+add_subdirectory(test)
 
 set (gnome_search_SOURCES
   gnc-general-search.c
@@ -6,6 +7,7 @@ set (gnome_search_SOURCES
   search-boolean.c
   search-core-type.c
   search-core-utils.c
+  search-currency.cpp
   search-date.c
   search-double.c
   search-int64.c
@@ -24,6 +26,7 @@ set (gnome_search_noinst_HEADERS
   search-boolean.h
   search-core-type.h
   search-core-utils.h
+  search-currency.h
   search-date.h
   search-double.h
   search-int64.h
@@ -37,7 +40,7 @@ set_source_files_properties (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS $
 
 set_local_dist(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
         ${gnome_search_noinst_HEADERS})
-set(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
+set(gnome_search_DIST ${gnome_search_DIST_local} ${test_gnome_search_DIST} PARENT_SCOPE)
 
 add_library (gnc-gnome-search
     ${gnome_search_SOURCES}
