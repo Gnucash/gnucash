@@ -657,6 +657,12 @@ gnc_commodity * gncCustomerGetCurrency (const GncCustomer *cust)
     return cust->currency;
 }
 
+static const char *
+qofCustomerGetCurrency (const GncCustomer *cust)
+{
+    return gnc_commodity_get_mnemonic (gncCustomerGetCurrency (cust));
+}
+
 gboolean gncCustomerGetActive (const GncCustomer *cust)
 {
     if (!cust) return FALSE;
@@ -929,6 +935,7 @@ gboolean gncCustomerRegister (void)
     {
         { CUSTOMER_ID, QOF_TYPE_NATURAL, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
         { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, (QofSetterFunc)gncCustomerSetName },
+        { CUSTOMER_CURRENCY, QOF_TYPE_STRING, (QofAccessFunc)qofCustomerGetCurrency, NULL },
         { CUSTOMER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetNotes, (QofSetterFunc)gncCustomerSetNotes },
         {
             CUSTOMER_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetDiscount,

@@ -38,6 +38,7 @@
 
 #include "dialog-search.h"
 #include "search-param.h"
+#include "search-currency.h"
 #include "QuickFill.h"
 #include "gnc-addr-quickfill.h"
 
@@ -883,6 +884,8 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
     /* Build parameter list in reverse order */
     if (params == NULL)
     {
+        params = gnc_search_param_prepend (params, _("Currency"), CURRENCY_MATCH_TYPE, type,
+                                           CUSTOMER_CURRENCY, NULL);
         params = gnc_search_param_prepend (params, _("Shipping Contact"), NULL, type,
                                            CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
         params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,

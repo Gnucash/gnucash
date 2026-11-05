@@ -120,6 +120,7 @@ static inline GncVendor * gncVendorLookup (const QofBook *book, const GncGUID *g
 
 #define VENDOR_ID           "id"
 #define VENDOR_NAME         "name"
+#define VENDOR_CURRENCY     "currency"
 #define VENDOR_ADDR         "addr"
 #define VENDOR_NOTES        "vendor_notes"
 #define VENDOR_TERMS        "vendor_terms"
