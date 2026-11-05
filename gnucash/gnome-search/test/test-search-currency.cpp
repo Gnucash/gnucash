@@ -25,6 +25,8 @@
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "gncInvoice.h"
+#include "gncCustomer.h"
+#include "gncVendor.h"
 #include "search-currency.h"
 #include "search-core-utils.h"
 
@@ -105,14 +107,14 @@ protected:
         gnc_clear_current_session ();
     }
 
-    void assert_match (GNCSearchCoreType& search, GncInvoice& expected)
+    void assert_match (GNCSearchCoreType& search, QofInstance& expected, const char *currency_param)
     {
         auto predicate{gnc_search_core_type_get_predicate (&search)};
         ASSERT_NE (predicate, nullptr);
         std::unique_ptr<QofQuery, decltype (&qof_query_destroy)> query{
-            qof_query_create_for (GNC_ID_INVOICE), qof_query_destroy};
+            qof_query_create_for (expected.e_type), qof_query_destroy};
         qof_query_set_book (query.get (), m_book);
-        qof_query_add_term (query.get (), qof_query_build_param_list (INVOICE_CURRENCY, nullptr),
+        qof_query_add_term (query.get (), qof_query_build_param_list (currency_param, nullptr),
                             predicate, QOF_QUERY_AND);
         auto results{qof_query_run (query.get ())};
         ASSERT_EQ (g_list_length (results), 1u);
@@ -131,20 +133,52 @@ TEST_F (CurrencySearchTest, SelectionComparisonAndCopy)
 {
     EXPECT_EQ (gnc_search_core_type_get_predicate (m_search.get ()), nullptr);
     gnc_currency_edit_set_currency (m_controls.m_picker, m_usd);
-    assert_match (*m_search, *m_usd_invoice);
+    assert_match (*m_search, *QOF_INSTANCE (m_usd_invoice), INVOICE_CURRENCY);
     gnc_combo_box_search_set_active (m_controls.m_comparison, QOF_COMPARE_NEQ);
-    assert_match (*m_search, *m_cad_invoice);
+    assert_match (*m_search, *QOF_INSTANCE (m_cad_invoice), INVOICE_CURRENCY);
 
     SearchPtr copy{gnc_search_core_type_clone (m_search.get ()), g_object_unref};
     auto copy_widget{make_widget (*copy)};
     auto controls{get_controls (*copy_widget)};
     ASSERT_NE (controls.m_picker, nullptr);
     gnc_currency_edit_set_currency (m_controls.m_picker, m_cad);
-    assert_match (*m_search, *m_usd_invoice);
-    assert_match (*copy, *m_cad_invoice);
+    assert_match (*m_search, *QOF_INSTANCE (m_usd_invoice), INVOICE_CURRENCY);
+    assert_match (*copy, *QOF_INSTANCE (m_cad_invoice), INVOICE_CURRENCY);
 
     gtk_combo_box_set_active (GTK_COMBO_BOX (controls.m_picker), -1);
     EXPECT_EQ (gnc_search_core_type_get_predicate (copy.get ()), nullptr);
+}
+
+TEST_F (CurrencySearchTest, CustomersAndVendors)
+{
+    auto usd_customer{gncCustomerCreate (m_book)};
+    auto cad_customer{gncCustomerCreate (m_book)};
+    gncCustomerSetCurrency (usd_customer, m_usd);
+    gncCustomerSetCurrency (cad_customer, m_cad);
+    auto usd_vendor{gncVendorCreate (m_book)};
+    auto cad_vendor{gncVendorCreate (m_book)};
+    gncVendorSetCurrency (usd_vendor, m_usd);
+    gncVendorSetCurrency (cad_vendor, m_cad);
+
+    struct CurrencyObjects
+    {
+        QofInstance *m_usd;
+        QofInstance *m_cad;
+        const char *m_param;
+    };
+    for (const auto& objects : {
+        CurrencyObjects{QOF_INSTANCE (usd_customer), QOF_INSTANCE (cad_customer), CUSTOMER_CURRENCY},
+        CurrencyObjects{QOF_INSTANCE (usd_vendor), QOF_INSTANCE (cad_vendor), VENDOR_CURRENCY}})
+    {
+        SCOPED_TRACE (objects.m_usd->e_type);
+        gnc_currency_edit_set_currency (m_controls.m_picker, m_usd);
+        gnc_combo_box_search_set_active (m_controls.m_comparison, QOF_COMPARE_EQUAL);
+        assert_match (*m_search, *objects.m_usd, objects.m_param);
+        gnc_combo_box_search_set_active (m_controls.m_comparison, QOF_COMPARE_NEQ);
+        assert_match (*m_search, *objects.m_cad, objects.m_param);
+        gnc_currency_edit_set_currency (m_controls.m_picker, m_cad);
+        assert_match (*m_search, *objects.m_usd, objects.m_param);
+    }
 }
 }
 

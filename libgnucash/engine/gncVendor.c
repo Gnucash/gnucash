@@ -701,6 +701,12 @@ gnc_commodity * gncVendorGetCurrency (const GncVendor *vendor)
     return vendor->currency;
 }
 
+static const char *
+qofVendorGetCurrency (const GncVendor *vendor)
+{
+    return gnc_commodity_get_mnemonic (gncVendorGetCurrency (vendor));
+}
+
 gboolean gncVendorGetActive (const GncVendor *vendor)
 {
     if (!vendor) return FALSE;
@@ -991,6 +997,7 @@ gboolean gncVendorRegister (void)
     {
         { VENDOR_ID, QOF_TYPE_NATURAL, (QofAccessFunc)gncVendorGetID, (QofSetterFunc)gncVendorSetID },
         { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName, (QofSetterFunc)gncVendorSetName },
+        { VENDOR_CURRENCY, QOF_TYPE_STRING, (QofAccessFunc)qofVendorGetCurrency, NULL },
         { VENDOR_ADDR,    GNC_ID_ADDRESS, (QofAccessFunc)gncVendorGetAddr, (QofSetterFunc)qofVendorSetAddr },
         { VENDOR_NOTES,   QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetNotes, (QofSetterFunc)gncVendorSetNotes },
         { VENDOR_TERMS,   GNC_ID_BILLTERM, (QofAccessFunc)gncVendorGetTerms, (QofSetterFunc)gncVendorSetTerms },
