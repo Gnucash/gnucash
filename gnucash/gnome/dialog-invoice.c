@@ -46,6 +46,7 @@
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
+#include "search-currency.h"
 #include "gnc-session.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
@@ -3544,7 +3545,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (inv_params == NULL)
     {
         inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Currency Symbol"), NULL, type,
+                                               _("Currency"), CURRENCY_MATCH_TYPE, type,
                                                INVOICE_CURRENCY, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Total Amount"), NULL, type,
@@ -3584,7 +3585,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (bill_params == NULL)
     {
         bill_params = gnc_search_param_prepend (bill_params,
-                                                _("Currency Symbol"), NULL, type,
+                                                _("Currency"), CURRENCY_MATCH_TYPE, type,
                                                 INVOICE_CURRENCY, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Total Amount"), NULL, type,
@@ -3624,7 +3625,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (emp_params == NULL)
     {
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Currency Symbol"), NULL, type,
+                                               _("Currency"), CURRENCY_MATCH_TYPE, type,
                                                INVOICE_CURRENCY, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Total Amount"), NULL, type,

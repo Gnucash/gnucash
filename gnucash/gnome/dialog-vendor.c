@@ -35,6 +35,7 @@
 #include "qof.h"
 #include "dialog-search.h"
 #include "search-param.h"
+#include "search-currency.h"
 
 #include "gncAddress.h"
 #include "gncVendor.h"
@@ -687,6 +688,8 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
     /* Build parameter list in reverse order */
     if (params == NULL)
     {
+        params = gnc_search_param_prepend (params, _("Currency"), CURRENCY_MATCH_TYPE, type,
+                                           VENDOR_CURRENCY, NULL);
         params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
                                            VENDOR_ADDR, ADDRESS_NAME, NULL);
         params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
