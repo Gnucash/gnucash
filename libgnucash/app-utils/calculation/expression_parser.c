@@ -769,6 +769,7 @@ next_token (parser_env_ptr pe)
 {
     char *nstr;
     const char *str_parse = pe->parse_str;
+    const char *name_end = pe->name + sizeof (pe->name) - 1;
     void *number;
 
     while (isspace (*str_parse))
@@ -805,14 +806,20 @@ next_token (parser_env_ptr pe)
         nstr = pe->name;
         /* skip over the '"'. */
         str_parse++;
-        do
-        {
+        while (*str_parse && *str_parse != '"' && nstr < name_end)
             *nstr++ = *str_parse++;
-        }
-        while ( *str_parse != '"' );
         *nstr = EOS;
-        str_parse++;
-        add_token( pe, STR_TOKEN );
+        if (*str_parse != '"')
+        {
+            /* Unterminated or over-long string literal. */
+            pe->error_code = EXPRESSION_ERROR;
+            add_token (pe, EOS);
+        }
+        else
+        {
+            str_parse++;
+            add_token( pe, STR_TOKEN );
+        }
     }
     /* test for name */
     else if (isalpha (*str_parse)
@@ -832,15 +839,23 @@ next_token (parser_env_ptr pe)
                 str_parse++;
                 break;
             }
+            if (nstr >= name_end)
+            {
+                /* Identifier too long for pe->name. */
+                pe->error_code = EXPRESSION_ERROR;
+                break;
+            }
             *nstr++ = *str_parse++;
         }
         while ((*str_parse == '_')
                 || (*str_parse == '(')
-                || isalpha (*str_parse)
-                || isdigit (*str_parse));
+                || isalpha ((unsigned char) *str_parse)
+                || isdigit ((unsigned char) *str_parse));
 
         *nstr = EOS;
-        if ( funcFlag )
+        if (pe->error_code)
+            add_token (pe, EOS);
+        else if ( funcFlag )
         {
             add_token(pe, FN_TOKEN);
         }
