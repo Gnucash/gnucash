@@ -30,6 +30,7 @@
 /* Add specific headers for this class */
 #include "gnc-glib-utils.h"
 #include "../Account.h"
+#include "../Account.hpp"
 #include "../AccountP.hpp"
 #include "../Split.h"
 #include "../Transaction.h"
@@ -2135,6 +2136,41 @@ test_gnc_account_foreach_child (Fixture *fixture, gconstpointer pData)
     gnc_account_foreach_child (begin, thunk, &counter);
     g_assert_cmpint (counter, == , 2);
 }
+
+static void
+test_gnc_account_foreach_split_between_dates_reverse (Fixture *fixture,
+                                                       gconstpointer pData)
+{
+    constexpr time64 seconds_per_day = 24 * 60 * 60;
+    const auto now = gnc_time (NULL);
+    const auto start_date = now + 14 * seconds_per_day;
+    const auto end_date = now - 14 * seconds_per_day;
+    guint count = 0;
+
+    gnc_account_foreach_split_between_dates (
+        fixture->acct, start_date, end_date, false,
+        [&count] (Split*) { ++count; });
+
+    g_assert_cmpuint (count, ==, 5);
+}
+
+static void
+test_gnc_account_foreach_split_between_dates_forward (Fixture *fixture,
+                                                       gconstpointer pData)
+{
+    constexpr time64 seconds_per_day = 24 * 60 * 60;
+    const auto now = gnc_time (NULL);
+    const auto start_date = now - 14 * seconds_per_day;
+    const auto end_date = now + 14 * seconds_per_day;
+    guint count = 0;
+
+    gnc_account_foreach_split_between_dates (
+        fixture->acct, start_date, end_date, false,
+        [&count] (Split*) { ++count; });
+
+    g_assert_cmpuint (count, ==, 5);
+}
+
 /* gnc_account_foreach_child_until  *** Not Used ***
 gpointer
 gnc_account_foreach_child_until (const Account *acc,// C: 4 in 2 */
@@ -2913,6 +2949,12 @@ test_suite_account (void)
     GNC_TEST_ADD (suitename, "gnc account lookup by full name helper", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name_helper,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by full name", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach child", Fixture, &complex, setup, test_gnc_account_foreach_child,  teardown );
+    GNC_TEST_ADD (suitename, "gnc account foreach split between reversed dates", Fixture,
+                  &some_data, setup,
+                  test_gnc_account_foreach_split_between_dates_reverse, teardown);
+    GNC_TEST_ADD (suitename, "gnc account foreach split between forward dates", Fixture,
+                  &some_data, setup,
+                  test_gnc_account_foreach_split_between_dates_forward, teardown);
     GNC_TEST_ADD (suitename, "gnc account foreach descendant", Fixture, &complex, setup, test_gnc_account_foreach_descendant,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach descendant until", Fixture, &complex, setup, test_gnc_account_foreach_descendant_until,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get full name", Fixture, &good_data, setup, test_gnc_account_get_full_name,  teardown );

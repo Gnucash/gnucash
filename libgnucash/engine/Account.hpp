@@ -36,6 +36,7 @@
 #include <functional>
 #include <algorithm>
 #include <optional>
+#include <utility>
 
 #include <Account.h>
 #include <SplitP.hpp>
@@ -72,8 +73,8 @@ void gnc_account_foreach_split_between_dates (const Account* account,
                                               bool include_descendants, Fn&& fn)
 {
     g_return_if_fail (GNC_IS_ACCOUNT (account));
-    // When both bounds are specified, they must form a valid date range.
-    g_return_if_fail (!start_date || !end_date || *start_date <= *end_date);
+    if (start_date && end_date && *start_date > *end_date)
+        std::swap (start_date, end_date);
 
     auto scan_account = [&](const Account* acc)
     {
