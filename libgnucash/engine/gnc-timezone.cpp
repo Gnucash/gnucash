@@ -505,7 +505,7 @@ namespace DSTRule
 
     Transition::Transition(gregorian_date date) :
 	month(date.month()), dow(date.day_of_week()),
-	week(static_cast<week_num>((6 + date.day() - date.day_of_week()) / 7))
+	week(static_cast<week_num>((6 + date.day()) / 7))
     {}
 
     bool
@@ -540,8 +540,10 @@ namespace DSTRule
 
     DSTRule::DSTRule (TZInfoIter info1, TZInfoIter info2,
 		      ptime date1, ptime date2) :
-	to_std(date1.date()), to_dst(date2.date()),
-	to_std_time(date1.time_of_day()), to_dst_time(date2.time_of_day()),
+	to_std((date1 + boost::posix_time::seconds(info2->info.gmtoff)).date()),
+	to_dst((date2 + boost::posix_time::seconds(info1->info.gmtoff)).date()),
+	to_std_time((date1 + boost::posix_time::seconds(info2->info.gmtoff)).time_of_day()),
+	to_dst_time((date2 + boost::posix_time::seconds(info1->info.gmtoff)).time_of_day()),
 	std_info(info1), dst_info(info2)
     {
 	if (info1->info.isdst == info2->info.isdst)
@@ -573,14 +575,19 @@ namespace DSTRule
          * transition occur at the right time; the isstd flag
          * determines whether that should be the standard offset or
          * the daylight offset for the daylight->standard transition.
+         *
+         * The rules are also built from the transition's wall-clock
+         * date, not its UTC date: in zones east of UTC a transition
+         * early on a Sunday morning local time is still Saturday in
+         * UTC, and a rule built from the UTC date picks the wrong
+         * Sunday in other years. date1 and date2 are the UTC times at
+         * which info1 and info2 take effect, so each is converted
+         * with the other info's offset, the one in force until then.
          */
 
-        to_dst_time += boost::posix_time::seconds(std_info->info.gmtoff);
         if (std_info->isstd) //if isstd always use standard time
-            to_std_time += boost::posix_time::seconds(std_info->info.gmtoff);
-        else
-            to_std_time += boost::posix_time::seconds(dst_info->info.gmtoff);
-
+            to_std_time += boost::posix_time::seconds(std_info->info.gmtoff -
+                                                      dst_info->info.gmtoff);
     }
 
     bool

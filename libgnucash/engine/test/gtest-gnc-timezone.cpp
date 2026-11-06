@@ -135,6 +135,20 @@ TEST(gnc_timezone_constructors, test_IANA_Belize_tz)
             EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21600);
             EXPECT_EQ(tz->dst_zone_abbrev(), "-0530");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 1800);
+            // DST starts at midnight after the first Saturday in October
+            // and ends at midnight after the second Saturday in February.
+            auto start = tz->dst_local_start_time(year).date();
+            EXPECT_EQ(10, start.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, start.day_of_week()) << year;
+            EXPECT_LE(2, start.day()) << year;
+            EXPECT_GE(8, start.day()) << year;
+            /* The end date comes from the rule built from the following
+             * February's transition, which can be a week out in this
+             * year, so only its month and weekday are checked.
+             */
+            auto end = tz->dst_local_end_time(year).date();
+            EXPECT_EQ(2, end.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
         }
         else if (year == 1973 || year == 1982)
         {
@@ -160,48 +174,69 @@ TEST(gnc_timezone_constructors, test_IANA_Belize_tz)
    }
 }
 
-TEST(gnc_timezone_constructors, test_IANA_Perth_tz)
+/* Zones east of UTC change their clocks early on a Sunday morning local time,
+ * which is still Saturday in UTC. The rules must use the local date, or they
+ * pick the wrong Sunday in other years.
+ */
+TEST(gnc_timezone_constructors, test_IANA_Sydney_tz)
 {
-    TimeZoneProvider tzp("Australia/Perth");
-    for (int year = 1916; year < 2048; ++year)
+    TimeZoneProvider tzp("Australia/Sydney");
+    for (int year = 1916; year < 2037; ++year)
     {
         auto tz = tzp.get(year);
         if (year < 1917)
         {
-            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
             EXPECT_TRUE(tz->has_dst());
-            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
-            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AEDT");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
         }
         else if (year < 1941)
         {
-            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
             EXPECT_FALSE(tz->has_dst());
-            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
         }
-        else if (year < 1943)
+        else if (year < 1944)
         {
-            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
             EXPECT_TRUE(tz->has_dst());
-            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
-            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AEDT");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
         }
-        else if (year == 1974 || year == 1983 || year == 1991 ||
-                 (year > 2005 && year < 2009))
+        else if (year < 1971)
         {
-            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
+        }
+        else if (year < 2008)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
             EXPECT_TRUE(tz->has_dst());
-            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
-            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AEDT");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
         }
         else
         {
-            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
-            EXPECT_FALSE(tz->has_dst());
-            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+            EXPECT_EQ(tz->std_zone_abbrev(), "AEST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 36000);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AEDT");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+            // Since 2008 DST starts on the first Sunday in October and ends
+            // on the first Sunday in April.
+            auto start = tz->dst_local_start_time(year).date();
+            EXPECT_EQ(10, start.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, start.day_of_week()) << year;
+            EXPECT_GE(7, start.day()) << year;
+            auto end = tz->dst_local_end_time(year).date();
+            EXPECT_EQ(4, end.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+            EXPECT_GE(7, end.day()) << year;
         }
     }
 }
@@ -278,6 +313,34 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
             EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
             EXPECT_EQ(tz->dst_zone_abbrev(), "MSD");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+            /* DST ran from midnight on 1 April to midnight on 1 October
+             * until it moved to the last Sundays in September (1984) and
+             * March (1985).
+             */
+            auto start = tz->dst_local_start_time(year).date();
+            if (year < 1985)
+            {
+                EXPECT_EQ(4, start.month()) << year;
+                EXPECT_EQ(1, start.day()) << year;
+            }
+            else
+            {
+                EXPECT_EQ(3, start.month()) << year;
+                EXPECT_EQ(boost::gregorian::Sunday, start.day_of_week()) << year;
+                EXPECT_LE(25, start.day()) << year;
+            }
+            auto end = tz->dst_local_end_time(year).date();
+            if (year < 1984)
+            {
+                EXPECT_EQ(10, end.month()) << year;
+                EXPECT_EQ(1, end.day()) << year;
+            }
+            else
+            {
+                EXPECT_EQ(9, end.month()) << year;
+                EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+                EXPECT_LE(24, end.day()) << year;
+            }
         }
         else if (year < 1991)
         {
@@ -292,6 +355,16 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
             EXPECT_EQ(tz->base_utc_offset().total_seconds(), 7200);
             EXPECT_EQ(tz->dst_zone_abbrev(), "EEST");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+            // DST starts on the last Sunday in March and ends on the last
+            // Sunday in September, or in October from 1996.
+            auto start = tz->dst_local_start_time(year).date();
+            EXPECT_EQ(3, start.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, start.day_of_week()) << year;
+            EXPECT_LE(25, start.day()) << year;
+            auto end = tz->dst_local_end_time(year).date();
+            EXPECT_EQ(year < 1996 ? 9 : 10, end.month()) << year;
+            EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+            EXPECT_LE(year < 1996 ? 24 : 25, end.day()) << year;
         }
         else
         {
@@ -300,6 +373,34 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
             EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
         }
      }
+}
+
+/* Israel starts DST on a Friday and ends it on a Sunday, so the week of the
+ * month in the rule must not depend on which weekday the transition falls on.
+ */
+TEST(gnc_timezone_constructors, test_IANA_Jerusalem_tz)
+{
+    TimeZoneProvider tzp("Asia/Jerusalem");
+    // Since 2013 DST starts on the Friday on or after 23 March and ends on
+    // the last Sunday in October.
+    for (int year = 2013; year < 2037; ++year)
+    {
+        auto tz = tzp.get(year);
+        EXPECT_EQ(tz->std_zone_abbrev(), "IST");
+        EXPECT_TRUE(tz->has_dst());
+        EXPECT_EQ(tz->base_utc_offset().total_seconds(), 7200);
+        EXPECT_EQ(tz->dst_zone_abbrev(), "IDT");
+        EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        auto start = tz->dst_local_start_time(year).date();
+        EXPECT_EQ(3, start.month()) << year;
+        EXPECT_EQ(boost::gregorian::Friday, start.day_of_week()) << year;
+        EXPECT_LE(23, start.day()) << year;
+        EXPECT_GE(29, start.day()) << year;
+        auto end = tz->dst_local_end_time(year).date();
+        EXPECT_EQ(10, end.month()) << year;
+        EXPECT_EQ(boost::gregorian::Sunday, end.day_of_week()) << year;
+        EXPECT_LE(25, end.day()) << year;
+    }
 }
 #endif
 
