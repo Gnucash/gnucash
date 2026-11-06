@@ -72,6 +72,7 @@ struct _GncSxSinceLastRunDialog
     GncSxSlrTreeModelAdapter *editing_model;
     GtkTreeView *instance_view;
     GtkToggleButton *review_created_txns_toggle;
+    GtkButton *postpone_all_button;
     GList *created_txns;
 
     GtkCellEditable *temp_ce; // used when editing values
@@ -139,6 +140,7 @@ static void _show_created_transactions (GncSxSinceLastRunDialog *app_dialog, GLi
 static void close_handler (gpointer user_data);
 static void dialog_destroy_cb (GtkWidget *object, GncSxSinceLastRunDialog *app_dialog);
 static void dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog);
+static void postpone_all_button_clicked_cb (GtkButton *button, GncSxSinceLastRunDialog *app_dialog);
 
 #define debug_path(fn, text, path) {\
     gchar *path_string = gtk_tree_path_to_string (path);\
@@ -1282,6 +1284,7 @@ since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GLis
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new (sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
+    dialog->postpone_all_button = GTK_BUTTON(gtk_builder_get_object (builder, "postpone_all_button"));
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dialog->review_created_txns_toggle),
                                   gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SET_REVIEW));
@@ -1292,6 +1295,9 @@ since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GLis
 
     g_signal_connect (G_OBJECT(ok_button), "button-press-event",
                       G_CALLBACK(finish_editing_before_ok_cb), dialog);
+
+    g_signal_connect (G_OBJECT(dialog->postpone_all_button), "clicked",
+                      G_CALLBACK(postpone_all_button_clicked_cb), dialog);
 
     {
         GtkCellRenderer *renderer;
@@ -1536,6 +1542,39 @@ close_handler (gpointer user_data)
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
     gtk_widget_destroy (app_dialog->dialog);
     g_free (app_dialog);
+}
+
+static void
+postpone_all_button_clicked_cb (GtkButton *button, GncSxSinceLastRunDialog *app_dialog)
+{
+    GncSxInstanceModel *instance_model;
+    GList *sx_instances_list;
+    GList *sx_iter;
+
+    g_return_if_fail (app_dialog != NULL);
+    g_return_if_fail (app_dialog->editing_model != NULL);
+
+    instance_model = gnc_sx_slr_tree_model_adapter_get_instance_model (app_dialog->editing_model);
+    sx_instances_list = gnc_sx_instance_model_get_sx_instances_list (instance_model);
+
+    // Iterate through all scheduled transaction instances
+    for (sx_iter = sx_instances_list; sx_iter != NULL; sx_iter = sx_iter->next)
+    {
+        GncSxInstances *sx_instances = (GncSxInstances*)sx_iter->data;
+        GList *instance_iter;
+
+        // Iterate through each instance within this scheduled transaction
+        for (instance_iter = sx_instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
+        {
+            GncSxInstance *instance = (GncSxInstance*)instance_iter->data;
+            
+            // Only change instances that are not already created
+            if (instance->state != SX_INSTANCE_STATE_CREATED)
+            {
+                gnc_sx_instance_model_change_instance_state (instance_model, instance, SX_INSTANCE_STATE_POSTPONED);
+            }
+        }
+    }
 }
 
 static void
