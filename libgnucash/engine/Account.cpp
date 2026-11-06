@@ -48,6 +48,7 @@
 #include "guid.hpp"
 
 #include <numeric>
+#include <array>
 #include <map>
 #include <unordered_set>
 #include <algorithm>
@@ -2345,7 +2346,7 @@ xaccAccountRecomputeBalance (Account * acc)
 /* The sort order is used to implicitly define an
  * order for report generation */
 
-static int typeorder[NUM_ACCOUNT_TYPES] =
+static constexpr std::array<int,NUM_ACCOUNT_TYPES> typeorder =
 {
     ACCT_TYPE_BANK, ACCT_TYPE_STOCK, ACCT_TYPE_MUTUAL, ACCT_TYPE_CURRENCY,
     ACCT_TYPE_CASH, ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE,
@@ -2353,11 +2354,14 @@ static int typeorder[NUM_ACCOUNT_TYPES] =
     ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY, ACCT_TYPE_TRADING
 };
 
-static int revorder[NUM_ACCOUNT_TYPES] =
+static constexpr auto revorder = []
 {
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-};
-
+    std::array<int, NUM_ACCOUNT_TYPES> rv{};
+    for (auto& r : rv) r = -1;
+    for (int i = 0; i < NUM_ACCOUNT_TYPES; i++)
+        rv[typeorder[i]] = i;
+    return rv;
+}();
 
 int
 xaccAccountOrder (const Account *aa, const Account *ab)
@@ -2381,17 +2385,6 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     result = g_strcmp0 (da, db);
     if (result)
         return result;
-
-    /* if account-type-order array not initialized, initialize it */
-    /* this will happen at most once during program invocation */
-    if (-1 == revorder[0])
-    {
-        int i;
-        for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-        {
-            revorder [typeorder[i]] = i;
-        }
-    }
 
     /* otherwise, sort on account type */
     ta = priv_aa->type;
