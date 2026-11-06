@@ -124,9 +124,9 @@ gnc_html_history_append(gnc_html_history * hist,
     if (hist->current_node)
     {
         auto hn = static_cast<gnc_html_history_node *>(hist->current_node->data);
-        if ((hn->type == node->type) &&
-                !g_strcmp(hn->location, node->location) &&
-                !g_strcmp(hn->label, node->label))
+        if (!g_strcmp(hn->type, node->type) &&
+            !g_strcmp(hn->location, node->location) &&
+            !g_strcmp(hn->label, node->label))
         {
             if (hist->destroy_cb)
             {
