@@ -24,11 +24,13 @@
 #include <glib.h>
 
 #include <config.h>
+#include <glib/gi18n.h>
 #include "qof.h"
 #include "qoflog.h"
 #include "Query.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-pricedb.h"
@@ -261,6 +263,19 @@ gnc_account_foreach_split_between_dates (const Account* account,
     std::optional<time64> start, end;
     if (scm_is_exact_integer (start_date)) start = scm_to_int64 (start_date);
     if (scm_is_exact_integer (end_date))   end = scm_to_int64 (end_date);
+
+    if (start && end && *start > *end)
+    {
+        gchar *start_text = qof_print_date (*start);
+        gchar *end_text = qof_print_date (*end);
+        gchar *message = g_strdup_printf (_("Start date %s is after end date %s; swapping the dates."),
+                                          start_text, end_text);
+        gnc_log_warn (message);
+        g_free (start_text);
+        g_free (end_text);
+        g_free (message);
+        std::swap (start, end);
+    }
 
     auto cb = [&](auto s) { scm_call_1 (scm_cb, gnc_split_to_scm (s)); };
     gnc_account_foreach_split_between_dates (account, start, end, incl_descendants, cb);
