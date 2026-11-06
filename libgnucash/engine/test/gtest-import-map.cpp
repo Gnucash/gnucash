@@ -275,11 +275,135 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + waldo + "/" + acct2_guid}, new KvpValue{*value});
     account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
+    // a stored token containing a delimiter is read as separate tokens:
+    // "pepper/waldo" counts for "pepper" and for "waldo", so "pepper" is now
+    // equally associated with both accounts
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + waldo + "/" + acct2_guid}, new KvpValue{*value});
     account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
-    EXPECT_EQ(t_expense_account1, account);
+    EXPECT_EQ(nullptr, account);
     g_free (acct1_guid);
     g_free (acct2_guid);
+}
+
+/* Helpers for the tests below: store a token count for an account, and
+ * build a token list. */
+static void
+set_bayes_count (Account* bank, const char* token, Account* account, int64_t count)
+{
+    auto guid = guid_to_string (xaccAccountGetGUID (account));
+    qof_instance_get_slots (QOF_INSTANCE (bank))->set_path (
+        {std::string{IMAP_FRAME_BAYES} + "/" + token + "/" + guid}, new KvpValue{count});
+    g_free (guid);
+}
+
+static GList*
+token_list (std::initializer_list<const char*> tokens)
+{
+    GList* list = nullptr;
+    for (auto token : tokens)
+        list = g_list_prepend (list, const_cast<char*>(token));
+    return list;
+}
+
+/* A recurring payment is identified by its tokens "smith" and "iban", but both
+ * were once assigned to another account by mistake. The transaction also
+ * contains very common tokens ("account", "bank") that occur with many accounts.
+ * The old spam-filter formula reached only 25% here and proposed nothing. */
+TEST_F(ImapBayesTest, StrayEntryAndCommonTokens)
+{
+    auto donations = t_expense_account1, other = t_expense_account2, third = t_expense_account;
+    set_bayes_count (t_acc, "smith", donations, 36);
+    set_bayes_count (t_acc, "smith", other, 2);
+    set_bayes_count (t_acc, "iban", donations, 36);
+    set_bayes_count (t_acc, "iban", other, 2);
+    set_bayes_count (t_acc, "account", donations, 36);
+    set_bayes_count (t_acc, "account", other, 600);
+    set_bayes_count (t_acc, "account", third, 700);
+    set_bayes_count (t_acc, "bank", donations, 36);
+    set_bayes_count (t_acc, "bank", other, 500);
+    set_bayes_count (t_acc, "bank", third, 450);
+
+    auto tokens = token_list ({"smith", "iban", "account", "bank"});
+    EXPECT_EQ (donations, gnc_account_imap_find_account_bayes (t_acc, tokens));
+    g_list_free (tokens);
+}
+
+/* The same person makes donations and gets reimbursements. Only the
+ * combination of the name with "donation" or "refund" tells them apart.
+ * The old formula proposed nothing for the donation. */
+TEST_F(ImapBayesTest, CombinationOfTokensDecides)
+{
+    auto donations = t_expense_account1, reimbursements = t_expense_account2,
+        other_donations = t_expense_account;
+    set_bayes_count (t_acc, "miller", donations, 10);
+    set_bayes_count (t_acc, "miller", reimbursements, 4);
+    set_bayes_count (t_acc, "donation", donations, 10);
+    set_bayes_count (t_acc, "donation", other_donations, 10);
+    set_bayes_count (t_acc, "refund", reimbursements, 4);
+
+    auto donation = token_list ({"donation", "miller"});
+    EXPECT_EQ (donations, gnc_account_imap_find_account_bayes (t_acc, donation));
+    g_list_free (donation);
+
+    auto reimbursement = token_list ({"refund", "miller"});
+    EXPECT_EQ (reimbursements, gnc_account_imap_find_account_bayes (t_acc, reimbursement));
+    g_list_free (reimbursement);
+
+    // a token never seen before carries no information
+    auto unknown = token_list ({"unknown"});
+    EXPECT_EQ (nullptr, gnc_account_imap_find_account_bayes (t_acc, unknown));
+    g_list_free (unknown);
+}
+
+/* Tokens are lower-cased and split at every character that is not a letter
+ * or a digit, when learning, when looking up, and when reading tokens stored
+ * by older versions. */
+TEST_F(ImapBayesTest, NormalizedTokens)
+{
+    auto root = qof_instance_get_slots (QOF_INSTANCE (t_bank_account));
+    auto acct1_guid = guid_to_string (xaccAccountGetGUID (t_expense_account1));
+    auto slot = [&](const char* token) {
+        auto value = root->get_slot ({std::string{IMAP_FRAME_BAYES} + "/" + token + "/" + acct1_guid});
+        return value ? value->get<int64_t>() : 0;
+    };
+
+    qof_instance_increase_editlevel (QOF_INSTANCE (t_bank_account));
+    auto learned = token_list ({"RENT;", "Rent", "CAFÉ,", "EREF:123/2026"});
+    gnc_account_imap_add_account_bayes (t_acc, learned, t_expense_account1);
+    g_list_free (learned);
+    qof_instance_reset_editlevel (QOF_INSTANCE (t_bank_account));
+
+    EXPECT_EQ (1, slot ("rent"));    // counted once per transaction
+    EXPECT_EQ (1, slot ("café"));    // non-ASCII letters are lower-cased too
+    EXPECT_EQ (1, slot ("eref"));
+    EXPECT_EQ (1, slot ("123"));
+    EXPECT_EQ (1, slot ("2026"));
+    EXPECT_EQ (0, slot ("RENT;"));
+
+    // tokens stored by an older version are normalised when read
+    set_bayes_count (t_acc, "DONATION;", t_expense_account2, 5);
+    auto lookup = token_list ({"Donation"});
+    EXPECT_EQ (t_expense_account2, gnc_account_imap_find_account_bayes (t_acc, lookup));
+    g_list_free (lookup);
+
+    // and the new learned tokens are found with differently written input
+    lookup = token_list ({"(Rent)"});
+    EXPECT_EQ (t_expense_account1, gnc_account_imap_find_account_bayes (t_acc, lookup));
+    g_list_free (lookup);
+    g_free (acct1_guid);
+}
+
+/* A stored token whose normalised words repeat, like "X/X", counts once for
+ * each word, as it would if learned now. With a single token, P(a|x) is the
+ * share of a in the counts of "x": 92 / (92 + 8) = 0.92 reaches the
+ * threshold. Counting "X/X" twice would give 92 / (92 + 16) = 0.85. */
+TEST_F(ImapBayesTest, StoredTokenWithRepeatedWord)
+{
+    set_bayes_count (t_acc, "x", t_expense_account1, 92);
+    set_bayes_count (t_acc, "X/X", t_expense_account2, 8);
+    auto tokens = token_list ({"x"});
+    EXPECT_EQ (t_expense_account1, gnc_account_imap_find_account_bayes (t_acc, tokens));
+    g_list_free (tokens);
 }
 
 TEST_F(ImapBayesTest, AddAccountBayes)
@@ -392,7 +516,8 @@ TEST_F (ImapBayesTest, get_bayes_info)
 {
     GList * tokens {nullptr};
     tokens = g_list_prepend (tokens, const_cast <char*> ("one/two/three"));
-    gnc_account_imap_add_account_bayes(t_acc, tokens, t_expense_account1);
+    // a token with delimiters, as stored by versions before token normalisation
+    set_bayes_count (t_acc, "one/two/three", t_expense_account1, 1);
     auto account = gnc_account_imap_find_account_bayes (t_acc, tokens);
     EXPECT_EQ (account, t_expense_account1);
     auto infos = gnc_account_imap_get_info_bayes (t_bank_account);
