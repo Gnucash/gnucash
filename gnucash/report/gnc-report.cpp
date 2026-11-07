@@ -71,6 +71,42 @@ try_load_config_array(const gchar *fns[])
     return FALSE;
 }
 
+/* Saved reports are Scheme code. Rather than evaluating the file with
+ * gfec_try_load, hand it to gnc:load-saved-reports-file, which reads it as
+ * data and evaluates it in a restricted sandbox (see
+ * saved-report-sandbox.scm). Individual reports that are malformed or try
+ * to use anything outside the allowlist are skipped with a warning.
+ * Returns TRUE if a file was found and could be read. */
+static gboolean
+try_load_saved_reports(const gchar *fns[])
+{
+    for (int i = 0; fns[i]; i++)
+    {
+        gchar *filename = gnc_build_userdata_path(fns[i]);
+        gboolean loaded = FALSE;
+        if (g_file_test(filename, G_FILE_TEST_EXISTS))
+        {
+            SCM loader = scm_c_eval_string("gnc:load-saved-reports-file");
+            if (scm_is_procedure(loader))
+            {
+                SCM filename_scm = scm_from_utf8_string(filename);
+                SCM result = gfec_apply(loader, scm_list_1(filename_scm),
+                                        [](const char* msg)
+                                        { g_warning("%s", msg); });
+                /* gfec_apply leaves SCM_UNDEFINED (not #f) on error */
+                loaded = scm_is_eq(result, SCM_BOOL_T);
+            }
+            else
+                g_warning("gnc:load-saved-reports-file is not available, "
+                          "not loading %s", filename);
+        }
+        g_free(filename);
+        if (loaded)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static void
 update_message(const gchar *msg)
 {
@@ -95,7 +131,7 @@ load_custom_reports_stylesheets(void)
     else is_user_config_loaded = TRUE;
 
     update_message("loading saved reports");
-    try_load_config_array(saved_report_files);
+    try_load_saved_reports(saved_report_files);
     update_message("loading stylesheets");
     try_load_config_array(stylesheet_files);
 }

@@ -37,6 +37,7 @@
 (use-modules (srfi srfi-26))
 (use-modules ((srfi srfi-69) #:prefix ht:))            ;for O(1) hash-table-size
 (use-modules (gnucash report report-register-hooks))
+(use-modules (gnucash report saved-report-sandbox))
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-document))
 (use-modules (gnucash report html-utilities))
@@ -50,8 +51,10 @@
 (export gnc:custom-report-invoice-template-guids)
 (export gnc:define-report)
 (export gnc:delete-report)
+(export gnc:eval-saved-report-string)
 (export gnc:find-report-template)
 (export gnc:is-custom-report-type)
+(export gnc:load-saved-reports-file)
 (export gnc:make-report)
 (export gnc:make-report-options)
 (export gnc:menuname-asset-liability)
@@ -617,6 +620,57 @@ not found.")))
              "      )\n"))))
     result-string))
 
+;; Saved reports are stored as Scheme code (see
+;; gnc:report-template-serialize-internal and gnc:generate-restore-forms).
+;; That code is never given to plain `eval': it is read as data and
+;; evaluated in a sandbox that can see only side-effect-free Guile
+;; primitives plus the procedures listed here, which are exactly those
+;; the serializer emits. If the serializer starts to emit a new
+;; procedure, it must be added to this list (test-saved-report-sandbox.scm
+;; checks that the generated code still loads).
+(define %report-core-module (current-module))
+
+(define saved-report-allowed-symbols
+  '(gnc:define-report
+    gnc:menuname-custom
+    gnc:report-template-new-options/report-guid
+    gnc:report-template-renderer/report-guid
+    gnc:restore-report-by-guid-with-custom-template
+    gnc:lookup-option
+    gnc:option-set-value
+    gnc:option-setter
+    gnc:optiondb
+    gnc-lookup-option
+    GncOption-get-value
+    gnc-budget-lookup
+    gnc-get-current-book))
+
+(define (make-saved-report-environment)
+  (make-saved-report-sandbox
+   (filter-map
+    (lambda (sym)
+      (let ((var (module-variable %report-core-module sym)))
+        (if (and var (variable-bound? var))
+            (cons sym (variable-ref var))
+            (begin
+              (gnc:warn "saved reports: " sym " is not available")
+              #f))))
+    saved-report-allowed-symbols)))
+
+;; Evaluate the saved-report code in STR; errors are thrown to the caller.
+;; Returns the value of the last form, which for a serialized report is
+;; the new report-template record.
+(define (gnc:eval-saved-report-string str)
+  (sandbox-eval-string str (make-saved-report-environment)))
+
+;; Load the saved-reports file FILENAME. A form that is unreadable, uses
+;; anything outside the allowlist, or fails for any other reason is
+;; reported with gnc:warn and skipped; the other reports are still
+;; loaded. Returns #f only if the file could not be read.
+(define (gnc:load-saved-reports-file filename)
+  (sandbox-load-file filename (make-saved-report-environment)
+                     (lambda (msg) (gnc:warn "saved reports: " msg))))
+
 (define (gnc:report-template-serialize-internal name type templ-name options guid)
   (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
          (result (string-append
@@ -697,7 +751,7 @@ not found.")))
          ;; - check if it's error free and can be deserialized
          ;; - load it into the runtime for immediate use by the user
          ;; (Bug #342206)
-         (save-result (eval-string saved-form)))
+         (save-result (gnc:eval-saved-report-string saved-form)))
 
     (and (record? save-result)
          (begin
