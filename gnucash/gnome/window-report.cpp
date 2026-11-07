@@ -98,18 +98,7 @@ static void
 gnc_options_dialog_help_cb(GncOptionsDialog *opt_dialog,
                            gpointer user_data)
 {
-    auto prm{static_cast<struct report_default_params_data*>(user_data)};
-
-    auto parent = prm->win->get_widget();
-    auto dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_INFO,
-                                         GTK_BUTTONS_OK,
-                                         "%s",
-                                         _("Set the report options you want using this dialog."));
-    g_signal_connect(G_OBJECT(dialog), "response",
-                     (GCallback)gtk_widget_destroy, nullptr);
-    gtk_widget_show(dialog);
+    gnc_gnome_help (GTK_WINDOW(opt_dialog), DF_MANUAL, DL_REPORT_OPTIONS);
 }
 
 static void
