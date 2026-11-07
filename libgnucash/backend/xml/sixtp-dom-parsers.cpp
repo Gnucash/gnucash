@@ -36,7 +36,7 @@
 static QofLogModule log_module = GNC_MOD_IO;
 
 const char*
-dom_node_to_text (xmlNodePtr node) noexcept
+dom_node_to_text (GncXmlNode* node) noexcept
 {
     if (node && node->children && node->children->type == XML_TEXT_NODE
         && !node->children->next)
@@ -45,15 +45,15 @@ dom_node_to_text (xmlNodePtr node) noexcept
 }
 
 std::optional<GncGUID>
-dom_tree_to_guid (xmlNodePtr node)
+dom_tree_to_guid (GncXmlNode* node)
 {
-    auto type = xmlGetProp (node, BAD_CAST "type");
+    auto type = gnc_xml_get_prop (node, "type");
     if (!type)
         return {};
 
-    bool ok = !g_strcmp0 ((char*)type, "guid") || !g_strcmp0 ((char*)type, "new");
+    bool ok = !g_strcmp0 (type, "guid") || !g_strcmp0 (type, "new");
 
-    xmlFree (type);
+    g_free (type);
 
     if (!ok)
         return {};
@@ -70,7 +70,7 @@ dom_tree_to_guid (xmlNodePtr node)
 }
 
 static KvpValue*
-dom_tree_to_integer_kvp_value (xmlNodePtr node)
+dom_tree_to_integer_kvp_value (GncXmlNode* node)
 {
     auto node_to_int_kvp = [](auto txt) -> KvpValue*
     {
@@ -84,31 +84,31 @@ dom_tree_to_integer_kvp_value (xmlNodePtr node)
 
 template <typename T>
 static bool
-dom_tree_to_num (xmlNodePtr node, std::function<bool(const char*, T*)>string_to_num, T* num_ptr)
+dom_tree_to_num (GncXmlNode* node, std::function<bool(const char*, T*)>string_to_num, T* num_ptr)
 {
     return apply_xmlnode_text<T>([&](auto txt){ return string_to_num (txt, num_ptr);}, node, false);
 }
 
 gboolean
-dom_tree_to_integer (xmlNodePtr node, gint64* daint)
+dom_tree_to_integer (GncXmlNode* node, gint64* daint)
 {
     return dom_tree_to_num<gint64>(node, string_to_gint64, daint);
 }
 
 gboolean
-dom_tree_to_guint16 (xmlNodePtr node, guint16* i)
+dom_tree_to_guint16 (GncXmlNode* node, guint16* i)
 {
     return dom_tree_to_num<guint16>(node, string_to_guint16, i);
 }
 
 gboolean
-dom_tree_to_guint (xmlNodePtr node, guint* i)
+dom_tree_to_guint (GncXmlNode* node, guint* i)
 {
     return dom_tree_to_num<guint>(node, string_to_guint, i);
 }
 
 gboolean
-dom_tree_to_boolean (xmlNodePtr node, gboolean* b)
+dom_tree_to_boolean (GncXmlNode* node, gboolean* b)
 {
     auto set_bool = [b](auto text) -> gboolean
     {
@@ -132,7 +132,7 @@ dom_tree_to_boolean (xmlNodePtr node, gboolean* b)
 }
 
 static KvpValue*
-dom_tree_to_double_kvp_value (xmlNodePtr node)
+dom_tree_to_double_kvp_value (GncXmlNode* node)
 {
     auto node_to_double_kvp = [](auto txt) -> KvpValue*
     {
@@ -143,13 +143,13 @@ dom_tree_to_double_kvp_value (xmlNodePtr node)
 }
 
 static KvpValue*
-dom_tree_to_numeric_kvp_value (xmlNodePtr node)
+dom_tree_to_numeric_kvp_value (GncXmlNode* node)
 {
     return new KvpValue {dom_tree_to_gnc_numeric (node)};
 }
 
 static KvpValue*
-dom_tree_to_string_kvp_value (xmlNodePtr node)
+dom_tree_to_string_kvp_value (GncXmlNode* node)
 {
     auto node_to_string_kvp = [](auto txt) -> KvpValue*
     {
@@ -159,21 +159,21 @@ dom_tree_to_string_kvp_value (xmlNodePtr node)
 }
 
 static KvpValue*
-dom_tree_to_guid_kvp_value (xmlNodePtr node)
+dom_tree_to_guid_kvp_value (GncXmlNode* node)
 {
     auto daguid = dom_tree_to_guid (node);
     return daguid ? new KvpValue {guid_copy (&*daguid)} : nullptr;
 }
 
 static KvpValue*
-dom_tree_to_time64_kvp_value (xmlNodePtr node)
+dom_tree_to_time64_kvp_value (GncXmlNode* node)
 {
     Time64 t{dom_tree_to_time64 (node)};
     return new KvpValue {t};
 }
 
 static KvpValue*
-dom_tree_to_gdate_kvp_value (xmlNodePtr node)
+dom_tree_to_gdate_kvp_value (GncXmlNode* node)
 {
     auto date = dom_tree_to_gdate (node);
     if (!date) return nullptr;
@@ -221,15 +221,15 @@ string_to_binary (const gchar* str,  void** v, guint64* data_len)
     return (TRUE);
 }
 
-static KvpValue* dom_tree_to_kvp_value (xmlNodePtr node);
+static KvpValue* dom_tree_to_kvp_value (GncXmlNode* node);
 //needed for test access as well as internal use.
-KvpFrame* dom_tree_to_kvp_frame (xmlNodePtr node);
+KvpFrame* dom_tree_to_kvp_frame (GncXmlNode* node);
 
 static KvpValue*
-dom_tree_to_list_kvp_value (xmlNodePtr node)
+dom_tree_to_list_kvp_value (GncXmlNode* node)
 {
     GList* list = NULL;
-    xmlNodePtr mark;
+    GncXmlNode* mark;
     KvpValue* ret = NULL;
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
@@ -254,7 +254,7 @@ dom_tree_to_list_kvp_value (xmlNodePtr node)
 }
 
 static KvpValue*
-dom_tree_to_frame_kvp_value (xmlNodePtr node)
+dom_tree_to_frame_kvp_value (GncXmlNode* node)
 {
     KvpFrame* frame = dom_tree_to_kvp_frame (node);
     return frame ? new KvpValue {frame} : nullptr;
@@ -264,7 +264,7 @@ dom_tree_to_frame_kvp_value (xmlNodePtr node)
 struct kvp_val_converter
 {
     const gchar* tag;
-    KvpValue* (*converter) (xmlNodePtr node);
+    KvpValue* (*converter) (GncXmlNode* node);
 };
 /* Note: The type attribute must remain 'timespec' to maintain compatibility.
  */
@@ -284,17 +284,17 @@ struct kvp_val_converter val_converters[] =
 };
 
 static KvpValue*
-dom_tree_to_kvp_value (xmlNodePtr node)
+dom_tree_to_kvp_value (GncXmlNode* node)
 {
-    xmlChar* xml_type;
+    char* xml_type;
     struct kvp_val_converter* mark;
     KvpValue* ret = NULL;
 
-    xml_type = xmlGetProp (node, BAD_CAST "type");
+    xml_type = gnc_xml_get_prop (node, "type");
 
     for (mark = val_converters; mark->tag; mark++)
     {
-        if (g_strcmp0 (reinterpret_cast<char*>(xml_type), mark->tag) == 0)
+        if (g_strcmp0 (xml_type, mark->tag) == 0)
         {
             ret = (mark->converter) (node);
         }
@@ -305,15 +305,15 @@ dom_tree_to_kvp_value (xmlNodePtr node)
         /* FIXME: deal with unknown type tag here */
     }
 
-    xmlFree (xml_type);
+    g_free (xml_type);
 
     return ret;
 }
 
 static gboolean
-dom_tree_to_kvp_frame_given (xmlNodePtr node, KvpFrame* frame)
+dom_tree_to_kvp_frame_given (GncXmlNode* node, KvpFrame* frame)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (frame, FALSE);
@@ -322,7 +322,7 @@ dom_tree_to_kvp_frame_given (xmlNodePtr node, KvpFrame* frame)
     {
         if (g_strcmp0 ((char*)mark->name, "slot") == 0)
         {
-            xmlNodePtr mark2;
+            GncXmlNode* mark2;
             const gchar* key = NULL;
             std::optional<std::string> maybe_key;
             KvpValue* val = NULL;
@@ -369,7 +369,7 @@ dom_tree_to_kvp_frame_given (xmlNodePtr node, KvpFrame* frame)
 
 
 KvpFrame*
-dom_tree_to_kvp_frame (xmlNodePtr node)
+dom_tree_to_kvp_frame (GncXmlNode* node)
 {
     g_return_val_if_fail (node, NULL);
 
@@ -383,14 +383,14 @@ dom_tree_to_kvp_frame (xmlNodePtr node)
 }
 
 gboolean
-dom_tree_create_instance_slots (xmlNodePtr node, QofInstance* inst)
+dom_tree_create_instance_slots (GncXmlNode* node, QofInstance* inst)
 {
     KvpFrame* frame = qof_instance_get_slots (inst);
     return dom_tree_to_kvp_frame_given (node, frame);
 }
 
 std::optional<std::string>
-dom_tree_to_text (xmlNodePtr tree)
+dom_tree_to_text (GncXmlNode* tree)
 {
     /* Expect *only* text and comment sibling nodes in the given tree --
        which actually may only be a "list".  i.e. if you're trying to
@@ -413,7 +413,7 @@ dom_tree_to_text (xmlNodePtr tree)
         return "";
     }
 
-    temp = (char*)xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
+    temp = gnc_xml_node_list_get_string (tree->xmlChildrenNode);
     if (!temp)
     {
         DEBUG ("Null string");
@@ -422,12 +422,12 @@ dom_tree_to_text (xmlNodePtr tree)
 
     DEBUG ("node string [%s]", (temp == NULL ? "(null)" : temp));
     rv = temp;
-    xmlFree (temp);
+    g_free (temp);
     return rv;
 }
 
 gnc_numeric
-dom_tree_to_gnc_numeric (xmlNodePtr node)
+dom_tree_to_gnc_numeric (GncXmlNode* node)
 {
     auto node_to_numeric = [](auto txt)
     {
@@ -439,7 +439,7 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
 
 
 time64
-dom_tree_to_time64 (xmlNodePtr node)
+dom_tree_to_time64 (GncXmlNode* node)
 {
     /* Turn something like this
 
@@ -454,7 +454,7 @@ dom_tree_to_time64 (xmlNodePtr node)
 
     time64 ret {INT64_MAX};
     gboolean seen = FALSE;
-    xmlNodePtr n;
+    GncXmlNode* n;
 
     for (n = node->xmlChildrenNode; n; n = n->next)
     {
@@ -491,7 +491,7 @@ dom_tree_to_time64 (xmlNodePtr node)
 }
 
 GDate*
-dom_tree_to_gdate (xmlNodePtr node)
+dom_tree_to_gdate (GncXmlNode* node)
 {
     /* Turn something like this
 
@@ -503,7 +503,7 @@ dom_tree_to_gdate (xmlNodePtr node)
 
     GDate ret;
     gboolean seen_date = FALSE;
-    xmlNodePtr n;
+    GncXmlNode* n;
 
     auto try_setting_date = [&ret](const char *content) -> bool
     {
@@ -561,7 +561,7 @@ gnc_strstrip (std::string_view sv)
 }
 
 static std::optional<CommodityRef>
-parse_commodity_ref (xmlNodePtr node, QofBook* book)
+parse_commodity_ref (GncXmlNode* node, QofBook* book)
 {
     /* Turn something like this
 
@@ -576,7 +576,7 @@ parse_commodity_ref (xmlNodePtr node, QofBook* book)
     CommodityRef rv;
     bool space_set{false};
     bool id_set{false};
-    xmlNodePtr n;
+    GncXmlNode* n;
 
     if (!node) return {};
     if (!node->xmlChildrenNode) return {};
@@ -621,7 +621,7 @@ parse_commodity_ref (xmlNodePtr node, QofBook* book)
 }
 
 gnc_commodity*
-dom_tree_to_commodity_ref_no_engine (xmlNodePtr node, QofBook* book)
+dom_tree_to_commodity_ref_no_engine (GncXmlNode* node, QofBook* book)
 {
     auto ref = parse_commodity_ref (node, book);
 
@@ -633,7 +633,7 @@ dom_tree_to_commodity_ref_no_engine (xmlNodePtr node, QofBook* book)
 }
 
 gnc_commodity*
-dom_tree_to_commodity_ref (xmlNodePtr node, QofBook* book)
+dom_tree_to_commodity_ref (GncXmlNode* node, QofBook* book)
 {
     gnc_commodity* ret;
     gnc_commodity_table* table;
@@ -684,7 +684,7 @@ dom_tree_handlers_all_gotten_p (struct dom_tree_handler* handlers)
 
 
 static inline gboolean
-gnc_xml_set_data (const gchar* tag, xmlNodePtr node, gpointer item,
+gnc_xml_set_data (const gchar* tag, GncXmlNode* node, gpointer item,
                   struct dom_tree_handler* handlers)
 {
     for (; handlers->tag != NULL; handlers++)
@@ -708,10 +708,10 @@ gnc_xml_set_data (const gchar* tag, xmlNodePtr node, gpointer item,
 }
 
 gboolean
-dom_tree_generic_parse (xmlNodePtr node, struct dom_tree_handler* handlers,
+dom_tree_generic_parse (GncXmlNode* node, struct dom_tree_handler* handlers,
                         gpointer data)
 {
-    xmlNodePtr achild;
+    GncXmlNode* achild;
     gboolean successful = TRUE;
 
     dom_tree_handlers_reset (handlers);
@@ -740,7 +740,7 @@ dom_tree_generic_parse (xmlNodePtr node, struct dom_tree_handler* handlers,
 }
 
 gboolean
-dom_tree_valid_time64 (time64 val, const xmlChar * name)
+dom_tree_valid_time64 (time64 val, const char* name)
 {
     if (val != INT64_MAX)
         return TRUE;

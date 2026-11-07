@@ -87,7 +87,7 @@ gnc_budget_dom_tree_create (GncBudget* bgt)
 /***********************************************************************/
 
 static gboolean
-budget_id_handler (xmlNodePtr node, gpointer bgt)
+budget_id_handler (GncXmlNode* node, gpointer bgt)
 {
     auto guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
@@ -96,19 +96,19 @@ budget_id_handler (xmlNodePtr node, gpointer bgt)
 }
 
 static gboolean
-budget_name_handler (xmlNodePtr node, gpointer bgt)
+budget_name_handler (GncXmlNode* node, gpointer bgt)
 {
     return apply_xmlnode_text (gnc_budget_set_name, GNC_BUDGET (bgt), node);
 }
 
 static gboolean
-budget_description_handler (xmlNodePtr node, gpointer bgt)
+budget_description_handler (GncXmlNode* node, gpointer bgt)
 {
     return apply_xmlnode_text (gnc_budget_set_description, GNC_BUDGET (bgt), node);
 }
 
 static gboolean
-budget_num_periods_handler (xmlNodePtr node, gpointer bgt)
+budget_num_periods_handler (GncXmlNode* node, gpointer bgt)
 {
     guint num_periods;
 
@@ -122,7 +122,7 @@ budget_num_periods_handler (xmlNodePtr node, gpointer bgt)
 }
 
 static gboolean
-budget_recurrence_handler (xmlNodePtr node, gpointer bgt)
+budget_recurrence_handler (GncXmlNode* node, gpointer bgt)
 {
     Recurrence* r;
 
@@ -135,7 +135,7 @@ budget_recurrence_handler (xmlNodePtr node, gpointer bgt)
 }
 
 static gboolean
-budget_slots_handler (xmlNodePtr node, gpointer bgt)
+budget_slots_handler (GncXmlNode* node, gpointer bgt)
 {
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (bgt));
 }
@@ -158,7 +158,7 @@ gnc_budget_end_handler (gpointer data_for_children,
                         gpointer* result, const gchar* tag)
 {
     GncBudget* bgt;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -177,7 +177,7 @@ gnc_budget_end_handler (gpointer data_for_children,
     g_return_val_if_fail (tree, FALSE);
 
     bgt = dom_tree_to_budget (tree, book);
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
     if (bgt != NULL)
     {
         /* ends up calling book_callback */
@@ -189,7 +189,7 @@ gnc_budget_end_handler (gpointer data_for_children,
 
 
 GncBudget*
-dom_tree_to_budget (xmlNodePtr node, QofBook* book)
+dom_tree_to_budget (GncXmlNode* node, QofBook* book)
 {
     GncBudget* bgt;
 

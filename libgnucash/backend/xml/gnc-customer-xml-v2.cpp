@@ -147,7 +147,7 @@ struct customer_pdata
 
 
 static gboolean
-set_boolean (xmlNodePtr node, GncCustomer* cust,
+set_boolean (GncXmlNode* node, GncCustomer* cust,
              void (*func) (GncCustomer* cust, gboolean b))
 {
     gint64 val;
@@ -161,7 +161,7 @@ set_boolean (xmlNodePtr node, GncCustomer* cust,
 }
 
 static gboolean
-customer_name_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_name_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -169,7 +169,7 @@ customer_name_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_guid_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_guid_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     GncCustomer* cust;
@@ -192,7 +192,7 @@ customer_guid_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_id_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_id_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -200,7 +200,7 @@ customer_id_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_notes_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_notes_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -208,7 +208,7 @@ customer_notes_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_terms_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     GncBillTerm* term;
@@ -223,7 +223,7 @@ customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_addr_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_addr_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -231,7 +231,7 @@ customer_addr_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_shipaddr_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_shipaddr_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -241,7 +241,7 @@ customer_shipaddr_handler (xmlNodePtr node, gpointer cust_pdata)
 
 
 static gboolean
-customer_taxincluded_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_taxincluded_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     auto set_tax_included = [](GncCustomer* cust, const char *str)
@@ -254,14 +254,14 @@ customer_taxincluded_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_active_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_active_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     return set_boolean (node, pdata->customer, gncCustomerSetActive);
 }
 
 static gboolean
-customer_discount_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_discount_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -270,7 +270,7 @@ customer_discount_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_credit_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_credit_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
 
@@ -279,7 +279,7 @@ customer_credit_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_currency_handler (xmlNodePtr node, gpointer customer_pdata)
+customer_currency_handler (GncXmlNode* node, gpointer customer_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (customer_pdata);
     gnc_commodity* com;
@@ -293,7 +293,7 @@ customer_currency_handler (xmlNodePtr node, gpointer customer_pdata)
 }
 
 static gboolean
-customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_taxtable_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     GncTaxTable* taxtable;
@@ -316,14 +316,14 @@ customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
 }
 
 static gboolean
-customer_taxtableoverride_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_taxtableoverride_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     return set_boolean (node, pdata->customer, gncCustomerSetTaxTableOverride);
 }
 
 static gboolean
-customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
+customer_slots_handler (GncXmlNode* node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->customer));
@@ -351,7 +351,7 @@ static struct dom_tree_handler customer_handlers_v2[] =
 };
 
 static GncCustomer*
-dom_tree_to_customer (xmlNodePtr node, QofBook* book)
+dom_tree_to_customer (GncXmlNode* node, QofBook* book)
 {
     struct customer_pdata cust_pdata;
     gboolean successful;
@@ -382,7 +382,7 @@ gnc_customer_end_handler (gpointer data_for_children,
                           gpointer* result, const gchar* tag)
 {
     GncCustomer* cust;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -407,7 +407,7 @@ gnc_customer_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, cust);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return cust != NULL;
 }

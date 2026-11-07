@@ -132,19 +132,19 @@ struct com_char_handler com_handlers[] =
 };
 
 static void
-set_commodity_value (xmlNodePtr node, gnc_commodity* com)
+set_commodity_value (GncXmlNode* node, gnc_commodity* com)
 {
     if (g_strcmp0 ((char*) node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char* string;
 
-        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
+        string = gnc_xml_node_list_get_string (node->xmlChildrenNode);
         if (string_to_gint64 (string, &val))
         {
             gnc_commodity_set_fraction (com, val);
         }
-        xmlFree (string);
+        g_free (string);
     }
     else if (g_strcmp0 ((char*)node->name, cmdty_get_quotes) == 0)
     {
@@ -155,12 +155,12 @@ set_commodity_value (xmlNodePtr node, gnc_commodity* com)
         gnc_quote_source* source;
         char* string;
 
-        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
+        string = gnc_xml_node_list_get_string (node->xmlChildrenNode);
         source = gnc_quote_source_lookup_by_internal (string);
         if (!source)
             source = gnc_quote_source_add_new (string, FALSE);
         gnc_commodity_set_quote_source (com, source);
-        xmlFree (string);
+        g_free (string);
     }
     else if (g_strcmp0 ((char*)node->name, cmdty_slots) == 0)
     {
@@ -210,19 +210,19 @@ valid_commodity (gnc_commodity* com)
 }
 
 static gnc_commodity*
-gnc_commodity_find_currency (QofBook* book, xmlNodePtr tree)
+gnc_commodity_find_currency (QofBook* book, GncXmlNode* tree)
 {
     gnc_commodity_table* table;
     gnc_commodity* currency = NULL;
     gchar* exchange = NULL, *mnemonic = NULL;
-    xmlNodePtr node;
+    GncXmlNode* node;
 
     for (node = tree->xmlChildrenNode; node; node = node->next)
     {
         if (g_strcmp0 ((char*) node->name, cmdty_namespace) == 0)
-            exchange = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+            exchange = gnc_xml_node_list_get_string (node->xmlChildrenNode);
         if (g_strcmp0 ((char*) node->name, cmdty_id) == 0)
-            mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+            mnemonic = gnc_xml_node_list_get_string (node->xmlChildrenNode);
     }
 
     if (exchange
@@ -234,9 +234,9 @@ gnc_commodity_find_currency (QofBook* book, xmlNodePtr tree)
     }
 
     if (exchange)
-        xmlFree (exchange);
+        g_free (exchange);
     if (mnemonic)
-        xmlFree (mnemonic);
+        g_free (mnemonic);
 
     return currency;
 }
@@ -248,8 +248,8 @@ gnc_commodity_end_handler (gpointer data_for_children,
                            gpointer* result, const gchar* tag)
 {
     gnc_commodity* com, *old_com;
-    xmlNodePtr achild;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* achild;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -280,7 +280,7 @@ gnc_commodity_end_handler (gpointer data_for_children,
     if (!valid_commodity (com))
     {
         PWARN ("Invalid commodity parsed");
-        xmlElemDump (stdout, NULL, tree);
+        gnc_xml_node_dump (stdout, tree);
         printf ("\n");
         fflush (stdout);
         gnc_commodity_destroy (com);
@@ -289,7 +289,7 @@ gnc_commodity_end_handler (gpointer data_for_children,
 
     gdata->cb (tag, gdata->parsedata, com);
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return TRUE;
 }
