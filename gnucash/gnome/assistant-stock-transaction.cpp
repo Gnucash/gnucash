@@ -1408,7 +1408,8 @@ StockAssistantModel::generate_list_of_splits() {
 
         if (err_act)
         {
-            auto err_str = g_strdup_printf (N_("Transaction can't balance, %s is error value %s"), err_act, err_reason);
+            const char *balance_str = N_("Transaction can't balance, %s is error value %s");
+            auto err_str = g_strdup_printf (_(balance_str), err_act, err_reason);
             m_logger.error(err_str);
             g_free (err_str);
         }
