@@ -39,14 +39,22 @@
 #include "window-main-summarybar.h"
 #include "dialog-utils.h"
 
+/* The summary bar is a button showing the currently selected row of the
+ * datamodel (mnemonic, net assets, profits). Clicking it pops up a
+ * GtkMenu listing every row, anchored so that the menu's bottom edge
+ * sits on the top edge of the bar (the bar lives at the bottom of the
+ * main window, so there is never room below it), with the current row
+ * pre-selected. */
 typedef struct
 {
     GtkWidget    *hbox;
-    GtkWidget    *totals_combo;
+    GtkWidget    *button;
+    GtkLabel     *bar_labels[3];
     GtkListStore *datamodel;
+    GtkWidget    *menu;
+    gchar        *active_key;     /* COLUMN_KEY of the row shown in the bar */
     int           component_id;
     int           cnxn_id;
-    gboolean      combo_popped;
     gboolean      show_negative_color;
     gchar        *negative_color;
 } GNCMainSummary;
@@ -324,6 +332,7 @@ get_total_mode_label (GNCCurrencyAcc *currency_accum)
 
 enum
 {
+    COLUMN_KEY,    /* stable row id: "<total_mode>:<commodity unique name>" */
     COLUMN_MNEMONIC_TYPE,
     COLUMN_ASSETS,
     COLUMN_ASSETS_VALUE,
@@ -333,6 +342,8 @@ enum
     COLUMN_PROFITS_NEG,
     N_COLUMNS
 };
+
+static void summary_update_bar (GNCMainSummary *summary);
 
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
@@ -393,8 +404,6 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
         GtkTreeIter iter;
         char asset_amount_string[256], profit_amount_string[256];
 
-        g_object_ref(summary->datamodel);
-        gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
         gtk_list_store_clear(summary->datamodel);
         for (current = g_list_first(currency_list); current; current = g_list_next(current))
         {
@@ -415,8 +424,14 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
             total_mode_label = get_total_mode_label (currency_accum);
             bidi_total = gnc_wrap_text_with_bidi_ltr_isolate(total_mode_label);
             bidi_asset_amount = gnc_wrap_text_with_bidi_ltr_isolate(asset_amount_string);
-            bidi_profit_amount = gnc_wrap_text_with_bidi_ltr_isolate(profit_amount_string);    
+            bidi_profit_amount = gnc_wrap_text_with_bidi_ltr_isolate(profit_amount_string);
+            /* Not the displayed label: two different commodities can
+             * share a symbol (e.g. AUD and USD both show "$"). */
+            gchar *row_key = g_strdup_printf
+                ("%d:%s", currency_accum->total_mode,
+                 gnc_commodity_get_unique_name (currency_accum->currency));
             gtk_list_store_set(summary->datamodel, &iter,
+                               COLUMN_KEY,           row_key,
                                COLUMN_MNEMONIC_TYPE, bidi_total,
                                COLUMN_ASSETS,        _("Net Assets:"),
                                COLUMN_ASSETS_VALUE,  bidi_asset_amount,
@@ -425,16 +440,16 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
                                COLUMN_PROFITS_VALUE, bidi_profit_amount,
                                COLUMN_PROFITS_NEG,   gnc_numeric_negative_p(currency_accum->profits),
                                -1);
+            g_free(row_key);
             g_free(total_mode_label);
             g_free(bidi_total);
             g_free(bidi_asset_amount);
             g_free(bidi_profit_amount);
         }
-        gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
-                                GTK_TREE_MODEL(summary->datamodel));
-        g_object_unref(summary->datamodel);
 
-        gtk_combo_box_set_active(GTK_COMBO_BOX(summary->totals_combo), 0);
+        /* The selected row is kept across refreshes by key (falling
+         * back to the first row in summary_update_bar if it is gone). */
+        summary_update_bar (summary);
     }
 
     g_list_free_full (currency_list, g_free);
@@ -479,6 +494,14 @@ gnc_main_window_summary_destroy_cb(GNCMainSummary *summary, gpointer data)
     gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                                 summarybar_update_color, summary);
 
+    if (summary->menu)
+    {
+        gtk_widget_destroy (summary->menu);
+        g_object_unref (summary->menu);
+    }
+    g_object_unref (summary->datamodel);
+
+    g_free (summary->active_key);
     g_free (summary->negative_color);
     g_free (summary);
 }
@@ -516,65 +539,255 @@ make_markup (GtkTreeModel *model, GtkTreeIter *iter,
     return markup;
 }
 
+/* Fill three labels (mnemonic/type, net assets, profits) from one row of
+ * the datamodel. Used for both the bar and the popup menu items. */
 static void
-cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter,
-                          gpointer user_data)
+fill_row_labels (const GNCMainSummary *summary, GtkTreeModel *model,
+                 GtkTreeIter *iter, GtkLabel *labels[3])
 {
-    GNCMainSummary * summary = user_data;
-    gint viewcol;
+    gchar *type;
+    gtk_tree_model_get (model, iter, COLUMN_MNEMONIC_TYPE, &type, -1);
+    gtk_label_set_text (labels[0], type);
+    g_free (type);
 
-    viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "view_column"));
+    gchar* markup = make_markup (model, iter, summary,
+                                 COLUMN_ASSETS, COLUMN_ASSETS_VALUE, COLUMN_ASSETS_NEG);
+    gtk_label_set_markup (labels[1], markup);
+    g_free (markup);
 
-    if (summary->combo_popped)
-        g_object_set (cell, "xalign", 0.0, NULL);
-    else
-        g_object_set (cell, "xalign", 0.5, NULL);
+    markup = make_markup (model, iter, summary,
+                          COLUMN_PROFITS, COLUMN_PROFITS_VALUE, COLUMN_PROFITS_NEG);
+    gtk_label_set_markup (labels[2], markup);
+    g_free (markup);
+}
 
-    if (viewcol == 0)
+/* Find the row whose COLUMN_KEY equals key. Returns TRUE and sets iter
+ * if found. */
+static gboolean
+summary_find_row_by_key (GtkTreeModel *model, const gchar *key,
+                         GtkTreeIter *iter)
+{
+    if (!key || !gtk_tree_model_get_iter_first (model, iter))
+        return FALSE;
+
+    do
     {
-        gchar *type;
-        gtk_tree_model_get (GTK_TREE_MODEL (tree_model), iter,
-                            COLUMN_MNEMONIC_TYPE, &type,
-                            -1);
-        g_object_set (cell, "text", type, NULL);
-        g_free (type);
+        gchar *row_key = NULL;
+        gtk_tree_model_get (model, iter, COLUMN_KEY, &row_key, -1);
+        gboolean match = row_key && g_strcmp0 (row_key, key) == 0;
+        g_free (row_key);
+        if (match)
+            return TRUE;
+    }
+    while (gtk_tree_model_iter_next (model, iter));
+
+    return FALSE;
+}
+
+/* Show the active row of the datamodel in the bar itself. The row is
+ * identified by key, so it survives rows being added, removed or
+ * reordered. If the remembered row has vanished (or none was chosen
+ * yet), fall back to the first row and remember that instead. */
+static void
+summary_update_bar (GNCMainSummary *summary)
+{
+    GtkTreeModel *model = GTK_TREE_MODEL (summary->datamodel);
+    GtkTreeIter iter;
+
+    if (!summary_find_row_by_key (model, summary->active_key, &iter))
+    {
+        g_free (summary->active_key);
+        summary->active_key = NULL;
+
+        if (!gtk_tree_model_get_iter_first (model, &iter))
+        {
+            for (int i = 0; i < 3; i++)
+                gtk_label_set_text (summary->bar_labels[i], "");
+            return;
+        }
+        gtk_tree_model_get (model, &iter, COLUMN_KEY, &summary->active_key, -1);
     }
 
-    if (viewcol == 2)
-    {
-        gchar *markup = make_markup (tree_model, iter, summary,
-                                     COLUMN_ASSETS, COLUMN_ASSETS_VALUE, COLUMN_ASSETS_NEG);
-        g_object_set (cell, "markup", markup, NULL);
-        g_free (markup);
-    }
+    fill_row_labels (summary, model, &iter, summary->bar_labels);
+}
 
-    if (viewcol == 4)
-    {
-        gchar *markup = make_markup (tree_model, iter, summary,
-                                     COLUMN_PROFITS, COLUMN_PROFITS_VALUE, COLUMN_PROFITS_NEG);
-        g_object_set (cell, "markup", markup, NULL);
-        g_free (markup);
-    }
+
+/* A row of the popup menu was chosen: make it the row shown in the bar. */
+static void
+summary_menu_item_activate_cb (GtkMenuItem *item, gpointer user_data)
+{
+    GNCMainSummary *summary = user_data;
+    const gchar *key = g_object_get_data (G_OBJECT (item), "summary-key");
+
+    if (!key)
+        return;
+
+    g_free (summary->active_key);
+    summary->active_key = g_strdup (key);
+    summary_update_bar (summary);
 }
 
 static void
-summary_combo_popped (GObject *widget, GParamSpec *pspec, gpointer user_data)
+summary_menu_remove_child_cb (GtkWidget *child, gpointer user_data)
 {
-    GNCMainSummary * summary = user_data;
-    if (summary->combo_popped)
-        summary->combo_popped = FALSE;
-    else
-        summary->combo_popped = TRUE;
+    gtk_widget_destroy (child);
+}
+
+/* Rebuild the menu from the datamodel. Returns the menu item for the
+ * active row (or NULL). */
+static GtkWidget *
+summary_menu_populate (GNCMainSummary *summary)
+{
+    GtkTreeModel *model = GTK_TREE_MODEL (summary->datamodel);
+    GtkWidget *active_item = NULL;
+
+    gtk_container_foreach (GTK_CONTAINER (summary->menu),
+                           summary_menu_remove_child_cb, NULL);
+
+    GtkTreeIter iter;
+    if (!gtk_tree_model_get_iter_first (model, &iter))
+        return NULL;
+
+    do
+    {
+        GtkWidget *item = gtk_menu_item_new ();
+        GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+        GtkLabel *labels[3];
+        gchar *key = NULL;
+
+        /* Homogeneous, like the bar, so the three columns line up. */
+        gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+
+        for (int i = 0; i < 3; i++)
+        {
+            labels[i] = GTK_LABEL (gtk_label_new (NULL));
+            gtk_label_set_xalign (labels[i], 0.0);
+            gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (labels[i]),
+                                TRUE, TRUE, 0);
+        }
+        fill_row_labels (summary, model, &iter, labels);
+
+        gtk_container_add (GTK_CONTAINER (item), box);
+        gtk_tree_model_get (model, &iter, COLUMN_KEY, &key, -1);
+        if (g_strcmp0 (key, summary->active_key) == 0)
+            active_item = item;
+        /* The item owns the key string and frees it when destroyed. */
+        g_object_set_data_full (G_OBJECT (item), "summary-key", key, g_free);
+
+        g_signal_connect (item, "activate",
+                          G_CALLBACK (summary_menu_item_activate_cb), summary);
+        gtk_menu_shell_append (GTK_MENU_SHELL (summary->menu), item);
+    }
+    while (gtk_tree_model_iter_next (model, &iter));
+
+    return active_item;
+}
+
+static void
+summary_popup_menu (GNCMainSummary *summary, const GdkEvent *trigger)
+{
+    GtkWidget *active_item = summary_menu_populate (summary);
+
+    /* Make the popup as wide as the bar. */
+    gtk_widget_set_size_request (summary->menu,
+                                gtk_widget_get_allocated_width (summary->button),
+                                -1);
+    gtk_widget_show_all (summary->menu);
+
+    /* Menu's bottom-left corner on the bar's top-left corner: the list
+     * grows upward from the bar. GDK flips it downward only if there is
+     * no room above. */
+    gtk_menu_popup_at_widget (GTK_MENU (summary->menu), summary->button,
+                              GDK_GRAVITY_NORTH_WEST,
+                              GDK_GRAVITY_SOUTH_WEST,
+                              trigger);
+
+    if (active_item)
+        gtk_menu_shell_select_item (GTK_MENU_SHELL (summary->menu), active_item);
+}
+
+/* Mouse: open on press of the primary button. Returning TRUE stops the
+ * button's own handling, so no "clicked" follows. */
+static gboolean
+summary_button_press_cb (GtkWidget *widget, GdkEventButton *event,
+                         gpointer user_data)
+{
+    if (event->type != GDK_BUTTON_PRESS || event->button != GDK_BUTTON_PRIMARY)
+        return FALSE;
+
+    summary_popup_menu (user_data, (const GdkEvent *) event);
+    return TRUE;
+}
+
+/* Keyboard: Space/Enter on the focused bar emits "clicked". */
+static void
+summary_button_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    GNCMainSummary *summary = user_data;
+
+    if (!gtk_widget_get_visible (summary->menu))
+        summary_popup_menu (summary, NULL);
+}
+
+typedef gboolean (*SummaryStepFn) (GtkTreeModel *, GtkTreeIter *);
+
+static gboolean
+summary_iter_last (GtkTreeModel *model, GtkTreeIter *iter)
+{
+    int n = gtk_tree_model_iter_n_children (model, NULL);
+    return n > 0 && gtk_tree_model_iter_nth_child (model, iter, NULL, n - 1);
+}
+
+static gboolean
+summary_button_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    GNCMainSummary *summary = user_data;
+    GtkTreeModel *model = GTK_TREE_MODEL (summary->datamodel);
+    SummaryStepFn fn;
+
+    if (event->state & gtk_accelerator_get_default_mod_mask ())
+        return FALSE;
+
+    switch (event->keyval)
+    {
+    case GDK_KEY_Up:
+    case GDK_KEY_KP_Up:
+        fn = gtk_tree_model_iter_previous;
+        break;
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+        fn = gtk_tree_model_iter_next;
+        break;
+    case GDK_KEY_Home:
+    case GDK_KEY_KP_Home:
+        fn = gtk_tree_model_get_iter_first;
+        break;
+    case GDK_KEY_End:
+    case GDK_KEY_KP_End:
+        fn = summary_iter_last;
+        break;
+    default:
+        return FALSE;
+    }
+
+    GtkTreeIter iter;
+    if (!summary_find_row_by_key (model, summary->active_key, &iter) || !fn (model, &iter))
+        return TRUE;
+
+    g_free (summary->active_key);
+    gtk_tree_model_get (model, &iter, COLUMN_KEY, &summary->active_key, -1);
+    summary_update_bar (summary);
+    return TRUE;
 }
 
 GtkWidget *
 gnc_main_window_summary_new (void)
 {
     GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
-    GtkCellRenderer *textRenderer;
     int i;
 
     retval->datamodel = gtk_list_store_new (N_COLUMNS,
+                                            G_TYPE_STRING,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
@@ -586,11 +799,8 @@ gnc_main_window_summary_new (void)
     retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
 
-    // Set the name for this wodget so it can be easily manipulated with css
+    // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(retval->hbox), "gnc-id-account-summary-bar");
-
-    retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
-    g_object_unref (retval->datamodel);
 
     retval->negative_color = get_negative_color_str();
     retval->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
@@ -605,26 +815,37 @@ gnc_main_window_summary_new (void)
                                          QOF_EVENT_DESTROY
                                          | GNC_EVENT_ITEM_CHANGED);
 
-    // Allows you to get when the popup menu is present
-    g_signal_connect (retval->totals_combo, "notify::popup-shown",G_CALLBACK (summary_combo_popped), retval);
+    /* The bar: a button holding the three centred labels and an arrow. */
+    retval->button = gtk_button_new ();
+    GtkWidget *inner = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (inner), TRUE);
 
-    retval->combo_popped = FALSE;
-
-    for (i = 0; i <= N_COLUMNS - 2; i += 2)
+    for (i = 0; i < 3; i++)
     {
-        textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
-
-        gtk_cell_renderer_set_fixed_size (textRenderer, 50, -1);
-
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, TRUE);
-
-        g_object_set_data (G_OBJECT(textRenderer), "view_column", GINT_TO_POINTER (i));
-        gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, cdf, retval, NULL);
+        retval->bar_labels[i] = GTK_LABEL (gtk_label_new (NULL));
+        gtk_label_set_xalign (retval->bar_labels[i], 0.5);
+        gtk_box_pack_start (GTK_BOX (inner), GTK_WIDGET (retval->bar_labels[i]),
+                            TRUE, TRUE, 0);
     }
 
+    GtkWidget *outer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    GtkWidget *arrow = gtk_image_new_from_icon_name ("pan-up-symbolic",
+                                                     GTK_ICON_SIZE_BUTTON);
+    gtk_box_pack_start (GTK_BOX (outer), inner, TRUE, TRUE, 0);
+    gtk_box_pack_end (GTK_BOX (outer), arrow, FALSE, FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (retval->button), outer);
+
+    /* The popup list; contents are rebuilt each time it is opened. */
+    retval->menu = g_object_ref_sink (gtk_menu_new ());
+    g_signal_connect (retval->button, "button-press-event",
+                      G_CALLBACK (summary_button_press_cb), retval);
+    g_signal_connect (retval->button, "clicked",
+                      G_CALLBACK (summary_button_clicked_cb), retval);
+    g_signal_connect (retval->button, "key-press-event",
+                      G_CALLBACK (summary_button_key_press_cb), retval);
     gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
-    gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, TRUE, TRUE, 5);
-    gtk_widget_show (retval->totals_combo);
+    gtk_box_pack_start (GTK_BOX(retval->hbox), retval->button, TRUE, TRUE, 5);
+    gtk_widget_show_all (retval->button);
     gtk_widget_show (retval->hbox);
 
     g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
