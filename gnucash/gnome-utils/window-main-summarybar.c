@@ -813,6 +813,11 @@ gnc_main_window_summary_new (void)
     gnc_gui_component_watch_entity_type (retval->component_id,
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_DESTROY
+                                         | QOF_EVENT_CREATE
+                                         | QOF_EVENT_ADD
+                                         | QOF_EVENT_MODIFY
+                                         | GNC_EVENT_ITEM_ADDED
+                                         | GNC_EVENT_ITEM_REMOVED
                                          | GNC_EVENT_ITEM_CHANGED);
 
     /* The bar: a button holding the three centred labels and an arrow. */
