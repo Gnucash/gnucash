@@ -2,6 +2,7 @@
 set (gnome_search_SOURCES
   gnc-general-search.c
   dialog-search.c
+  dialog-search-account.c
   search-account.c
   search-boolean.c
   search-core-type.c
@@ -16,6 +17,7 @@ set (gnome_search_SOURCES
 
 set (gnome_search_HEADERS
   dialog-search.h
+  dialog-search-account.h
   gnc-general-search.h
 )
 
@@ -34,10 +36,6 @@ set (gnome_search_noinst_HEADERS
 
 # Add dependency on config.h
 set_source_files_properties (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-
-set_local_dist(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
-        ${gnome_search_noinst_HEADERS})
-set(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
 
 add_library (gnc-gnome-search
     ${gnome_search_SOURCES}
@@ -65,3 +63,9 @@ install(TARGETS gnc-gnome-search
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+
+add_subdirectory(test)
+
+set_local_dist(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
+        ${gnome_search_noinst_HEADERS})
+set(gnome_search_DIST ${gnome_search_DIST_local} ${test_gnome_search_DIST} PARENT_SCOPE)

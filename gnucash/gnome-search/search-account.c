@@ -33,6 +33,7 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
 #include "dialog-utils.h"
+#include "dialog-search-account.h"
 
 #include "search-account.h"
 #include "search-core-utils.h"
@@ -135,6 +136,37 @@ gnc_search_account_matchall_new (void)
     return o;
 }
 
+GList *
+gnc_search_account_get_selected_accounts (GNCSearchAccount *fi)
+{
+    GNCSearchAccountPrivate *priv;
+
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), NULL);
+
+    priv = _PRIVATE(fi);
+    return priv->selected_accounts;
+}
+
+void
+gnc_search_account_set_selected_accounts (GNCSearchAccount *fi, GList *accounts)
+{
+    GNCSearchAccountPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (GNC_IS_SEARCH_ACCOUNT (fi));
+
+    priv = _PRIVATE(fi);
+    if (priv->selected_accounts)
+    {
+        g_list_free (priv->selected_accounts);
+        priv->selected_accounts = NULL;
+    }
+
+    if (accounts)
+        priv->selected_accounts = g_list_copy (accounts);
+}
+
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
@@ -199,69 +231,42 @@ describe_button (GNCSearchAccount *fi)
 }
 
 static void
-button_clicked (GtkButton *button, GNCSearchAccount *fi)
+search_account_dialog_response_cb (GtkDialog *dialog,
+                                   gint response,
+                                   gpointer user_data)
 {
-    GNCSearchAccountPrivate *priv;
-    GtkDialog *dialog;
-    GtkWidget *account_tree;
-    GtkWidget *accounts_scroller;
-    GtkWidget *label;
-    char *desc;
-    GtkTreeSelection *selection;
+    GncSearchAccountDialog *account_dialog = GNC_SEARCH_ACCOUNT_DIALOG (dialog);
+    GtkButton *button = GTK_BUTTON (user_data);
 
-    /* Create the account tree */
-    account_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(account_tree), FALSE);
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(account_tree));
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-
-    /* Select the currently-selected accounts */
-    priv = _PRIVATE(fi);
-    if (priv->selected_accounts)
-        gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(account_tree),
-                priv->selected_accounts, FALSE);
-
-    /* Create the account scroller and put the tree in it */
-    accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(accounts_scroller),
-                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(accounts_scroller), account_tree);
-    gtk_widget_set_size_request(GTK_WIDGET(accounts_scroller), 300, 300);
-
-    /* Create the label */
-    label = gtk_label_new (_("Select Accounts to Match"));
-
-    /* Create the dialog */
-    dialog =
-        GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
-                   GTK_WINDOW(priv->parent),
-                   0,
-                   _("_Cancel"), GTK_RESPONSE_CANCEL,
-                   _("_OK"), GTK_RESPONSE_OK,
-                   NULL));
-
-    /* Put the dialog together */
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), label,
-                        FALSE, FALSE, 3);
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), accounts_scroller,
-                        TRUE, TRUE, 3);
-
-    gtk_widget_show_all (GTK_WIDGET (dialog));
-
-    /* Now run the dialog */
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
+    if (response == GTK_RESPONSE_OK && account_dialog->search_account)
     {
-        if (priv->selected_accounts)
-            g_list_free (priv->selected_accounts);
+        GList *selected = gnc_search_account_dialog_get_selected_accounts (account_dialog);
+        gnc_search_account_set_selected_accounts (account_dialog->search_account, selected);
+        g_list_free (selected);
 
-        priv->selected_accounts =
-            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
-
-        desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
+        if (button)
+        {
+            char *desc = describe_button (account_dialog->search_account);
+            gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
+        }
     }
 
     gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+button_clicked (GtkButton *button, GNCSearchAccount *fi)
+{
+    GNCSearchAccountPrivate *priv;
+    GtkWidget *dialog;
+
+    priv = _PRIVATE(fi);
+    dialog = gnc_search_account_dialog_new (priv->parent, fi);
+
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (search_account_dialog_response_cb), button);
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    gtk_widget_show_all (dialog);
 }
 
 static GtkWidget *

@@ -32,6 +32,8 @@ GNCSearchAccount	*gnc_search_account_new	(void);
 GNCSearchAccount	*gnc_search_account_matchall_new	(void);
 
 /* methods */
+GList *gnc_search_account_get_selected_accounts (GNCSearchAccount *fi);
+void gnc_search_account_set_selected_accounts (GNCSearchAccount *fi, GList *accounts);
 
 #endif /* ! _GNCSEARCH_ACCOUNT_H */
 
