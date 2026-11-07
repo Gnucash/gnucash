@@ -49,7 +49,7 @@ add_library (gnc-generic-import
   ${generic_import_noinst_HEADERS}
 )
 
-target_link_libraries(gnc-generic-import gnc-gnome-utils gnc-engine PkgConfig::GTK3 PkgConfig::GLIB2)
+target_link_libraries(gnc-generic-import gnc-gnome-utils gnc-engine ctre PkgConfig::GTK3 PkgConfig::GLIB2)
 
 target_compile_definitions (gnc-generic-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import\")
 

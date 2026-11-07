@@ -29,6 +29,7 @@
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/locale.hpp>
 #include <boost/regex.hpp>
+#include <ctre.hpp>
 #include <stdexcept>
 #include <unicode/smpdtfmt.h>
 #include <unicode/locid.h>
@@ -441,27 +442,28 @@ GncDateTimeImpl::GncDateTimeImpl(const char* str) :
             m_time = LDT_from_date_time(res->date(), res->time_of_day(), utc_zone);
             return;
         }
-        static const boost::regex delim_iso("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}(?::?\\d{2})?)?$");
-        static const boost::regex non_delim("^(\\d{14}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}\\s*(:?\\d{2})?)?$");
+        static constexpr ctll::fixed_string delim_iso("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(?:\\.\\d{0,9})?)\\s*([+\\-]\\d{2}(?::?\\d{2})?)?$");
+        static constexpr ctll::fixed_string non_delim("^(\\d{14}(?:\\.\\d{0,9})?)\\s*([+\\-]\\d{2}\\s*(:?\\d{2})?)?$");
         PTime pdt;
-        boost::cmatch sm;
-        if (regex_match(str, sm, non_delim))
+        std::string tzstr;
+        if (auto sm = ctre::match<non_delim>(str))
         {
-            std::string time_str(sm[1]);
+            std::string time_str(sm.get<1>().to_string());
             time_str.insert(8, "T");
             pdt = boost::posix_time::from_iso_string(time_str);
+            if (sm.get<2>())
+                tzstr = sm.get<2>().to_string();
         }
-        else if (regex_match(str, sm, delim_iso))
+        else if (auto sm = ctre::match<delim_iso>(str))
         {
-            pdt = boost::posix_time::time_from_string(sm[1]);
+            pdt = boost::posix_time::time_from_string(sm.get<1>().to_string());
+            if (sm.get<2>())
+                tzstr = sm.get<2>().to_string();
         }
         else
         {
             throw(std::invalid_argument("The date string was not formatted in a way that GncDateTime(const char*) knows how to parse."));
         }
-        std::string tzstr("");
-        if (sm[2].matched)
-            tzstr += sm[2];
         tzptr = tz_from_string(tzstr);
         m_time = LDT_from_date_time(pdt.date(), pdt.time_of_day(), tzptr);
     }
