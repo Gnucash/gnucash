@@ -268,14 +268,13 @@ gnc_account_foreach_split_between_dates (const Account* account,
     {
         gchar *start_text = qof_print_date (*start);
         gchar *end_text = qof_print_date (*end);
-        gchar *message = g_strdup_printf (_("Start date %s is after end date %s."),
+        gchar *message = g_strdup_printf (_("Start date %s is after end date %s; swapping the dates."),
                                           start_text, end_text);
-        SCM message_arg = scm_from_utf8_string (message);
+        gnc_log_warn (message);
         g_free (start_text);
         g_free (end_text);
         g_free (message);
-        scm_throw (scm_from_utf8_symbol ("report-parameters-error"),
-                   scm_list_1 (message_arg));
+        std::swap (start, end);
     }
 
     auto cb = [&](auto s) { scm_call_1 (scm_cb, gnc_split_to_scm (s)); };
