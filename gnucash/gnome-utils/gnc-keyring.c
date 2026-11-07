@@ -68,7 +68,7 @@ const SecretSchema* gnucash_get_secret_schema(void)
 #ifdef HAVE_OSX_KEYCHAIN
 /* Log an OSStatus from the macOS keychain as a readable message. */
 static void
-gnc_log_osx_keychain_error (const gchar *context, OSStatus status)
+log_osx_keychain_error (const gchar *context, OSStatus status)
 {
     CFStringRef osx_resultstring = SecCopyErrorMessageString (status, NULL);
     char resultstring[256] = "";
@@ -83,6 +83,114 @@ gnc_log_osx_keychain_error (const gchar *context, OSStatus status)
 }
 #endif
 
+#if defined(HAVE_LIBSECRET) || defined(HAVE_GNOME_KEYRING) || defined(HAVE_OSX_KEYCHAIN)
+/* Return a copy of the password currently stored in the keyring for these
+ * coordinates, or NULL if none is stored; the caller frees it with g_free().
+ * Unlike gnc_keyring_get_password() this performs no user interaction. */
+static gchar *
+keyring_lookup_password (const gchar *access_method, const gchar *server,
+                             guint32 port, const gchar *service,
+                             const gchar *user)
+{
+    gchar *stored = NULL;
+#ifdef HAVE_LIBSECRET
+    GError *error = NULL;
+    gchar *found;
+    if (port == 0)
+        found = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                             "protocol", access_method,
+                                             "server", server,
+                                             "user", user,
+                                             NULL);
+    else
+        found = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                             "protocol", access_method,
+                                             "server", server,
+                                             "port", port,
+                                             "user", user,
+                                             NULL);
+    if (found)
+    {
+        stored = g_strdup (found);
+        secret_password_free (found);
+    }
+    if (error)
+        g_error_free (error);
+#elif HAVE_GNOME_KEYRING
+    GList *found_list = NULL;
+    if (gnome_keyring_find_network_password_sync
+            (user, NULL, server, service, access_method, NULL, port,
+             &found_list) == GNOME_KEYRING_RESULT_OK && found_list)
+    {
+        GnomeKeyringNetworkPasswordData *found = found_list->data;
+        if (found->password)
+            stored = g_strdup (found->password);
+    }
+    if (found_list)
+        gnome_keyring_network_password_list_free (found_list);
+#endif
+#ifdef HAVE_OSX_KEYCHAIN
+    void *password_data = NULL;
+    UInt32 password_length = 0;
+    if (SecKeychainFindInternetPassword (NULL,
+                                         strlen (server), server,
+                                         strlen (access_method), access_method,
+                                         strlen (user), user,
+                                         strlen (service), service,
+                                         port, kSecProtocolTypeAny,
+                                         kSecAuthenticationTypeDefault,
+                                         &password_length, &password_data,
+                                         NULL) == noErr)
+    {
+        stored = g_strndup (password_data, password_length);
+        SecKeychainItemFreeContent (NULL, password_data);
+    }
+#endif
+    return stored;
+}
+#endif /* any keyring backend */
+
+#ifdef HAVE_OSX_KEYCHAIN
+/* Store password for these coordinates in the macOS keychain, updating the item
+ * if it already exists; a plain SecKeychainAddInternetPassword would fail with
+ * errSecDuplicateItem. */
+static OSStatus
+store_osx_keychain_password (const gchar *access_method, const gchar *server,
+                             guint32 port, const gchar *service,
+                             const gchar *user, const gchar *password)
+{
+    SecKeychainItemRef itemRef = NULL;
+    OSStatus status =
+        SecKeychainFindInternetPassword (NULL,
+                                         strlen (server), server,
+                                         strlen (access_method), access_method,
+                                         strlen (user), user,
+                                         strlen (service), service,
+                                         port, kSecProtocolTypeAny,
+                                         kSecAuthenticationTypeDefault,
+                                         NULL, NULL, &itemRef);
+    if (status == errSecItemNotFound)
+        status =
+            SecKeychainAddInternetPassword (NULL,
+                                            strlen (server), server,
+                                            strlen (access_method),
+                                            access_method,
+                                            strlen (user), user,
+                                            strlen (service), service,
+                                            port, kSecProtocolTypeAny,
+                                            kSecAuthenticationTypeDefault,
+                                            strlen (password), password, NULL);
+    else if (status == noErr)
+        status =
+            SecKeychainItemModifyAttributesAndData (itemRef, NULL,
+                                                    strlen (password),
+                                                    password);
+    if (itemRef)
+        CFRelease (itemRef);
+    return status;
+}
+#endif /* HAVE_OSX_KEYCHAIN */
+
 void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *server,
                                guint32 port,
@@ -90,88 +198,74 @@ void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *user,
                                const gchar* password)
 {
-#ifdef HAVE_LIBSECRET
-    GError* error = NULL;
-    gchar* label = NULL;
+#if defined(HAVE_LIBSECRET) || defined(HAVE_GNOME_KEYRING) || defined(HAVE_OSX_KEYCHAIN)
+    gchar *stored;
+    gboolean unchanged;
 
     g_return_if_fail(access_method != NULL && server != NULL &&
                      service != NULL && user != NULL && password != NULL);
 
-    label = g_strdup_printf("GnuCash password for %s://%s@%s", access_method, user, server);
+    /* Only (re)write the keyring when the stored password is missing or has
+     * actually changed. */
+    stored = keyring_lookup_password (access_method, server, port, service, user);
+    unchanged = (g_strcmp0 (stored, password) == 0);
+    g_free (stored);
+    if (unchanged)
+        return;
+#endif
 
-    if (port == 0)
-        secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
-                                    label, password, NULL, &error,
-                                    "protocol", access_method,
-                                    "server", server,
-                                    "user", user,
-                                    NULL);
-    else
-        secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
-                                    label, password, NULL, &error,
-                                    "protocol", access_method,
-                                    "server", server,
-                                    "port", port,
-                                    "user", user,
-                                    NULL);
-
-    g_free(label);
-
-    if (error != NULL)
+#ifdef HAVE_LIBSECRET
     {
-        PWARN ("libsecret error: %s", error->message);
-        PWARN ("The user will be prompted for a password again next time.");
-        g_error_free(error);
+        GError *error = NULL;
+        gchar *label = g_strdup_printf ("GnuCash password for %s://%s@%s",
+                                        access_method, user, server);
+        if (port == 0)
+            secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                        label, password, NULL, &error,
+                                        "protocol", access_method,
+                                        "server", server,
+                                        "user", user,
+                                        NULL);
+        else
+            secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                        label, password, NULL, &error,
+                                        "protocol", access_method,
+                                        "server", server,
+                                        "port", port,
+                                        "user", user,
+                                        NULL);
+        g_free (label);
+        if (error != NULL)
+        {
+            PWARN ("libsecret error: %s", error->message);
+            PWARN ("The user will be prompted for a password again next time.");
+            g_error_free (error);
+        }
     }
 #elif HAVE_GNOME_KEYRING
-    GnomeKeyringResult  gkr_result;
-    guint32 item_id = 0;
-
-    g_return_if_fail(access_method != NULL && server != NULL &&
-                     service != NULL && user != NULL && password != NULL);
-
-    gkr_result = gnome_keyring_set_network_password_sync
-        (NULL, user, NULL, server, service,
-         access_method, NULL, port, password, &item_id);
-
-    if (gkr_result != GNOME_KEYRING_RESULT_OK)
     {
-        PWARN ("Gnome-keyring error: %s",
-               gnome_keyring_result_to_message(gkr_result));
-        PWARN ("The user will be prompted for a password again next time.");
+        guint32 item_id = 0;
+        GnomeKeyringResult gkr_result = gnome_keyring_set_network_password_sync
+            (NULL, user, NULL, server, service,
+             access_method, NULL, port, password, &item_id);
+        if (gkr_result != GNOME_KEYRING_RESULT_OK)
+        {
+            PWARN ("Gnome-keyring error: %s",
+                   gnome_keyring_result_to_message (gkr_result));
+            PWARN ("The user will be prompted for a password again next time.");
+        }
     }
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
-    OSStatus status;
-    SecKeychainItemRef *itemRef = NULL;
-
-    g_return_if_fail(access_method != NULL && server != NULL &&
-                     service != NULL && user != NULL && password != NULL);
-    /* mysql and postgres aren't valid protocols on Mac OS X.
-     * So we use the security domain parameter to allow us to
-     * distinguish between these two.
-     */
-    // FIXME I'm not sure this works if a password was already in the keychain
-    //       I may have to do a lookup first and if it exists, run some
-    //       update function instead
-    status =
-        SecKeychainAddInternetPassword (NULL, /* keychain */
-                                        strlen(server), server, /* servername */
-                                        strlen(access_method),
-                                        access_method,  /* securitydomain */
-                                        strlen(user), user, /* accountname */
-                                        strlen(service), service, /* path */
-                                        port, /* port */
-                                        kSecProtocolTypeAny, /* protocol */
-                                        kSecAuthenticationTypeDefault, /* auth type */
-                                        strlen(password),
-                                        password, /* passworddata */
-                                        itemRef );
-
-    if ( status != noErr )
     {
-        gnc_log_osx_keychain_error ("gnc_keyring_set_password", status);
-        PWARN ( "The user will be prompted for a password again next time." );
+        OSStatus status =
+            store_osx_keychain_password (access_method, server, port, service,
+                                         user, password);
+        if (status != noErr)
+        {
+            log_osx_keychain_error ("gnc_keyring_set_password", status);
+            PWARN ("The user will be prompted for a password again next time.");
+        }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 }
@@ -347,7 +441,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         }
         else
         {
-            gnc_log_osx_keychain_error ("gnc_keyring_get_password", status);
+            log_osx_keychain_error ("gnc_keyring_get_password", status);
         }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
