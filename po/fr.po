@@ -38,17 +38,19 @@
 # Martin LORANG <wablate@lorang.net>, 2024.
 # Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
 # Frédéric Mergey <fmergey@yahoo.com>, 2025, 2026.
+# Christophe Vu-Brugier <cvubrugier@users.noreply.hosted.weblate.org>, 2026.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
+"PO-Revision-Date: 2026-11-07 20:36+0000\n"
+"Last-Translator: Christophe Vu-Brugier "
+"<cvubrugier@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -56,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -33049,7 +33051,7 @@ msgstr "Importe des comptes depuis un fichier CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
 msgid "Import _Transactions from CSV…"
-msgstr "Importer des _transactions depuis un ficher CSV…"
+msgstr "Importer des _transactions depuis un fichier CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
