@@ -42,8 +42,8 @@ void write_dom_node_to_file (xmlNodePtr node, int fd);
 int files_compare (const gchar* f1, const gchar* f2);
 
 gboolean print_dom_tree (gpointer data_for_children,
-                         GSList* data_from_children,
-                         GSList* sibling_data, gpointer parent_data,
+                         const sixtp_child_result_list& data_from_children,
+                         const sixtp_child_result_list& sibling_data, gpointer parent_data,
                          gpointer global_data, gpointer* result,
                          const gchar* tag);
 
