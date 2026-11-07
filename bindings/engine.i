@@ -24,6 +24,7 @@
 #include <glib.h>
 
 #include <config.h>
+#include <glib/gi18n.h>
 #include "qof.h"
 #include "qoflog.h"
 #include "Query.h"
@@ -267,12 +268,14 @@ gnc_account_foreach_split_between_dates (const Account* account,
     {
         gchar *start_text = qof_print_date (*start);
         gchar *end_text = qof_print_date (*end);
-        SCM date_args = scm_list_2 (scm_from_utf8_string (start_text),
-                                    scm_from_utf8_string (end_text));
+        gchar *message = g_strdup_printf (_("Start date %s is after end date %s."),
+                                          start_text, end_text);
+        SCM message_arg = scm_from_utf8_string (message);
         g_free (start_text);
         g_free (end_text);
-        scm_misc_error ("gnc-account-foreach-split-between-dates",
-                        "start date ~A is after end date ~A", date_args);
+        g_free (message);
+        scm_throw (scm_from_utf8_symbol ("report-parameters-error"),
+                   scm_list_1 (message_arg));
     }
 
     auto cb = [&](auto s) { scm_call_1 (scm_cb, gnc_split_to_scm (s)); };

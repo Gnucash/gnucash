@@ -88,7 +88,12 @@
          (gnc:html-table-cell-append-objects!
           contents-cell
           (match (gnc:apply-with-error-handling
-                  (lambda () (gnc:report-render-html subreport #f)) '())
+                  (lambda ()
+                    (catch 'report-parameters-error
+                      (lambda () (gnc:report-render-html subreport #f))
+                      (lambda (key message)
+                        (gnc:report-parameters-error-html message))))
+                  '())
             ((html #f) html)
             ((_ captured-error)
              (gnc:make-html-text

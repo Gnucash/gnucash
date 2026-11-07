@@ -85,6 +85,7 @@
 (export gnc:report-needs-save?)
 (export gnc:report-options)
 (export gnc:report-render-html)
+(export gnc:report-parameters-error-html)
 (export gnc:render-report)
 (export gnc:report-serialize)
 (export gnc:report-add-anchor!)         ;add anchor, returns the integer key
@@ -787,11 +788,25 @@ not found.")))
                (gnc:report-set-dirty?! report #f)  ;; mark it clean
                html)))))
 
-;; render report. will return a 2-element list: either (list html #f)
-;; where html is the report html string, or (list #f captured-error)
-;; where captured-error is the error string.
+;; Render user-facing content for report parameter errors.
+(define (gnc:report-parameters-error-html message)
+  (gnc:html-make-generic-simple-warning
+   (G_ "Invalid report parameters") message))
+
+;; Render report. It will return a 2-element list: either (list html #f)
+;; where html is the report HTML string, or (list #f captured-error)
+;; where captured-error is the backtrace/error string. A recognized
+;; parameter error is rendered as an HTML page instead.
 (define (gnc:render-report report)
-  (define (get-report) (gnc:report-render-html report #t))
+  (define (get-report)
+    (catch 'report-parameters-error
+      (lambda () (gnc:report-render-html report #t))
+      (lambda (key message)
+        (let ((doc (gnc:make-html-document)))
+          (gnc:html-document-set-title! doc (G_ "Invalid report parameters"))
+          (gnc:html-document-add-object!
+           doc (gnc:report-parameters-error-html message))
+          (gnc:html-document-render doc #t)))))
   (gnc:apply-with-error-handling get-report '()))
 
 ;; "thunk" should take the report-type and the report template record
