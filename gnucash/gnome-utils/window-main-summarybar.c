@@ -141,7 +141,6 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
     GNCCurrencyAcc *grand_total_accum = NULL;
     GNCCurrencyAcc *non_curr_accum = NULL;
     GList *children, *node;
-    gboolean non_currency = FALSE;
 
     if (parent == NULL) return;
 
@@ -152,6 +151,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
         QofBook *book = gnc_account_get_book (account);
         GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
         gnc_commodity *to_curr = options.default_currency;
+        gboolean non_currency = FALSE;
 
         account_type = xaccAccountGetType(account);
         account_currency = xaccAccountGetCommodity(account);
