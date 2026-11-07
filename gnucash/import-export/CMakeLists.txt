@@ -11,6 +11,7 @@ add_subdirectory(customer-import)
 add_subdirectory(log-replay)
 add_subdirectory(ofx)
 add_subdirectory(qif-imp)
+add_subdirectory(sie4)
 
 
 set (generic_import_SOURCES
@@ -81,5 +82,6 @@ set_local_dist(import_export_DIST_local CMakeLists.txt ${generic_import_SOURCES}
 set(import_export_DIST ${import_export_DIST_local} ${aqbanking_DIST} ${bi_import_DIST}
         ${csv_export_DIST} ${csv_import_DIST} ${customer_import_DIST}
         ${log_report_DIST} ${ofx_DIST} ${qif_DIST} ${qif_import_DIST}
+        ${sie4_export_DIST}
         ${test_generic_import_DIST}
         PARENT_SCOPE)
