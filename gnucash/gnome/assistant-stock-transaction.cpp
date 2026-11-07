@@ -2275,7 +2275,7 @@ void
 PageCapGain::prepare(StockTransactionEntry* entry)
 {
     entry->set_memo(get_memo());
-    if (gnc_numeric_check(m_value.get()))
+    if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     entry->set_account(m_account.get());
     g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
