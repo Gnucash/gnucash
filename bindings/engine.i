@@ -29,6 +29,7 @@
 #include "Query.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-pricedb.h"
@@ -261,6 +262,18 @@ gnc_account_foreach_split_between_dates (const Account* account,
     std::optional<time64> start, end;
     if (scm_is_exact_integer (start_date)) start = scm_to_int64 (start_date);
     if (scm_is_exact_integer (end_date))   end = scm_to_int64 (end_date);
+
+    if (start && end && *start > *end)
+    {
+        gchar *start_text = qof_print_date (*start);
+        gchar *end_text = qof_print_date (*end);
+        SCM date_args = scm_list_2 (scm_from_utf8_string (start_text),
+                                    scm_from_utf8_string (end_text));
+        g_free (start_text);
+        g_free (end_text);
+        scm_misc_error ("gnc-account-foreach-split-between-dates",
+                        "start date ~A is after end date ~A", date_args);
+    }
 
     auto cb = [&](auto s) { scm_call_1 (scm_cb, gnc_split_to_scm (s)); };
     gnc_account_foreach_split_between_dates (account, start, end, incl_descendants, cb);
