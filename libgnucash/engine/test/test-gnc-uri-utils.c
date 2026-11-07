@@ -212,7 +212,7 @@ test_gnc_uri_get_components()
         gint32 tport     = 0;
 
         gnc_uri_get_components( strs[i].uri, &tprotocol, &thostname,
-                                &tport, &tusername, &tpassword, &tpath );
+                                &tport, &tusername, &tpassword, &tpath, NULL );
         g_assert_cmpstr ( tprotocol, ==, strs[i].protocol );
         g_assert_cmpstr ( thostname, ==, strs[i].hostname );
         g_assert_cmpstr ( tusername, ==, strs[i].username );
@@ -268,7 +268,7 @@ test_gnc_uri_create_uri()
         gchar *turi = NULL;
 
         turi = gnc_uri_create_uri( strs[i].protocol, strs[i].hostname, strs[i].port,
-                                   strs[i].username, strs[i].password, strs[i].path );
+                                   strs[i].username, strs[i].password, strs[i].path, NULL );
         g_assert_cmpstr ( turi, ==, strs[i].created_uri );
         g_free(turi);
     }
@@ -319,6 +319,74 @@ test_gnc_uri_is_file_uri()
     }
 }
 
+/* TEST: query-string handling (used for the opt-in "compress" connection option) */
+static void
+test_gnc_uri_query_component()
+{
+    gchar *scheme = NULL, *hostname = NULL, *username = NULL,
+          *password = NULL, *path = NULL, *query = NULL;
+    gint32 port = 0;
+    gchar *uri = NULL;
+
+    /* A query string must be split off the path, not folded into the db name */
+    gnc_uri_get_components ("mysql://dbuser:dbpass@db.gnucash.org/gnucash?compress=true",
+                            &scheme, &hostname, &port, &username, &password,
+                            &path, &query);
+    g_assert_cmpstr (path, ==, "gnucash");
+    g_assert_cmpstr (query, ==, "compress=true");
+    g_free (scheme); g_free (hostname); g_free (username);
+    g_free (password); g_free (path); g_free (query);
+
+    /* Multiple query parameters are preserved verbatim; splitting the
+     * key=value pairs is the consumer's job (GLib's g_uri_parse_params),
+     * not this function's. */
+    scheme = hostname = username = password = path = query = NULL;
+    gnc_uri_get_components ("mysql://db.gnucash.org/gnucash?compress=true&foo=bar",
+                            &scheme, &hostname, &port, &username, &password,
+                            &path, &query);
+    g_assert_cmpstr (path, ==, "gnucash");
+    g_assert_cmpstr (query, ==, "compress=true&foo=bar");
+    g_free (scheme); g_free (hostname); g_free (username);
+    g_free (password); g_free (path); g_free (query);
+
+    /* Passing NULL for the query out-param must still strip it from the path */
+    scheme = hostname = username = password = path = NULL;
+    gnc_uri_get_components ("mysql://db.gnucash.org/gnucash?compress=true",
+                            &scheme, &hostname, &port, &username, &password,
+                            &path, NULL);
+    g_assert_cmpstr (path, ==, "gnucash");
+    g_free (scheme); g_free (hostname); g_free (username);
+    g_free (password); g_free (path);
+
+    /* A uri without a query yields a NULL query */
+    query = NULL;
+    scheme = hostname = username = password = path = NULL;
+    gnc_uri_get_components ("mysql://db.gnucash.org/gnucash",
+                            &scheme, &hostname, &port, &username, &password,
+                            &path, &query);
+    g_assert_null (query);
+    g_free (scheme); g_free (hostname); g_free (username);
+    g_free (password); g_free (path);
+
+    /* gnc_uri_create_uri must append the query */
+    uri = gnc_uri_create_uri ("mysql", "db.gnucash.org", 0, "dbuser", "dbpass",
+                              "gnucash", "compress=true");
+    g_assert_cmpstr (uri, ==, "mysql://dbuser:dbpass@db.gnucash.org/gnucash?compress=true");
+    g_free (uri);
+
+    /* ... and a NULL query must not add a '?' */
+    uri = gnc_uri_create_uri ("mysql", "db.gnucash.org", 0, "dbuser", "dbpass",
+                              "gnucash", NULL);
+    g_assert_cmpstr (uri, ==, "mysql://dbuser:dbpass@db.gnucash.org/gnucash");
+    g_free (uri);
+
+    /* The query must round-trip through normalize (password hidden here) */
+    uri = gnc_uri_normalize_uri ("mysql://dbuser:dbpass@db.gnucash.org/gnucash?compress=true",
+                                 FALSE);
+    g_assert_cmpstr (uri, ==, "mysql://dbuser@db.gnucash.org/gnucash?compress=true");
+    g_free (uri);
+}
+
 void
 test_suite_gnc_uri_utils(void)
 {
@@ -326,6 +394,7 @@ test_suite_gnc_uri_utils(void)
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_scheme()", test_gnc_uri_get_scheme);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_path()", test_gnc_uri_get_path);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_create_uri()", test_gnc_uri_create_uri);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_query_component()", test_gnc_uri_query_component);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_normalize_uri()", test_gnc_uri_normalize_uri);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_scheme()", test_gnc_uri_is_file_scheme);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_uri()", test_gnc_uri_is_file_uri);

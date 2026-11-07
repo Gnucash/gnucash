@@ -113,6 +113,7 @@ public:
 
 /* ================================================================= */
 /* ================================================================= */
+
 struct UriStrings
 {
     UriStrings() = default;
@@ -127,15 +128,17 @@ struct UriStrings
     std::string m_username;
     std::string m_password;
     std::string m_basename;
+    std::string m_query;
     int m_portnum;
+    bool m_compress = false;
 };
 
 UriStrings::UriStrings(const std::string& uri)
 {
-    gchar *scheme, *host, *username, *password, *dbname;
+    gchar *scheme, *host, *username, *password, *dbname, *query;
     int portnum;
     gnc_uri_get_components(uri.c_str(), &scheme, &host, &portnum, &username,
-                           &password, &dbname);
+                           &password, &dbname, &query);
     m_protocol = std::string{scheme};
     m_host = std::string{host};
     if (dbname)
@@ -144,12 +147,34 @@ UriStrings::UriStrings(const std::string& uri)
         m_username = std::string{username};
     if (password)
         m_password = std::string{password};
+    if (query)
+    {
+        m_query = std::string{query};
+        /* Parse the URI query string ("key=value&key=value") with GLib's
+         * standard parser rather than rolling our own. */
+        GError* qerr = nullptr;
+        GHashTable* params = g_uri_parse_params(query, -1, "&",
+                                                G_URI_PARAMS_NONE, &qerr);
+        if (params)
+        {
+            auto val = static_cast<const char*>(
+                g_hash_table_lookup(params, "compress"));
+            m_compress = (val != nullptr &&
+                          (g_ascii_strcasecmp(val, "true") == 0 ||
+                           g_ascii_strcasecmp(val, "1") == 0 ||
+                           g_ascii_strcasecmp(val, "yes") == 0 ||
+                           g_ascii_strcasecmp(val, "on") == 0));
+            g_hash_table_destroy(params);
+        }
+        g_clear_error(&qerr);
+    }
     m_portnum = portnum;
     g_free(scheme);
     g_free(host);
     g_free(username);
     g_free(password);
     g_free(dbname);
+    g_free(query);
 }
 
 std::string
@@ -221,6 +246,21 @@ GncDbiBackend<Type>::set_standard_connection_options (dbi_conn conn,
             auto err = dbi_conn_error(conn, &msg);
             PERR("Error (%d) setting port option to %d: %s", err, uri.m_portnum, msg);
             throw std::runtime_error(msg);
+        }
+        /* Opt-in client/server protocol compression. Only MySQL's libdbi driver
+         * supports this (maps to CLIENT_COMPRESS); it is requested via a
+         * "compress" flag in the connection URI's query string. Failure to
+         * enable it is non-fatal: fall back to an uncompressed connection. */
+        if (Type == DbType::DBI_MYSQL && uri.m_compress)
+        {
+            auto cresult = dbi_conn_set_option_numeric(conn, "mysql_client_compress", 1);
+            if (cresult < 0)
+            {
+                const char *msg = nullptr;
+                auto err = dbi_conn_error(conn, &msg);
+                PWARN("Error (%d) enabling MySQL client compression: %s",
+                      err, msg);
+            }
         }
     }
     catch (std::runtime_error& err)
