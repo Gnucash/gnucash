@@ -246,12 +246,67 @@ test_variable_expressions()
     success("variable found");
 }
 
+/* The parser stores identifiers and string literals in a fixed 128-byte
+ * buffer. Over-long tokens and unterminated string literals must be
+ * rejected with an error rather than overflowing it or reading past the
+ * end of the input. */
+static void
+test_overlong_tokens (void)
+{
+    static const gsize name_max = 127; /* sizeof (parser_env.name) - 1 */
+    gchar *errLoc = NULL;
+    GHashTable *vars = g_hash_table_new (g_str_hash, g_str_equal);
+    GString* exp = g_string_sized_new (name_max + 10);
+    GString* name = g_string_sized_new (name_max + 1);
+
+    /* The longest identifier that fits is still accepted as a variable. */
+    g_string_set_size (name, name_max);                  /* sets len = n, keeps NUL terminator */
+    memset (name->str, 'a', name_max);
+    g_string_printf (exp, "1 + %s", name->str);
+
+    gnc_numeric num;
+    do_test (gnc_exp_parser_parse_separate_vars (exp->str, &num, &errLoc, vars), "identifier of maximum length parses");
+    do_test (g_hash_table_size (vars) == 1, "maximum-length identifier is registered as a variable");
+    g_hash_table_destroy (vars);
+
+    /* over-long variable name */
+    g_string_append_c (name, 'a');
+    g_string_printf (exp, "1 + %s", name->str);
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse (exp->str, &num, &errLoc), "over-long identifier is rejected");
+
+    /* over-long function name */
+    g_string_printf (exp, "%s(1)", name->str);
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse (exp->str, &num, &errLoc), "over-long function name is rejected");
+
+    /* over-long string literal as a function argument */
+    g_string_printf (exp, "abs(\"%s\")", name->str);
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse (exp->str, &num, &errLoc), "over-long string literal is rejected");
+
+    /* over-long, unterminated string literal */
+    g_string_printf (exp, "abs(\"%s", name->str);
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse (exp->str, &num, &errLoc), "over-long unterminated string literal is rejected");
+    g_string_free (name, TRUE);
+    g_string_free (exp, TRUE);
+
+    /* short unterminated string literals */
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse ("\"abc", &num, &errLoc), "unterminated string literal is rejected");
+    errLoc = NULL;
+    do_test (!gnc_exp_parser_parse ("abs(\"", &num, &errLoc), "lone opening quote is rejected");
+    success ("over-long tokens rejected");
+}
+
 static void
 real_main (void *closure, int argc, char **argv)
 {
     /* set_should_print_success (TRUE); */
     test_parser();
     test_variable_expressions();
+    test_overlong_tokens();
     print_test_results();
     exit(get_rv());
 }
