@@ -71,6 +71,9 @@ InvoiceWindow* gnc_ui_invoice_duplicate (GtkWindow* parent, GncInvoice* old_invo
 /* Search for invoices */
 GNCSearchWindow * gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book);
 
+/* Search for bills owned by a vendor job or charged back to a customer job. */
+GNCSearchWindow * gnc_bill_search_for_job (GtkWindow *parent, GncJob *job, QofBook *book);
+
 void gnc_business_call_owner_report (GtkWindow* parent, GncOwner *owner, Account *acc);
 
 void gnc_business_call_owner_report_with_enddate (GtkWindow* parent,
