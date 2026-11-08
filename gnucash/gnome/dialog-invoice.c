@@ -47,6 +47,7 @@
 #include "dialog-search.h"
 #include "search-param.h"
 #include "search-currency.h"
+#include "search-owner.h"
 #include "gnc-session.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
@@ -3551,8 +3552,8 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                _("Total Amount"), NULL, type,
                                                INVOICE_TOTAL, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Invoice Owner"), NULL, type,
-                                               INVOICE_OWNER, NULL);
+                                               _("Invoice Owner"), GNC_SEARCH_TYPE_INVOICE_OWNER, type,
+                                               INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice Notes"), NULL, type,
                                                INVOICE_NOTES, NULL);
@@ -3597,8 +3598,8 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                 _("Chargeback Customer"), GNC_ID_OWNER, type,
                                                 INVOICE_BILLTO, OWNER_PARENT, QOF_PARAM_GUID, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
-                                                _("Bill Owner"), NULL, type,
-                                                INVOICE_OWNER, NULL);
+                                                _("Bill Owner"), GNC_SEARCH_TYPE_BILL_OWNER, type,
+                                                INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill Notes"), NULL, type,
                                                 INVOICE_NOTES, NULL);
@@ -3637,8 +3638,8 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                _("Total Amount"), NULL, type,
                                                INVOICE_TOTAL, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Voucher Owner"), NULL, type,
-                                               INVOICE_OWNER, NULL);
+                                               _("Voucher Owner"), GNC_SEARCH_TYPE_VOUCHER_OWNER, type,
+                                               INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Voucher Notes"), NULL, type,
                                                INVOICE_NOTES, NULL);
