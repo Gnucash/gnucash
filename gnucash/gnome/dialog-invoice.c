@@ -3591,6 +3591,12 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                 _("Total Amount"), NULL, type,
                                                 INVOICE_TOTAL, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
+                                               _("Chargeback Job"), GNC_ID_JOB, type,
+                                               INVOICE_BILLTO, OWNER_JOB, QOF_PARAM_GUID, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Chargeback Customer"), GNC_ID_OWNER, type,
+                                                INVOICE_BILLTO, OWNER_PARENT, QOF_PARAM_GUID, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill Owner"), NULL, type,
                                                 INVOICE_OWNER, NULL);
         bill_params = gnc_search_param_prepend (bill_params,

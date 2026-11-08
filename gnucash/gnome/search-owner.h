@@ -30,6 +30,8 @@ G_DECLARE_FINAL_TYPE (GNCSearchOwner, gnc_search_owner, GNC, SEARCH_OWNER, GNCSe
 
 GNCSearchOwner  *gnc_search_owner_new   (void);
 
+GNCSearchOwner  *gnc_search_job_new     (void);
+
 /* methods */
 
 #endif /* ! _GNCSEARCH_OWNER_H */

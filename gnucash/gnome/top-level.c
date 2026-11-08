@@ -419,6 +419,8 @@ gnc_main_gui_init (void)
     /* Register the Owner search type */
     gnc_search_core_register_type (GNC_OWNER_MODULE_NAME,
                                     (GNCSearchCoreNew) gnc_search_owner_new);
+    gnc_search_core_register_type (GNC_ID_JOB,
+                                    (GNCSearchCoreNew) gnc_search_job_new);
     gnc_business_urls_initialize ();
     gnc_business_options_gnome_initialize ();
 

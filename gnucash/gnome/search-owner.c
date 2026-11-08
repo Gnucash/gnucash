@@ -52,6 +52,7 @@ struct _GNCSearchOwner
     GNCSearchCoreType parent_instance;
 
     QofGuidMatch    how;
+    gboolean       job_only;
 
     GncOwner    owner;
     GtkWindow * parent;
@@ -112,6 +113,15 @@ GNCSearchOwner *
 gnc_search_owner_new (void)
 {
     GNCSearchOwner *o = g_object_new(gnc_search_owner_get_type (), NULL);
+    return o;
+}
+
+GNCSearchOwner *
+gnc_search_job_new (void)
+{
+    GNCSearchOwner *o = gnc_search_owner_new ();
+    o->job_only = TRUE;
+    gncOwnerInitJob (&o->owner, NULL);
     return o;
 }
 
@@ -256,8 +266,13 @@ gncs_get_widget (GNCSearchCoreType *fe)
      * Note that this will build the owner_choice and
      * put it in the owner_box we just created.
      */
-    type_menu = make_type_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
+    if (fi->job_only)
+        set_owner_widget (fi);
+    else
+    {
+        type_menu = make_type_menu (fe);
+        gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
+    }
 
     /* connect the owner box */
     gtk_box_pack_start (GTK_BOX (box), fi->owner_box, FALSE, FALSE, 3);
@@ -290,6 +305,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 
     se = gnc_search_owner_new ();
     se->how = fse->how;
+    se->job_only = fse->job_only;
     gncOwnerCopy (&(fse->owner), &(se->owner));
 
     return (GNCSearchCoreType *)se;
