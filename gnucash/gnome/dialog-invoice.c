@@ -3499,8 +3499,9 @@ free_invoice_cb (gpointer user_data)
     g_free (sw);
 }
 
-GNCSearchWindow *
-gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book)
+static GNCSearchWindow *
+gnc_invoice_search_internal (GtkWindow *parent, GncInvoice *start, GncOwner *owner,
+                             QofBook *book, GncOwner *billto)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     struct _invoice_select_window *sw;
@@ -3756,6 +3757,14 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
         }
     }
 
+    if (billto && gncOwnerGetGUID (billto))
+    {
+        qof_query_add_guid_match (q, qof_query_build_param_list
+                                  (INVOICE_BILLTO, QOF_PARAM_GUID, NULL),
+                                  gncOwnerGetGUID (billto), QOF_QUERY_AND);
+        q2 = qof_query_copy (q);
+    }
+
     /* Launch select dialog and return the result */
     sw = g_new0 (struct _invoice_select_window, 1);
 
@@ -3795,6 +3804,29 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                      buttons, NULL, new_invoice_cb,
                                      sw, free_invoice_cb, GNC_PREFS_GROUP_SEARCH,
                                      label, style_class);
+}
+
+GNCSearchWindow *
+gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book)
+{
+    return gnc_invoice_search_internal (parent, start, owner, book, NULL);
+}
+
+GNCSearchWindow *
+gnc_bill_search_for_job (GtkWindow *parent, GncJob *job, QofBook *book)
+{
+    GncOwner owner, vendor;
+
+    g_return_val_if_fail (job, NULL);
+
+    gncOwnerInitJob (&owner, job);
+
+    if (gncOwnerGetType (gncOwnerGetEndOwner (&owner)) == GNC_OWNER_VENDOR)
+        return gnc_invoice_search (parent, NULL, &owner, book);
+
+    /* A customer job is linked to a vendor bill through its chargeback owner. */
+    gncOwnerInitVendor (&vendor, NULL);
+    return gnc_invoice_search_internal (parent, NULL, &vendor, book, &owner);
 }
 
 DialogQueryView *
