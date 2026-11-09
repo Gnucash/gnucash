@@ -31,43 +31,44 @@
 #include <optional>
 
 #include "gnc-xml-helper.h"
+#include "gnc-xml-sax-node.h"
 
-std::optional<GncGUID> dom_tree_to_guid (xmlNodePtr node);
+std::optional<GncGUID> dom_tree_to_guid (GncXmlNode* node);
 
 std::string gnc_strstrip (std::string_view sv);
 
-gnc_commodity* dom_tree_to_commodity_ref (xmlNodePtr node, QofBook* book);
-gnc_commodity* dom_tree_to_commodity_ref_no_engine (xmlNodePtr node, QofBook*);
+gnc_commodity* dom_tree_to_commodity_ref (GncXmlNode* node, QofBook* book);
+gnc_commodity* dom_tree_to_commodity_ref_no_engine (GncXmlNode* node, QofBook*);
 
-GList* dom_tree_freqSpec_to_recurrences (xmlNodePtr node, QofBook* book);
-Recurrence* dom_tree_to_recurrence (xmlNodePtr node);
+GList* dom_tree_freqSpec_to_recurrences (GncXmlNode* node, QofBook* book);
+Recurrence* dom_tree_to_recurrence (GncXmlNode* node);
 
-time64 dom_tree_to_time64 (xmlNodePtr node);
-gboolean dom_tree_valid_time64 (time64 ts, const xmlChar* name);
-GDate* dom_tree_to_gdate (xmlNodePtr node);
-gnc_numeric dom_tree_to_gnc_numeric (xmlNodePtr node);
-std::optional<std::string> dom_tree_to_text (xmlNodePtr tree);
-const char* dom_node_to_text (xmlNodePtr node) noexcept;
+time64 dom_tree_to_time64 (GncXmlNode* node);
+gboolean dom_tree_valid_time64 (time64 ts, const char* name);
+GDate* dom_tree_to_gdate (GncXmlNode* node);
+gnc_numeric dom_tree_to_gnc_numeric (GncXmlNode* node);
+std::optional<std::string> dom_tree_to_text (GncXmlNode* tree);
+const char* dom_node_to_text (GncXmlNode* node) noexcept;
 gboolean string_to_binary (const gchar* str,  void** v, guint64* data_len);
-gboolean dom_tree_create_instance_slots (xmlNodePtr node, QofInstance* inst);
+gboolean dom_tree_create_instance_slots (GncXmlNode* node, QofInstance* inst);
 
-gboolean dom_tree_to_integer (xmlNodePtr node, gint64* daint);
-gboolean dom_tree_to_guint16 (xmlNodePtr node, guint16* i);
-gboolean dom_tree_to_guint (xmlNodePtr node, guint* i);
-gboolean dom_tree_to_boolean (xmlNodePtr node, gboolean* b);
+gboolean dom_tree_to_integer (GncXmlNode* node, gint64* daint);
+gboolean dom_tree_to_guint16 (GncXmlNode* node, guint16* i);
+gboolean dom_tree_to_guint (GncXmlNode* node, guint* i);
+gboolean dom_tree_to_boolean (GncXmlNode* node, gboolean* b);
 
 /* higher level structures */
-Account* dom_tree_to_account (xmlNodePtr node, QofBook* book);
-QofBook* dom_tree_to_book (xmlNodePtr node, QofBook* book);
-GNCLot*  dom_tree_to_lot (xmlNodePtr node, QofBook* book);
-Transaction* dom_tree_to_transaction (xmlNodePtr node, QofBook* book);
-GncBudget* dom_tree_to_budget (xmlNodePtr node, QofBook* book);
+Account* dom_tree_to_account (GncXmlNode* node, QofBook* book);
+QofBook* dom_tree_to_book (GncXmlNode* node, QofBook* book);
+GNCLot*  dom_tree_to_lot (GncXmlNode* node, QofBook* book);
+Transaction* dom_tree_to_transaction (GncXmlNode* node, QofBook* book);
+GncBudget* dom_tree_to_budget (GncXmlNode* node, QofBook* book);
 
 struct dom_tree_handler
 {
     const char* tag;
 
-    gboolean (*handler) (xmlNodePtr, gpointer data);
+    gboolean (*handler) (GncXmlNode*, gpointer data);
 
     int required;
     int gotten;
@@ -76,7 +77,7 @@ struct dom_tree_handler
 template <typename T, typename F,
           std::enable_if_t<std::is_invocable_r_v<void, F, const char*>, int> = 0>
 inline T
-apply_xmlnode_text (F&& f, xmlNodePtr node, T default_val = T{})
+apply_xmlnode_text (F&& f, GncXmlNode* node, T default_val = T{})
 {
     if (!node)
         return default_val;
@@ -93,7 +94,7 @@ apply_xmlnode_text (F&& f, xmlNodePtr node, T default_val = T{})
 template <typename Obj, typename F,
           std::enable_if_t<std::is_invocable_r_v<void, F, Obj*, const char*>, int> = 0>
 inline bool
-apply_xmlnode_text (F&& f, Obj* obj, xmlNodePtr node)
+apply_xmlnode_text (F&& f, Obj* obj, GncXmlNode* node)
 {
     auto set_str = [&](auto txt)
     {
@@ -103,7 +104,7 @@ apply_xmlnode_text (F&& f, Obj* obj, xmlNodePtr node)
     return apply_xmlnode_text<bool> (set_str, node, false);
 }
 
-gboolean dom_tree_generic_parse (xmlNodePtr node,
+gboolean dom_tree_generic_parse (GncXmlNode* node,
                                  struct dom_tree_handler* handlers,
                                  gpointer data);
 

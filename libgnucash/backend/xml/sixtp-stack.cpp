@@ -141,8 +141,16 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
 
     if (initial_parser->start_handler)
     {
+        /* Pass the caller-supplied top_level_data itself (typically NULL,
+           meaning "no parent") as parent_data here, matching how
+           sixtp_context_run_end_handler passes ctxt->top_frame_data (not
+           its address) as parent_data to the top frame's end_handler.
+           Passing &ret->top_frame_data instead would hand start_handler
+           the address of this context's own field as a bogus non-NULL
+           "parent", which a DOM-building start_handler would then try to
+           read/link into as if it were a real parent node. */
         if (!initial_parser->start_handler (NULL,
-                                            &ret->top_frame_data,
+                                            ret->top_frame_data,
                                             &ret->data.global_data,
                                             &ret->top_frame->data_for_children,
                                             &ret->top_frame->frame_data,

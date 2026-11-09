@@ -371,7 +371,7 @@ gnc_counter_end_handler (gpointer data_for_children,
 {
     gint64 val;
     char* type;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     sixtp_gdv2* sixdata = (sixtp_gdv2*)gdata->parsedata;
     gboolean ret = TRUE;
@@ -390,7 +390,7 @@ gnc_counter_end_handler (gpointer data_for_children,
      *
      * This is invalid xml because the namespace isn't declared in the
      * tag itself. This should be changed to 'type' at some point. */
-    type = (char*)xmlGetProp (tree, BAD_CAST "cd:type");
+    type = gnc_xml_get_prop (tree, "cd:type");
     if (!apply_xmlnode_text<bool> ([&val](auto txt){ return string_to_gint64 (txt, &val);}, tree))
     {
         auto strval = dom_tree_to_text (tree);
@@ -448,8 +448,8 @@ gnc_counter_end_handler (gpointer data_for_children,
         }
     }
 
-    xmlFree (type);
-    xmlFreeNode (tree);
+    g_free (type);
+    gnc_xml_node_free (tree);
     return ret;
 }
 

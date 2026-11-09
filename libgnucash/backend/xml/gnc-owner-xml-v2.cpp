@@ -97,7 +97,7 @@ struct owner_pdata
 };
 
 static gboolean
-owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
+owner_type_handler (GncXmlNode* node, gpointer owner_pdata)
 {
     struct owner_pdata* pdata = static_cast<decltype (pdata)> (owner_pdata);
     GncOwner* owner = pdata->owner;
@@ -116,7 +116,7 @@ owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
 }
 
 static gboolean
-owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
+owner_id_handler (GncXmlNode* node, gpointer owner_pdata)
 {
     struct owner_pdata* pdata = static_cast<decltype (pdata)> (owner_pdata);
 
@@ -185,7 +185,7 @@ static struct dom_tree_handler owner_handlers_v2[] =
 };
 
 gboolean
-gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner* owner, QofBook* book)
+gnc_dom_tree_to_owner (GncXmlNode* node, GncOwner* owner, QofBook* book)
 {
     struct owner_pdata owner_pdata;
     gboolean successful;

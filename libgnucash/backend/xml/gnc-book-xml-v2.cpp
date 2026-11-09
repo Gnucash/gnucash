@@ -111,7 +111,7 @@ write_book_parts (FILE* out, QofBook* book)
 /* ================================================================ */
 
 static gboolean
-book_id_handler (xmlNodePtr node, gpointer book_pdata)
+book_id_handler (GncXmlNode* node, gpointer book_pdata)
 {
     QofBook* book = static_cast<decltype (book)> (book_pdata);
 
@@ -122,7 +122,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
 }
 
 static gboolean
-book_slots_handler (xmlNodePtr node, gpointer book_pdata)
+book_slots_handler (GncXmlNode* node, gpointer book_pdata)
 {
     QofBook* book = static_cast<decltype (book)> (book_pdata);
     gboolean success;
@@ -150,7 +150,7 @@ gnc_book_end_handler (gpointer data_for_children,
                       gpointer parent_data, gpointer global_data,
                       gpointer* result, const gchar* tag)
 {
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -167,7 +167,7 @@ gnc_book_end_handler (gpointer data_for_children,
     if (!book)
         gdata->cb (tag, gdata->parsedata, book);
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return book != NULL;
 }
@@ -179,7 +179,7 @@ gnc_book_id_end_handler (gpointer data_for_children,
                          gpointer* result, const gchar* tag)
 {
     gboolean successful;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -189,7 +189,7 @@ gnc_book_id_end_handler (gpointer data_for_children,
     g_return_val_if_fail (tree, FALSE);
 
     successful = book_id_handler (tree, book);
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return successful;
 }
@@ -201,7 +201,7 @@ gnc_book_slots_end_handler (gpointer data_for_children,
                             gpointer* result, const gchar* tag)
 {
     gboolean successful;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -211,13 +211,13 @@ gnc_book_slots_end_handler (gpointer data_for_children,
     g_return_val_if_fail (tree, FALSE);
 
     successful = book_slots_handler (tree, book);
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return successful;
 }
 
 QofBook*
-dom_tree_to_book (xmlNodePtr node, QofBook* book)
+dom_tree_to_book (GncXmlNode* node, QofBook* book)
 {
     gboolean successful;
 

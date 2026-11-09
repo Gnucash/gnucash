@@ -208,7 +208,7 @@ squash_extra_whitespace (char* text)
 }
 
 static char*
-grab_clean_string (xmlNodePtr tree)
+grab_clean_string (GncXmlNode* tree)
 {
     auto txt = dom_tree_to_text (tree);
     auto str = g_strdup (txt ? txt->c_str() : "");
@@ -224,7 +224,7 @@ gnc_short_descrip_end_handler (gpointer data_for_children,
     GncExampleAccount* gea =
         (GncExampleAccount*) ((gxpf_data*)global_data)->parsedata;
 
-    gea->short_description = grab_clean_string ((xmlNodePtr)data_for_children);
+    gea->short_description = grab_clean_string ((GncXmlNode*)data_for_children);
 
     return TRUE;
 }
@@ -244,7 +244,7 @@ gnc_long_descrip_end_handler (gpointer data_for_children,
     GncExampleAccount* gea =
         (GncExampleAccount*) ((gxpf_data*)global_data)->parsedata;
 
-    gea->long_description = grab_clean_string ((xmlNodePtr)data_for_children);
+    gea->long_description = grab_clean_string ((GncXmlNode*)data_for_children);
 
     return TRUE;
 }
@@ -265,7 +265,7 @@ gnc_excludep_end_handler (gpointer data_for_children,
         (GncExampleAccount*) ((gxpf_data*)global_data)->parsedata;
     gint64 val = 0;
 
-    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    dom_tree_to_integer ((GncXmlNode*)data_for_children, &val);
     gea->exclude_from_select_all = (val ? TRUE : FALSE);
 
     return TRUE;
@@ -287,7 +287,7 @@ gnc_selected_end_handler (gpointer data_for_children,
         (GncExampleAccount*) ((gxpf_data*)global_data)->parsedata;
     gint64 val = 0;
 
-    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    dom_tree_to_integer ((GncXmlNode*)data_for_children, &val);
     gea->start_selected = (val ? TRUE : FALSE);
 
     return TRUE;
@@ -308,7 +308,7 @@ gnc_title_end_handler (gpointer data_for_children,
     GncExampleAccount* gea =
         (GncExampleAccount*) ((gxpf_data*)global_data)->parsedata;
 
-    gea->title = grab_clean_string ((xmlNodePtr)data_for_children);
+    gea->title = grab_clean_string ((GncXmlNode*)data_for_children);
 
     return TRUE;
 }

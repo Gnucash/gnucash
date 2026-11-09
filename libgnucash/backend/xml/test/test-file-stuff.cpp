@@ -48,7 +48,7 @@
 */
 /***********************************************************************/
 
-extern KvpFrame* dom_tree_to_kvp_frame (xmlNodePtr node);
+extern KvpFrame* dom_tree_to_kvp_frame (GncXmlNode* node);
 
 static int
 files_return (int ret, const char* msg)
@@ -110,25 +110,23 @@ print_dom_tree (gpointer data_for_children, GSList* data_from_children,
 {
     if (parent_data == NULL)
     {
-        xmlElemDump ((FILE*)global_data, NULL, (xmlNodePtr)data_for_children);
-        xmlFreeNode (static_cast<xmlNodePtr> (data_for_children));
+        gnc_xml_node_dump ((FILE*)global_data, (GncXmlNode*)data_for_children);
+        gnc_xml_node_free (static_cast<GncXmlNode*> (data_for_children));
     }
     return TRUE;
 }
 
 gboolean
-check_dom_tree_version (xmlNodePtr node,  const char* verstr)
+check_dom_tree_version (GncXmlNode* node,  const char* verstr)
 {
     char* verteststr;
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (verstr, FALSE);
     g_return_val_if_fail (node->properties, FALSE);
-    g_return_val_if_fail (node->properties->xmlAttrPropertyValue, FALSE);
-    g_return_val_if_fail (node->properties->xmlAttrPropertyValue->content,
-                          FALSE);
+    g_return_val_if_fail (node->properties->value, FALSE);
 
-    verteststr = (char*) node->properties->xmlAttrPropertyValue->content;
+    verteststr = node->properties->value;
     if (g_strcmp0 (verstr, verteststr) == 0)
     {
         return TRUE;
@@ -140,7 +138,7 @@ check_dom_tree_version (xmlNodePtr node,  const char* verstr)
 }
 
 gboolean
-equals_node_val_vs_string (xmlNodePtr node, const gchar* str)
+equals_node_val_vs_string (GncXmlNode* node, const gchar* str)
 {
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (str, FALSE);
@@ -163,7 +161,7 @@ equals_node_val_vs_string (xmlNodePtr node, const gchar* str)
 }
 
 gboolean
-equals_node_val_vs_int (xmlNodePtr node, gint64 val)
+equals_node_val_vs_int (GncXmlNode* node, gint64 val)
 {
     gint64 test_val;
 
@@ -180,13 +178,13 @@ equals_node_val_vs_int (xmlNodePtr node, gint64 val)
 }
 
 gboolean
-equals_node_val_vs_boolean (xmlNodePtr node, gboolean val)
+equals_node_val_vs_boolean (GncXmlNode* node, gboolean val)
 {
     return equals_node_val_vs_string (node, val ? "TRUE" : "FALSE");
 }
 
 gboolean
-equals_node_val_vs_guid (xmlNodePtr node, const GncGUID* id)
+equals_node_val_vs_guid (GncXmlNode* node, const GncGUID* id)
 {
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (id, FALSE);
@@ -206,7 +204,7 @@ equals_node_val_vs_guid (xmlNodePtr node, const GncGUID* id)
 }
 
 gboolean
-equals_node_val_vs_commodity (xmlNodePtr node, const gnc_commodity* com,
+equals_node_val_vs_commodity (GncXmlNode* node, const gnc_commodity* com,
                               QofBook* book)
 {
     gnc_commodity* cmpcom;
@@ -231,7 +229,7 @@ equals_node_val_vs_commodity (xmlNodePtr node, const gnc_commodity* com,
 }
 
 gboolean
-equals_node_val_vs_kvp_frame (xmlNodePtr node, const KvpFrame* frm)
+equals_node_val_vs_kvp_frame (GncXmlNode* node, const KvpFrame* frm)
 {
     KvpFrame* cmpfrm;
 
@@ -260,7 +258,7 @@ equals_node_val_vs_kvp_frame (xmlNodePtr node, const KvpFrame* frm)
 }
 
 gboolean
-equals_node_val_vs_date (xmlNodePtr node, time64 time)
+equals_node_val_vs_date (GncXmlNode* node, time64 time)
 {
     return time == dom_tree_to_time64 (node);
 }
@@ -273,8 +271,8 @@ just_dom_tree_end_handler (gpointer data_for_children,
                            gpointer parent_data, gpointer global_data,
                            gpointer* result, const gchar* tag)
 {
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    xmlNodePtr* globaldata = (xmlNodePtr*)global_data;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
+    GncXmlNode** globaldata = (GncXmlNode**)global_data;
 
     if (parent_data)
     {
@@ -295,11 +293,11 @@ just_dom_tree_end_handler (gpointer data_for_children,
     return TRUE;
 }
 
-static xmlNodePtr
+static GncXmlNode*
 grab_file_doc (const char* filename)
 {
     sixtp* parser;
-    xmlNodePtr ret;
+    GncXmlNode* ret;
     gpointer parse_result = NULL;
 
     parser = sixtp_dom_parser_new (just_dom_tree_end_handler, NULL, NULL);
@@ -313,7 +311,7 @@ static void
 test_load_file (const char* filename, gxpf_callback cb, sixtp* top_parser,
                 QofBook* book)
 {
-    xmlNodePtr node;
+    GncXmlNode* node;
 
     node = grab_file_doc (filename);
 
@@ -330,7 +328,7 @@ test_load_file (const char* filename, gxpf_callback cb, sixtp* top_parser,
                       "%s", filename);
     }
 
-    xmlFreeNode (node);
+    gnc_xml_node_free (node);
 }
 
 void

@@ -50,7 +50,7 @@ const gchar* recurrence_version_string = "1.0.0";
 //TODO: I think three of these functions rightly belong in Recurrence.c.
 
 static gboolean
-recurrence_period_type_handler (xmlNodePtr node, gpointer d)
+recurrence_period_type_handler (GncXmlNode* node, gpointer d)
 {
     auto r = static_cast<Recurrence*>(d);
     auto set_ptype = [](Recurrence *r, const char* txt)
@@ -62,7 +62,7 @@ recurrence_period_type_handler (xmlNodePtr node, gpointer d)
 }
 
 static gboolean
-recurrence_start_date_handler (xmlNodePtr node, gpointer r)
+recurrence_start_date_handler (GncXmlNode* node, gpointer r)
 {
     GDate* d;
 
@@ -75,13 +75,13 @@ recurrence_start_date_handler (xmlNodePtr node, gpointer r)
 }
 
 static gboolean
-recurrence_mult_handler (xmlNodePtr node, gpointer r)
+recurrence_mult_handler (GncXmlNode* node, gpointer r)
 {
     return dom_tree_to_guint16 (node, & ((Recurrence*)r)->mult);
 }
 
 static gboolean
-recurrence_weekend_adj_handler (xmlNodePtr node, gpointer d)
+recurrence_weekend_adj_handler (GncXmlNode* node, gpointer d)
 {
     auto r = static_cast<Recurrence*>(d);
     auto set_wadj = [](Recurrence *r, const char* txt)
@@ -102,7 +102,7 @@ static struct dom_tree_handler recurrence_dom_handlers[] =
 };
 
 Recurrence*
-dom_tree_to_recurrence (xmlNodePtr node)
+dom_tree_to_recurrence (GncXmlNode* node)
 {
     gboolean successful;
     Recurrence* r;
@@ -114,7 +114,7 @@ dom_tree_to_recurrence (xmlNodePtr node)
     if (!successful)
     {
         PERR ("failed to parse recurrence node");
-        xmlElemDump (stdout, NULL, node);
+        gnc_xml_node_dump (stdout, node);
         g_free (r);
         r = NULL;
     }

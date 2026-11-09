@@ -54,12 +54,14 @@ test_string_converters (void)
     {
         const char* mark = test_strings[i];
         xmlNodePtr test_node = text_to_dom_tree ("test-string", mark);
-        auto backout = dom_tree_to_text (test_node);
+        auto conv_node = gnc_xml_node_from_libxml (test_node);
+        auto backout = dom_tree_to_text (conv_node);
 
         do_test_args (
             g_strcmp0 (backout->c_str(), mark) == 0,
             "string converting", __FILE__, __LINE__, "with string %s", mark);
 
+        gnc_xml_node_free (conv_node);
         xmlFreeNode (test_node);
     }
 }
@@ -70,12 +72,14 @@ test_bad_string (void)
     const char* badstr = "foo\abar";
     const char* sanitized = "foo?bar";
     xmlNodePtr test_node = text_to_dom_tree ("test-string", badstr);
+    auto conv_node = gnc_xml_node_from_libxml (test_node);
 
-    auto backout = dom_tree_to_text (test_node);
+    auto backout = dom_tree_to_text (conv_node);
     do_test_args (g_strcmp0 (backout->c_str(), sanitized) == 0,
                   "string sanitizing", __FILE__, __LINE__,
                   "with string %s", badstr);
 
+    gnc_xml_node_free (conv_node);
     xmlFreeNode (test_node);
 }
 
