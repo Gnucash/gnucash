@@ -67,8 +67,6 @@ gboolean string_to_guint16 (std::string_view, guint16* v);
 
 gboolean string_to_guint (std::string_view, guint* v);
 
-gboolean hex_string_to_binary (const gchar* str,  void** v, guint64* data_len);
-
 gboolean generic_return_chars_end_handler (gpointer data_for_children,
                                            GSList* data_from_children,
                                            GSList* sibling_data,
