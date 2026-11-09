@@ -24,7 +24,6 @@
 #include <glib.h>
 
 #include <config.h>
-#include <glib/gi18n.h>
 #include "qof.h"
 #include "qoflog.h"
 #include "Query.h"
@@ -268,7 +267,7 @@ gnc_account_foreach_split_between_dates (const Account* account,
     {
         gchar *start_text = qof_print_date (*start);
         gchar *end_text = qof_print_date (*end);
-        gchar *message = g_strdup_printf (_("Start date %s is after end date %s; swapping the dates."),
+        gchar *message = g_strdup_printf ("Start date %s is after end date %s; swapping the dates.",
                                           start_text, end_text);
         gnc_log_warn (message);
         g_free (start_text);
