@@ -44,7 +44,7 @@ Recurrence* dom_tree_to_recurrence (xmlNodePtr node);
 
 time64 dom_tree_to_time64 (xmlNodePtr node);
 gboolean dom_tree_valid_time64 (time64 ts, const xmlChar* name);
-GDate* dom_tree_to_gdate (xmlNodePtr node);
+std::optional<GDate> dom_tree_to_gdate (xmlNodePtr node);
 gnc_numeric dom_tree_to_gnc_numeric (xmlNodePtr node);
 std::optional<std::string> dom_tree_to_text (xmlNodePtr tree);
 const char* dom_node_to_text (xmlNodePtr node) noexcept;

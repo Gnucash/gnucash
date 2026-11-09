@@ -64,13 +64,10 @@ recurrence_period_type_handler (xmlNodePtr node, gpointer d)
 static gboolean
 recurrence_start_date_handler (xmlNodePtr node, gpointer r)
 {
-    GDate* d;
-
-    d = dom_tree_to_gdate (node);
+    auto d = dom_tree_to_gdate (node);
     g_return_val_if_fail (d, FALSE);
-    g_return_val_if_fail (g_date_valid (d), FALSE);
+    g_return_val_if_fail (g_date_valid (&d.value()), FALSE);
     ((Recurrence*) r)->start = *d;
-    g_date_free (d);
     return TRUE;
 }
 

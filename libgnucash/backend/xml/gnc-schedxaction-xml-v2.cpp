@@ -296,11 +296,9 @@ gboolean
 sx_set_date (xmlNodePtr node, SchedXaction* sx,
              void (*settor) (SchedXaction* sx, const GDate* d))
 {
-    GDate* date;
-    date = dom_tree_to_gdate (node);
+    auto date = dom_tree_to_gdate (node);
     g_return_val_if_fail (date, FALSE);
-    (*settor) (sx, date);
-    g_date_free (date);
+    (*settor) (sx, &date.value());
 
     return TRUE;
 }
@@ -467,14 +465,12 @@ static
 gboolean
 sx_defer_last_handler (xmlNodePtr node, gpointer gpTSD)
 {
-    GDate* gd;
     SXTmpStateData* tsd = (SXTmpStateData*)gpTSD;
 
     g_return_val_if_fail (node, FALSE);
-    gd = dom_tree_to_gdate (node);
+    auto gd = dom_tree_to_gdate (node);
     g_return_val_if_fail (gd, FALSE);
     tsd->last_date = *gd;
-    g_date_free (gd);
     return TRUE;
 }
 

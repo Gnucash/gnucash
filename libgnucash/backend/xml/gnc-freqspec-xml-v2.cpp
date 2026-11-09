@@ -155,12 +155,10 @@ gboolean
 fs_date_handler (xmlNodePtr node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
-    GDate*                foo;
-    foo = dom_tree_to_gdate (node);
-    if (foo == NULL)
+    auto foo = dom_tree_to_gdate (node);
+    if (!foo)
         return FALSE;
     fspd->once_day = *foo;
-    g_date_free (foo);
     return TRUE;
 }
 
