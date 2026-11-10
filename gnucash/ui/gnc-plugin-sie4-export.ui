@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder5">
+    <item>
+      <attribute name="label" translatable="yes">Export _SIE4…</attribute>
+      <attribute name="action">gnc-plugin-sie4-export-actions.Sie4ExportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the book to a Swedish SIE4 file</attribute>
+    </item>
+  </menu>
+
+</interface>
