@@ -68,6 +68,7 @@
 ;; Define the strings here to avoid typos and make changes easier.
 
 ;;Accounts
+(define optname-subacct (N_ "Include Sub-Accounts"))
 (define optname-accounts (N_ "Accounts"))
 (define optname-filterby (N_ "Filter By…"))
 (define optname-filtertype (N_ "Filter Type"))
@@ -647,6 +648,10 @@ be excluded from periodic reporting.")
   ;; Accounts options
 
   ;; account to do report on
+  (gnc-register-simple-boolean-option options
+    gnc:pagename-accounts optname-subacct
+    "a" (N_ "Include sub-accounts of all selected accounts.") #f)
+
   (gnc-register-account-list-option options
     gnc:pagename-accounts optname-accounts
     "a" (G_ "Report on these accounts.")
@@ -2216,8 +2221,12 @@ be excluded from periodic reporting.")
                      (lambda () (make-regexp account-matcher))
                      (const 'invalid-account-regex))
                    'no-guile-regex-support)))
+         (dosubs?    (opt-val gnc:pagename-accounts optname-subacct))
+         (accounts (opt-val gnc:pagename-accounts optname-accounts))
          (c_account_0 (or custom-source-accounts
-                          (opt-val gnc:pagename-accounts optname-accounts)))
+                          (if dosubs?
+                              (gnc-accounts-and-all-descendants accounts)
+                              accounts)))
          (acct? (lambda (acc)
                   (if (regexp? account-matcher-regexp)
                       (regexp-exec account-matcher-regexp
@@ -2228,7 +2237,8 @@ be excluded from periodic reporting.")
                           c_account_0
                           (filter (if account-matcher-neg (negate acct?) acct?)
                                   c_account_0)))
-         (c_account_2 (opt-val gnc:pagename-accounts optname-filterby))
+         (accounts_f (opt-val gnc:pagename-accounts optname-filterby))
+         (c_account_2 (if dosubs? (gnc-accounts-and-all-descendants accounts_f) accounts_f ))
          (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
          (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
