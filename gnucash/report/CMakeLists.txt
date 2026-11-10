@@ -62,6 +62,7 @@ set (report_SCHEME_1
     html-chart.scm
     html-document.scm
     html-fonts.scm
+    html-sankey.scm
     html-style-info.scm
     html-style-sheet.scm
     html-anytag.scm
