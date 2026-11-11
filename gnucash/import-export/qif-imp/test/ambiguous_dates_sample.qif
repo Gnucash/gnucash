@@ -1,0 +1,19 @@
+!Account
+NAssets:Savings
+^
+!Type:Bank
+D10/11/2026
+T1237.7
+PPension
+L[Income:Pension]
+^
+D09/11/2026
+T-59
+PGym membership
+L[Expenses:Gym]
+^
+D08/11/2026
+T-298.2
+PSchool fee
+L[Expenses:School]
+^

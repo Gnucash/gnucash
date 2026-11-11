@@ -1,9 +1,15 @@
 
 set(scm_qifimp_test_with_srfi64_SOURCES
   test-qif-imp.scm
+  test-qif-file-dates.scm
   test-qif-parse.scm
   test-qif-merge-groups.scm
   )
+
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/ambiguous_dates_sample.qif
+  ${CMAKE_CURRENT_BINARY_DIR}/ambiguous_dates_sample.qif
+  COPYONLY)
 
 set (GUILE_DEPENDS
   scm-app-utils
@@ -15,6 +21,8 @@ set (GUILE_DEPENDS
 
 if (HAVE_SRFI64)
   gnc_add_scheme_tests("${scm_qifimp_test_with_srfi64_SOURCES}")
+  set_tests_properties(test-qif-file-dates PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
   gnc_add_scheme_test_targets(scm-test-qif-imp-srfi64
     SOURCES "${scm_qifimp_test_with_srfi64_SOURCES}"
@@ -24,4 +32,5 @@ if (HAVE_SRFI64)
 endif()
 
 set_dist_list(test_qif_import_DIST CMakeLists.txt
-  ${scm_qifimp_test_with_srfi64_SOURCES})
+  ${scm_qifimp_test_with_srfi64_SOURCES}
+  ambiguous_dates_sample.qif)
