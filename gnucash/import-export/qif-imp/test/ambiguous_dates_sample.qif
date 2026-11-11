@@ -17,3 +17,10 @@ T-298.2
 PSchool fee
 L[Expenses:School]
 ^
+!Type:Prices
+"ABC",100.00,"10/11/2026"
+^
+"XYZ",25.50,"09/11/2026"
+^
+"FND",50.25,"08/11/2026"
+^
