@@ -263,7 +263,7 @@
                          (case tag
                            ;; D : transaction date
                            ((#\D)
-                            (qif-xtn:set-date! current-xtn value))
+                            (qif-xtn:set-datestr! current-xtn value))
 
                            ;; T : total amount
                            ((#\T)
@@ -380,7 +380,7 @@
                             (qif-xtn:set-from-acct! current-xtn
                                                     current-account-name)
 
-                            (if (qif-xtn:date current-xtn)
+                            (if (qif-xtn:datestr current-xtn)
                                 (qif-file:add-xtn! self current-xtn)
                                 ;; The date is missing! Warn the user.
                                 (mywarn (G_ "Date required.") " "
@@ -641,14 +641,26 @@
 
 ;; if the date format was ambiguous, this will get called to reparse.
 (define (qif-file:reparse-dates self new-format)
-  (check-and-parse-field
-   qif-xtn:date qif-xtn:set-date! equal?
-   qif-parse:check-date-format (list new-format)
-   qif-parse:parse-date/format
-   (qif-file:xtns self)
-   qif-parse:print-date
-   'error-on-ambiguity (lambda (t e) e) 'date
-   (lambda (fraction) #t)))
+  (let ((formats (list new-format))
+        (errorproc (lambda (t e) e))
+        (reporter (lambda (fraction) #t)))
+    (let ((prices-ok
+           (check-and-parse-field
+            qif-price:datestr qif-price:set-date! equal?
+            qif-parse:check-date-format formats
+            qif-parse:parse-date/format
+            (qif-file:prices self)
+            qif-parse:print-date
+            'error-on-ambiguity errorproc 'date reporter))
+          (xtns-ok
+           (check-and-parse-field
+            qif-xtn:datestr qif-xtn:set-date! equal?
+            qif-parse:check-date-format formats
+            qif-parse:parse-date/format
+            (qif-file:xtns self)
+            qif-parse:print-date
+            'error-on-ambiguity errorproc 'date reporter)))
+      (and prices-ok xtns-ok))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -820,7 +832,7 @@
       ;; Dates
       (start-sub 0.5)
       (check-and-parse-field
-       qif-price:date qif-price:set-date! equal?
+       qif-price:datestr qif-price:set-date! equal?
        qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
        qif-parse:parse-date/format
        (qif-file:prices self)
@@ -853,7 +865,7 @@
       ;; Dates; assume this is 15% of the transaction effort.
       (start-sub 0.15)
       (check-and-parse-field
-       qif-xtn:date qif-xtn:set-date! equal?
+       qif-xtn:datestr qif-xtn:set-date! equal?
        qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
        qif-parse:parse-date/format
        (qif-file:xtns self)
@@ -1159,7 +1171,7 @@
            (else
             (let ((xtn (make-qif-price)))
               (qif-price:set-symbol! xtn symbol)
-              (qif-price:set-date! xtn date)
+              (qif-price:set-datestr! xtn date)
               (qif-price:set-share-price! xtn (number->string value))
               xtn))))
          (_ #f))))
