@@ -2438,6 +2438,7 @@ update_file_page (QIFImportWindow * wind)
     while (!scm_is_null (loaded_file_list))
     {
         gchar *row_text    = NULL;
+        gchar *date_format_label = NULL;
         gchar *date_format_text = NULL;
         SCM    scm_qiffile = SCM_BOOL_F;
         SCM    date_format = SCM_BOOL_F;
@@ -2446,9 +2447,11 @@ update_file_page (QIFImportWindow * wind)
         row_text = gnc_scm_call_1_to_string (qif_file_path, scm_qiffile);
         date_format = scm_call_1 (qif_file_date_format, scm_qiffile);
         if (scm_is_symbol (date_format))
-            date_format_text = gnc_scm_symbol_to_locale_string (date_format);
+            date_format_label = gnc_scm_symbol_to_locale_string (date_format);
         else
-            date_format_text = g_strdup (_("Not set"));
+            date_format_label = g_strdup (_("Not set"));
+        date_format_text = g_strdup_printf (_("(date format: %s)"),
+                                            date_format_label);
 
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
@@ -2457,6 +2460,7 @@ update_file_page (QIFImportWindow * wind)
                             FILENAME_COL_DATE_FORMAT, date_format_text,
                             -1);
         g_free (row_text);
+        g_free (date_format_label);
         g_free (date_format_text);
 
         if (scm_qiffile == wind->selected_file)

@@ -751,10 +751,9 @@
            (set! error (list (cons t e)))
            (set! error (cons (cons t e) error))))
 
-     ;; The date format checks in prices and transactions share
-     ;; candidates in date-formats list and defer conversion until
-     ;; both both prices and transactions are inspected and a one
-     ;; file-wide format is identified.
+     ;; Price and transaction date checks share candidates in
+     ;; date-formats. After both checks, reparse-dates applies the
+     ;; common file-wide format to both groups.
      (define (record-date-formats formats has-values)
        (set! date-formats formats)
        (if has-values
@@ -843,8 +842,8 @@
       (set-sub (G_ "Parsing dates"))
       (start-sub 0.05)
       (start-sub 0.5)
-      ;; Prices narrow the the date-formats candidates first; no
-      ;; errors are recorded at this stage.
+      ;; Price dates narrow the candidates first; errors are deferred
+      ;; until transaction dates have been checked too.
       (let ((prices-ok
              (check-and-parse-field
               qif-price:datestr qif-price:set-date! equal?
@@ -856,8 +855,8 @@
               update-progress record-date-formats)))
         (finish-sub)
         (start-sub 0.5)
-        ;; Transactions further narrow the date-formats candidates
-        ;; left by prices; no errors are recorded at this stage.
+        ;; Transaction dates narrow the remaining candidates; errors
+        ;; are deferred until both groups have been checked.
         (let ((xtns-ok
                (check-and-parse-field
                 qif-xtn:datestr qif-xtn:set-date! equal?
@@ -884,8 +883,7 @@
                  (append (map qif-price:datestr (qif-file:prices self))
                          (map qif-xtn:datestr (qif-file:xtns self)))
                  qif-parse:print-date (lambda (t e) #t) 'date))
-            ;; Set chosen-date-format only after both Prices and
-            ;; Transactions groups agree on a format.
+            ;; Choose a format only after both groups agree.
             (set! chosen-date-format (car date-formats)))
            (else
             ;; Report ambiguity only after both groups have narrowed it.
@@ -1039,17 +1037,24 @@
 ;;
 ;;  This is a semi-generic routine to apply a format check and
 ;;  parsing routine to fields that can have multiple possible
-;;  formats.  In this case, any amount field cam be decimal or
-;;  comma radix and the date field can be any of several possible
-;;  types.
+;;  formats. Amounts can use decimal or comma notation, and dates can
+;;  have several possible formats.
 ;;
 ;;  The return value will be:
 ;;    success:   #t (including when ambiguity is deferred to the caller)
 ;;    failure:   #f (no format fits or parsing fails)
 ;;
+;;  Errors are passed to errorproc as (errortype value):
+;;    no matching format or parse failure: value is a message string
+;;    deferred ambiguity: value is the surviving format list; conversion
+;;                        is skipped
+;;  Equivalence checks may also send a message describing differing
+;;  interpretations. They omit this detail for dates.
+;;
 ;;  If formats-reporter is supplied, it is called once after checking all
 ;;  objects and before conversion. It receives the surviving format list
-;;  (empty if none) and a flag indicating whether any getter returned a value.
+;;  (empty if none) and a flag indicating whether any getter returned a
+;;  non-#f value.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (check-and-parse-field getter setter equiv-thunk checker
