@@ -10,6 +10,14 @@ configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/ambiguous_dates_sample.qif
   ${CMAKE_CURRENT_BINARY_DIR}/ambiguous_dates_sample.qif
   COPYONLY)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/ambiguous_prices_resolved_by_transactions.qif
+  ${CMAKE_CURRENT_BINARY_DIR}/ambiguous_prices_resolved_by_transactions.qif
+  COPYONLY)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/incompatible_price_transaction_dates.qif
+  ${CMAKE_CURRENT_BINARY_DIR}/incompatible_price_transaction_dates.qif
+  COPYONLY)
 
 set (GUILE_DEPENDS
   scm-app-utils
@@ -33,4 +41,6 @@ endif()
 
 set_dist_list(test_qif_import_DIST CMakeLists.txt
   ${scm_qifimp_test_with_srfi64_SOURCES}
-  ambiguous_dates_sample.qif)
+  ambiguous_dates_sample.qif
+  ambiguous_prices_resolved_by_transactions.qif
+  incompatible_price_transaction_dates.qif)
