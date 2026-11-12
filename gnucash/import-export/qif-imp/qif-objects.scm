@@ -79,8 +79,10 @@
 (export qif-file:add-price!)
 (export qif-file:prices)
 (export qif-file:cats)
+(export qif-file:date-format)
 (export qif-file:path)
 (export qif-file:path-to-accountname)
+(export qif-file:set-date-format!)
 (export qif-file:set-path!)
 (export qif-file:set-xtns!)
 (export qif-file:xtns)
@@ -170,6 +172,7 @@
 ;;  cats         : list of <qif-cat>  
 ;;  classes      : list of <qif-class>  
 ;;  prices       : list of <qif-price>
+;;  date-format  : selected date format symbol, or #f until determined
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-file>
@@ -177,6 +180,7 @@
    'qif-file 
    '(path                 ;; where file was loaded 
      y2k-threshold
+     date-format          ;; date format used for this file
      xtns                
      accounts 
      cats
@@ -194,6 +198,12 @@
 
 (define qif-file:y2k-threshold 
   (record-accessor <qif-file> 'y2k-threshold))
+
+(define qif-file:date-format
+  (record-accessor <qif-file> 'date-format))
+
+(define qif-file:set-date-format!
+  (record-modifier <qif-file> 'date-format))
 
 (define qif-file:set-y2k-threshold!
   (record-modifier <qif-file> 'y2k-threshold))
@@ -231,6 +241,7 @@
 (define (make-qif-file) 
   (let ((self (construct <qif-file>)))
     (qif-file:set-y2k-threshold! self 50)
+    (qif-file:set-date-format! self #f)
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
     (qif-file:set-cats! self '())

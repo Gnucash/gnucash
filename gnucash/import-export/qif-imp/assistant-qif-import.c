@@ -77,6 +77,7 @@ enum filename_cols
 {
     FILENAME_COL_INDEX = 0,
     FILENAME_COL_NAME,
+    FILENAME_COL_DATE_FORMAT,
     NUM_FILENAME_COLS
 };
 
@@ -2414,6 +2415,7 @@ update_file_page (QIFImportWindow * wind)
 {
     SCM       loaded_file_list = wind->imported_files;
     SCM       qif_file_path;
+    SCM       qif_file_date_format;
     int       row = 0;
     GtkTreeView *view;
     GtkListStore *store;
@@ -2429,23 +2431,33 @@ update_file_page (QIFImportWindow * wind)
     store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
     gtk_list_store_clear (store);
     qif_file_path = scm_c_eval_string ("qif-file:path");
+    qif_file_date_format = scm_c_eval_string ("qif-file:date-format");
 
     mark_page_complete (assistant, FALSE);
 
     while (!scm_is_null (loaded_file_list))
     {
         gchar *row_text    = NULL;
+        gchar *date_format_text = NULL;
         SCM    scm_qiffile = SCM_BOOL_F;
+        SCM    date_format = SCM_BOOL_F;
 
         scm_qiffile = SCM_CAR(loaded_file_list);
         row_text = gnc_scm_call_1_to_string (qif_file_path, scm_qiffile);
+        date_format = scm_call_1 (qif_file_date_format, scm_qiffile);
+        if (scm_is_symbol (date_format))
+            date_format_text = gnc_scm_symbol_to_locale_string (date_format);
+        else
+            date_format_text = g_strdup (_("Not set"));
 
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             FILENAME_COL_INDEX, row++,
                             FILENAME_COL_NAME, row_text,
+                            FILENAME_COL_DATE_FORMAT, date_format_text,
                             -1);
         g_free (row_text);
+        g_free (date_format_text);
 
         if (scm_qiffile == wind->selected_file)
         {
@@ -3768,7 +3780,8 @@ build_views (QIFImportWindow *wind)
 
     /* Set up the selected file view */
     view = GTK_TREE_VIEW(wind->selected_file_view);
-    store = gtk_list_store_new (NUM_FILENAME_COLS, G_TYPE_INT, G_TYPE_STRING);
+    store = gtk_list_store_new (NUM_FILENAME_COLS, G_TYPE_INT,
+                                G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
     g_object_unref (store);
 
@@ -3777,6 +3790,14 @@ build_views (QIFImportWindow *wind)
              renderer,
              "text",
              FILENAME_COL_NAME,
+             NULL);
+    gtk_tree_view_append_column (view, column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes ("unused",
+             renderer,
+             "text",
+             FILENAME_COL_DATE_FORMAT,
              NULL);
     gtk_tree_view_append_column (view, column);
 
