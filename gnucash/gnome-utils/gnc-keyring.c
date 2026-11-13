@@ -183,6 +183,59 @@ store_osx_keychain_password (const gchar *access_method, const gchar *server,
 }
 #endif /* HAVE_OSX_KEYCHAIN */
 
+#if defined(HAVE_LIBSECRET) || defined(HAVE_GNOME_KEYRING) || defined(HAVE_OSX_KEYCHAIN)
+/* Return a copy of the password currently stored in the keyring for these
+ * coordinates, or NULL if none is stored; the caller frees it with g_free().
+ * Unlike gnc_keyring_get_password() this performs no user interaction. */
+static gchar *
+keyring_lookup_password (const gchar *access_method, const gchar *server,
+                         guint32 port, const gchar *service, const gchar *user)
+{
+    gchar *stored = NULL;
+#ifdef HAVE_LIBSECRET
+    GError *error = NULL;
+    gchar *found;
+    if (port == 0)
+        found = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                             "protocol", access_method,
+                                             "server", server,
+                                             "user", user,
+                                             NULL);
+    else
+        found = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                             "protocol", access_method,
+                                             "server", server,
+                                             "port", port,
+                                             "user", user,
+                                             NULL);
+    if (found)
+    {
+        stored = g_strdup (found);
+        secret_password_free (found);
+    }
+    if (error)
+        g_error_free (error);
+#elif HAVE_GNOME_KEYRING
+    GList *found_list = NULL;
+    if (gnome_keyring_find_network_password_sync
+            (user, NULL, server, service, access_method, NULL, port,
+             &found_list) == GNOME_KEYRING_RESULT_OK && found_list)
+    {
+        GnomeKeyringNetworkPasswordData *found = found_list->data;
+        if (found->password)
+            stored = g_strdup (found->password);
+    }
+    if (found_list)
+        gnome_keyring_network_password_list_free (found_list);
+#endif
+#ifdef HAVE_OSX_KEYCHAIN
+    stored = find_osx_keychain_password (access_method, server, port, service,
+                                         user);
+#endif
+    return stored;
+}
+#endif /* any keyring backend */
+
 void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *server,
                                guint32 port,
@@ -190,12 +243,25 @@ void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *user,
                                const gchar* password)
 {
+#if defined(HAVE_LIBSECRET) || defined(HAVE_GNOME_KEYRING) || defined(HAVE_OSX_KEYCHAIN)
+    gchar *stored;
+    gboolean unchanged;
+
+    g_return_if_fail (access_method != NULL && server != NULL &&
+                      service != NULL && user != NULL && password != NULL);
+
+    /* Only (re)write the keyring when the stored password is missing or has
+     * actually changed. */
+    stored = keyring_lookup_password (access_method, server, port, service, user);
+    unchanged = (g_strcmp0 (stored, password) == 0);
+    g_free (stored);
+    if (unchanged)
+        return;
+#endif
+
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gchar* label = NULL;
-
-    g_return_if_fail(access_method != NULL && server != NULL &&
-                     service != NULL && user != NULL && password != NULL);
 
     label = g_strdup_printf("GnuCash password for %s://%s@%s", access_method, user, server);
 
@@ -227,9 +293,6 @@ void gnc_keyring_set_password (const gchar *access_method,
     GnomeKeyringResult  gkr_result;
     guint32 item_id = 0;
 
-    g_return_if_fail(access_method != NULL && server != NULL &&
-                     service != NULL && user != NULL && password != NULL);
-
     gkr_result = gnome_keyring_set_network_password_sync
         (NULL, user, NULL, server, service,
          access_method, NULL, port, password, &item_id);
@@ -243,9 +306,6 @@ void gnc_keyring_set_password (const gchar *access_method,
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
     OSStatus status;
-
-    g_return_if_fail(access_method != NULL && server != NULL &&
-                     service != NULL && user != NULL && password != NULL);
 
     status = store_osx_keychain_password (access_method, server, port,
                                           service, user, password);
