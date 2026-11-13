@@ -42,12 +42,13 @@ static QofLogModule log_module = "qof.kvp";
 
 KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
 {
+    this->m_valuemap.reserve(rhs.m_valuemap.size());
     std::for_each(rhs.m_valuemap.begin(), rhs.m_valuemap.end(),
         [this](const map_type::value_type & a)
         {
             auto key = qof_string_cache_insert(a.first);
             auto val = new KvpValueImpl(*a.second);
-            this->m_valuemap.insert({key,val});
+            this->m_valuemap.emplace_hint(this->m_valuemap.end(), key, val);
         }
     );
 }
