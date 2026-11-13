@@ -504,9 +504,11 @@ document.getElementById(chartid).onclick = function(evt) {
 }\n\n")
 
 (define (get-options-string chart)
-  (scm->json-string
-   (gnc:html-chart-get-options-internal chart)
-   #:pretty #t))
+  (string-join
+   (string-split
+    (scm->json-string (gnc:html-chart-get-options-internal chart) #:pretty #t)
+    #\<)
+   "\\u003c"))
 
 (define (gnc:html-chart-render chart doc)
 

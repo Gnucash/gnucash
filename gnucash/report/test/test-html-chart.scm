@@ -271,6 +271,13 @@ may share a page without sharing their variables"
       (test-assert "formats the y-axis ticks by default"
         (string-contains html "chartjsoptions.options.scales.y.ticks.callback")))
 
+    (gnc:html-chart-set-data-labels! chart '("</script><b>Cash & Shares</b>"))
+    (let ((html (render-chart chart)))
+      (test-assert "chart labels cannot terminate the inline script"
+        (not (string-contains html "</script><b>")))
+      (test-assert "script-safe JSON preserves literal label text"
+        (string-contains html "\\u003c/script>\\u003cb>Cash & Shares\\u003c/b>")))
+
     ;; a report may want the axis ticks left alone, see price-scatter
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
     (gnc:html-chart-set-custom-y-axis-ticks?! chart #f)
