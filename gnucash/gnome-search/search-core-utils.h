@@ -31,9 +31,12 @@ enum gnc_combo_search_cols
     NUM_GNC_COMBO_SEARCH_COLS,
 };
 
+G_BEGIN_DECLS
+
 GtkWidget *gnc_combo_box_new_search (void);
 void gnc_combo_box_search_add (GtkComboBox *combo, const gchar *text, guint value);
 guint gnc_combo_box_search_get_active (GtkComboBox *combo);
 void gnc_combo_box_search_set_active (GtkComboBox *combo, guint value);
 void gnc_combo_box_search_changed(GtkComboBox *combo, guint *value);
 
+G_END_DECLS

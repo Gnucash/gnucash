@@ -1,3 +1,4 @@
+add_subdirectory(test)
 
 set (gnome_search_SOURCES
   gnc-general-search.c
@@ -7,6 +8,7 @@ set (gnome_search_SOURCES
   search-boolean.c
   search-core-type.c
   search-core-utils.c
+  search-currency.cpp
   search-date.c
   search-double.c
   search-int64.c
@@ -26,13 +28,14 @@ set (gnome_search_noinst_HEADERS
   search-boolean.h
   search-core-type.h
   search-core-utils.h
+  search-currency.h
   search-date.h
   search-double.h
   search-int64.h
   search-numeric.h
   search-reconciled.h
   search-string.h
-)  
+)
 
 # Add dependency on config.h
 set_source_files_properties (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
