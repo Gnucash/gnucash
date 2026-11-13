@@ -230,7 +230,6 @@
                                                   (cons 'text "")))
                                     (cons 'tooltip (list
                                                     (cons 'mode 'index)
-                                                    (cons 'intersect #f)
                                                     (cons 'backgroundColor "rgba(36, 36, 36, 0.94)")
                                                     (cons 'titleMarginBottom 14)
                                                     (cons 'padding (list
@@ -286,7 +285,10 @@
 
 (define (gnc:html-chart-set-type! chart type)
   (gnc:html-chart-set! chart '(type) type)
-  (gnc:html-chart-set! chart '(options interaction intersect) (equal? type 'pie)))
+  (gnc:html-chart-set! chart '(options interaction intersect)
+                       (case type
+                         ((pie doughnut radar polarArea) #t)
+                         (else #f))))
 
 (define (gnc:html-chart-title chart)
   (gnc:html-chart-get chart '(options plugins title text)))

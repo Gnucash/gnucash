@@ -147,6 +147,8 @@
 
     ;; chart type. a pie chart requires the pointer to be over a slice
     (test-equal "default type is bar" 'bar (gnc:html-chart-type chart))
+    (test-equal "tooltips inherit shared intersection by default"
+      #f (assq 'intersect (gnc:html-chart-get chart '(options plugins tooltip))))
     (gnc:html-chart-set-type! chart 'pie)
     (test-equal "set-type! pie" 'pie (gnc:html-chart-type chart))
     (test-equal "set-type! pie requires intersect"
@@ -154,6 +156,34 @@
     (gnc:html-chart-set-type! chart 'line)
     (test-equal "set-type! line does not require intersect"
       #f (gnc:html-chart-get chart '(options interaction intersect)))
+
+    (for-each
+     (lambda (entry)
+       (let ((type (car entry))
+             (intersect? (cdr entry)))
+         (gnc:html-chart-set-type! chart type)
+         (test-equal (format #f "set-type! ~a hover intersection" type)
+           intersect? (gnc:html-chart-get chart '(options interaction intersect)))
+         (test-equal (format #f "set-type! ~a leaves tooltip intersection inherited" type)
+           #f (assq 'intersect (gnc:html-chart-get chart '(options plugins tooltip))))
+         (test-equal (format #f "set-type! ~a retains indexed tooltips" type)
+           'index (gnc:html-chart-get chart '(options plugins tooltip mode)))))
+     '((pie . #t) (line . #f) (doughnut . #t) (bar . #f)
+       (radar . #t) (line . #f) (polarArea . #t) (bar . #f)
+       (pie . #t) (scatter . #f) (bubble . #f) (doughnut . #t)))
+
+    (for-each
+     (lambda (intersect?)
+       (let ((custom-chart (gnc:make-html-chart)))
+         (gnc:html-chart-set! custom-chart '(options plugins tooltip intersect) intersect?)
+         (for-each
+          (lambda (type)
+            (gnc:html-chart-set-type! custom-chart type)
+            (test-equal (format #f "set-type! ~a preserves explicit tooltip intersection ~a"
+                                type intersect?)
+              intersect? (gnc:html-chart-get custom-chart '(options plugins tooltip intersect))))
+              '(pie doughnut radar polarArea bar line scatter bubble))))
+     '(#f #t))
 
     ;; title - a string, or a list of strings for a multi-line title
     (gnc:html-chart-set-title! chart "single line")
