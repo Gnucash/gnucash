@@ -263,7 +263,7 @@
                          (case tag
                            ;; D : transaction date
                            ((#\D)
-                            (qif-xtn:set-date! current-xtn value))
+                            (qif-xtn:set-datestr! current-xtn value))
 
                            ;; T : total amount
                            ((#\T)
@@ -380,7 +380,7 @@
                             (qif-xtn:set-from-acct! current-xtn
                                                     current-account-name)
 
-                            (if (qif-xtn:date current-xtn)
+                            (if (qif-xtn:datestr current-xtn)
                                 (qif-file:add-xtn! self current-xtn)
                                 ;; The date is missing! Warn the user.
                                 (mywarn (G_ "Date required.") " "
@@ -639,16 +639,31 @@
      (qif-file:xtns self))
     retval))
 
-;; if the date format was ambiguous, this will get called to reparse.
+;; Parse both date groups with the selected file format and retain it.
 (define (qif-file:reparse-dates self new-format)
-  (check-and-parse-field
-   qif-xtn:date qif-xtn:set-date! equal?
-   qif-parse:check-date-format (list new-format)
-   qif-parse:parse-date/format
-   (qif-file:xtns self)
-   qif-parse:print-date
-   'error-on-ambiguity (lambda (t e) e) 'date
-   (lambda (fraction) #t)))
+  (let ((formats (list new-format))
+        (errorproc (lambda (t e) e))
+        (reporter (lambda (fraction) #t)))
+    (let ((prices-ok
+           (check-and-parse-field
+            qif-price:datestr qif-price:set-date! equal?
+            qif-parse:check-date-format formats
+            qif-parse:parse-date/format
+            (qif-file:prices self)
+            qif-parse:print-date
+            'error-on-ambiguity errorproc 'date reporter #f))
+          (xtns-ok
+           (check-and-parse-field
+            qif-xtn:datestr qif-xtn:set-date! equal?
+            qif-parse:check-date-format formats
+            qif-parse:parse-date/format
+            (qif-file:xtns self)
+            qif-parse:print-date
+            'error-on-ambiguity errorproc 'date reporter #f)))
+      (let ((success (and prices-ok xtns-ok)))
+        (if success
+            (qif-file:set-date-format! self new-format))
+        success))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -671,7 +686,11 @@
   (define (private-parse)
    (let ((error #f)
          (update-count 0)
-         (all-ok #f))
+         (all-ok #f)
+         (date-formats '(m-d-y d-m-y y-m-d y-d-m))
+         (chosen-date-format #f)
+         (date-values-present? #f)
+         (date-parse-ok #t))
 
      ;; This procedure sets a suboperation name.
      (define (set-sub str)
@@ -732,6 +751,14 @@
            (set! error (list (cons t e)))
            (set! error (cons (cons t e) error))))
 
+     ;; Price and transaction date checks share candidates in
+     ;; date-formats. After both checks, reparse-dates applies the
+     ;; common file-wide format to both groups.
+     (define (record-date-formats formats has-values)
+       (set! date-formats formats)
+       (if has-values
+           (set! date-values-present? #t)))
+
 
      (and
       ;;
@@ -752,7 +779,7 @@
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'tax-class
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Budget amounts; this is the last task for category parsing.
@@ -763,7 +790,7 @@
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'budget-amt
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       (finish-sub)
@@ -784,7 +811,7 @@
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'limit
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Budget amounts; assume this is 20% of the account parsing effort.
@@ -795,7 +822,7 @@
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'budget
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Account types; this is the last task for account parsing.
@@ -810,24 +837,72 @@
       (finish-sub)
 
 
+      ;; Check price and transaction dates together because QIF uses one
+      ;; date format for the whole file.
+      (set-sub (G_ "Parsing dates"))
+      (start-sub 0.05)
+      (start-sub 0.5)
+      ;; Price dates narrow the candidates first; errors are deferred
+      ;; until transaction dates have been checked too.
+      (let ((prices-ok
+             (check-and-parse-field
+              qif-price:datestr qif-price:set-date! equal?
+              qif-parse:check-date-format date-formats
+              qif-parse:parse-date/format
+              (qif-file:prices self)
+              qif-parse:print-date
+              'error-on-ambiguity (lambda (t e) #t) 'date
+              update-progress record-date-formats)))
+        (finish-sub)
+        (start-sub 0.5)
+        ;; Transaction dates narrow the remaining candidates; errors
+        ;; are deferred until both groups have been checked.
+        (let ((xtns-ok
+               (check-and-parse-field
+                qif-xtn:datestr qif-xtn:set-date! equal?
+                qif-parse:check-date-format date-formats
+                qif-parse:parse-date/format
+                (qif-file:xtns self)
+                qif-parse:print-date
+                'error-on-ambiguity (lambda (t e) #t) 'date
+                update-progress record-date-formats)))
+          (finish-sub)
+          (finish-sub)
+          (set! date-parse-ok (and prices-ok xtns-ok))
+          (cond
+           ((or (not date-parse-ok) (null? date-formats))
+            (add-error 'date (G_ "Unrecognized or inconsistent format."))
+            (set! date-parse-ok #f))
+           ((not date-values-present?)
+            #t)
+           ((or (null? (cdr date-formats))
+                (all-formats-equivalent?
+                 (lambda (date) date)
+                 qif-parse:parse-date/format equal?
+                 date-formats
+                 (append (map qif-price:datestr (qif-file:prices self))
+                         (map qif-xtn:datestr (qif-file:xtns self)))
+                 qif-parse:print-date (lambda (t e) #t) 'date))
+            ;; Choose a format only after both groups agree.
+            (set! chosen-date-format (car date-formats)))
+           (else
+            ;; Report ambiguity only after both groups have narrowed it.
+            (add-error 'date date-formats)))
+          (if chosen-date-format
+              (begin
+                (set! date-parse-ok
+                      (qif-file:reparse-dates self chosen-date-format))
+                (if (not date-parse-ok)
+                    (add-error 'date (G_ "Parsing failed.")))))
+          date-parse-ok))
+
+
       ;;
       ;; Prices
       ;;
       (set-sub (G_ "Parsing prices"))
       ;; We process the list of prices
       (start-sub 0.05)
-
-      ;; Dates
-      (start-sub 0.5)
-      (check-and-parse-field
-       qif-price:date qif-price:set-date! equal?
-       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
-       qif-parse:parse-date/format
-       (qif-file:prices self)
-       qif-parse:print-date
-       'error-on-ambiguity add-error 'date
-       update-progress)
-      (finish-sub)
 
       ;; Amounts
       (start-sub 1)
@@ -837,7 +912,7 @@
        qif-parse:parse-number/format (qif-file:prices self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'share-price
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       (finish-sub)
@@ -849,18 +924,6 @@
       (set-sub (G_ "Parsing transactions"))
       ;; Transaction parsing takes up the rest of the overall parsing effort.
       (start-sub 1)
-
-      ;; Dates; assume this is 15% of the transaction effort.
-      (start-sub 0.15)
-      (check-and-parse-field
-       qif-xtn:date qif-xtn:set-date! equal?
-       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
-       qif-parse:parse-date/format
-       (qif-file:xtns self)
-       qif-parse:print-date
-       'error-on-ambiguity add-error 'date
-       update-progress)
-      (finish-sub)
 
       ;; Clear flags; assume this is 5% of the transaction effort.
       (start-sub 0.05)
@@ -888,7 +951,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'share-price
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Share quantities; assume this is 10% of the transaction effort.
@@ -899,7 +962,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'num-shares
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Commissions; assume this is 10% of the transaction effort.
@@ -910,7 +973,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'commission
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       ;; Splits; this is the rest of the transaction effort.
@@ -923,7 +986,7 @@
        qif-parse:parse-numbers/format (qif-file:xtns self)
        qif-parse:print-numbers
        'guess-on-ambiguity add-error 'split-amounts
-       update-progress)
+       update-progress #f)
       (finish-sub)
 
       (finish-sub)
@@ -974,15 +1037,30 @@
 ;;
 ;;  This is a semi-generic routine to apply a format check and
 ;;  parsing routine to fields that can have multiple possible
-;;  formats.  In this case, any amount field cam be decimal or
-;;  comma radix and the date field can be any of several possible
-;;  types.
+;;  formats. Amounts can use decimal or comma notation, and dates can
+;;  have several possible formats.
+;;
+;;  The return value will be:
+;;    success:   #t (including when ambiguity is deferred to the caller)
+;;    failure:   #f (no format fits or parsing fails)
+;;
+;;  Errors are passed to errorproc as (errortype value):
+;;    no matching format or parse failure: value is a message string
+;;    deferred ambiguity: value is the surviving format list; conversion
+;;                        is skipped
+;;  Equivalence checks may also send a message describing differing
+;;  interpretations. They omit this detail for dates.
+;;
+;;  If formats-reporter is supplied, it is called once after checking all
+;;  objects and before conversion. It receives the surviving format list
+;;  (empty if none) and a flag indicating whether any getter returned a
+;;  non-#f value.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (check-and-parse-field getter setter equiv-thunk checker
                                formats parser objects printer
                                on-error errorproc errortype
-                               reporter)
+                               reporter formats-reporter)
   (let* ((do-parsing #f)
          (retval #t)
          (format #f)
@@ -1003,10 +1081,17 @@
                   (set! formats (checker val formats))))
             (set! work-done (+ 1 work-done))
             (reporter (/ work-done work-to-do)))
-          (if (and (not (null? formats))
+          (if (and (pair? formats)
                    ;; (not (null? (cdr formats)))
                    (not (null? rest)))
               (loop (car rest) (cdr rest)))))
+
+    ;; Report back the surviving formats to the caller; this is used
+    ;; in parse-fields to narrow date-formats from Prices group to
+    ;; Transaction group as we assume that the date format is one for
+    ;; the entire QIF file.
+    (if formats-reporter
+        (formats-reporter (if (list? formats) formats '()) do-parsing))
 
     ;; if there's nothing left in formats, there's no format that will
     ;; fit all the values for a given field.  We have to give up at
@@ -1159,7 +1244,7 @@
            (else
             (let ((xtn (make-qif-price)))
               (qif-price:set-symbol! xtn symbol)
-              (qif-price:set-date! xtn date)
+              (qif-price:set-datestr! xtn date)
               (qif-price:set-share-price! xtn (number->string value))
               xtn))))
          (_ #f))))
