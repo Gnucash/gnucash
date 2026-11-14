@@ -15,12 +15,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
  * GNU General Public License for more details.                     *
  *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, see                            *
+ * <https://www.gnu.org/licenses/>.                                *
 \********************************************************************/
 
 #include <config.h>
@@ -29,10 +26,53 @@
 #include <glib/gi18n.h>
 
 #include "gnc-ui.h"
+#include "gnc-path.h"
 #include "dialog-utils.h"
 #include "dialog-object-references.h"
 
-static QofLogModule log_module = GNC_MOD_GUI;
+struct _GncObjectReferencesDialog
+{
+    GtkDialog parent_instance;
+    GtkLabel *lbl_explanation;
+    GtkWidget *hbox_list;
+    GtkTreeView *listview;
+};
+
+G_DEFINE_TYPE (GncObjectReferencesDialog, gnc_object_references_dialog, GTK_TYPE_DIALOG)
+
+static void
+gnc_object_references_dialog_init (GncObjectReferencesDialog *self)
+{
+    gtk_widget_init_template (GTK_WIDGET (self));
+    gtk_widget_set_name (GTK_WIDGET (self), "gnc-id-object-reference");
+    GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
+    self->listview = GTK_TREE_VIEW (gtk_tree_view_new_with_model (GTK_TREE_MODEL (store)));
+    g_object_unref (store);
+    GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
+    GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes ("Object", renderer, "text", 0, NULL);
+    gtk_tree_view_append_column (self->listview, column);
+    gtk_container_add (GTK_CONTAINER (self->hbox_list), GTK_WIDGET (self->listview));
+}
+
+static void
+gnc_object_references_dialog_class_init (GncObjectReferencesDialogClass *klass)
+{
+    gchar *directory = gnc_path_get_gtkbuilderdir ();
+    gchar *filename = g_build_filename (directory, "dialog-object-references.glade", NULL);
+    gchar *contents = NULL;
+    gsize length = 0;
+    GError *error = NULL;
+    if (!g_file_get_contents (filename, &contents, &length, &error))
+        g_error ("Could not load object references dialog: %s", error->message);
+    GBytes *template = g_bytes_new_take (contents, length);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+    gtk_widget_class_set_template (widget_class, template);
+    g_bytes_unref (template);
+    g_free (filename);
+    g_free (directory);
+    gtk_widget_class_bind_template_child (widget_class, GncObjectReferencesDialog, lbl_explanation);
+    gtk_widget_class_bind_template_child (widget_class, GncObjectReferencesDialog, hbox_list);
+}
 
 GStrv
 gnc_object_references_get_display_names (const GList *objects)
@@ -44,61 +84,21 @@ gnc_object_references_get_display_names (const GList *objects)
 }
 
 void
-gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
+gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
 {
-    GtkWidget* dialog;
-    GtkBuilder* builder;
-    GtkWidget* box;
+    GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG, NULL);
+    GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (dialog);
+    gtk_label_set_text (self->lbl_explanation, explanation_text);
     GStrv names = gnc_object_references_get_display_names (objlist);
-    GtkLabel* explanation;
-    GtkListStore* store;
-    GtkWidget* listview;
-    GtkTreeViewColumn* column;
-    GtkCellRenderer* renderer;
-
-    ENTER("");
-
-    /* Open the dialog */
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-object-references.glade", "object_references_dialog" );
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "object_references_dialog" ));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-object-reference");
-
-    explanation = GTK_LABEL(gtk_builder_get_object (builder, "lbl_explanation" ));
-    gtk_label_set_text( explanation, explanation_text );
-
-    /* Set up the list store */
-    store = gtk_list_store_new( 1, G_TYPE_STRING );
-    for (gchar **name = names; *name; ++name)
+    GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model (self->listview));
+    for (gchar **name = names; name && *name; ++name)
     {
         GtkTreeIter iter;
-
-        gtk_list_store_append( store, &iter );
-        gtk_list_store_set( store, &iter, 0, *name, -1 );
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter, 0, *name, -1);
     }
-
     g_strfreev (names);
-
-    /* Set up the list view */
-    listview = gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) );
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes( "Object", renderer, "text", 0, NULL );
-    gtk_tree_view_append_column( GTK_TREE_VIEW(listview), column );
-
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "hbox_list" ));
-    gtk_container_add( GTK_CONTAINER(box), listview );
-
-    /* Autoconnect signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
-
-    /* Run the dialog */
-    gtk_widget_show_all( dialog );
-    gtk_dialog_run( GTK_DIALOG(dialog) );
-    g_object_unref(G_OBJECT(builder));
-    g_object_unref (store);
-    gtk_widget_destroy( dialog );
-
-    LEAVE("");
+    gtk_widget_show_all (dialog);
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
 }

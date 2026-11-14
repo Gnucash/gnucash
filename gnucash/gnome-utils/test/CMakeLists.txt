@@ -36,4 +36,7 @@ gnc_add_test(test-object-references gtest-object-references.cpp
   object_references_test_INCLUDES object_references_test_LIBS)
 
 set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-load-gnome-utils-module.scm
-  gtest-object-references.cpp)
+  gtest-object-references.cpp gtest-object-references-dialog.cpp)
+
+gnc_add_test(test-object-references-dialog gtest-object-references-dialog.cpp
+  object_references_test_INCLUDES object_references_test_LIBS)
