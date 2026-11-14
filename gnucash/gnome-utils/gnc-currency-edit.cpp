@@ -54,6 +54,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include <algorithm>
+
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-gtk-utils.h"
@@ -75,6 +77,7 @@ struct _GNCCurrencyEdit
 {
     GtkComboBox combobox;
 
+    glong widest;
     gchar *mnemonic;
 };
 
@@ -295,6 +298,7 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
                         CURRENCY_COL_NAME, string,
                         CURRENCY_COL_NORMALIZED_FOLDED, normalized_folded,
                         -1);
+    gce->widest = std::max (gce->widest, g_utf8_strlen (string, -1));
     g_free (normalized_folded);
     g_free (normalized);
 }
@@ -317,6 +321,9 @@ fill_currencies(GNCCurrencyEdit *gce)
                  (gnc_get_current_commodities (), GNC_COMMODITY_NS_CURRENCY);
     g_list_foreach(currencies, (GFunc)add_item, gce);
     g_list_free(currencies);
+
+    auto entry = gtk_bin_get_child (GTK_BIN (gce));
+    gtk_entry_set_width_chars (GTK_ENTRY (entry), gce->widest);
 }
 
 
