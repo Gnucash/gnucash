@@ -1,5 +1,3 @@
-add_subdirectory(test)
-
 set (gnome_search_SOURCES
   gnc-general-search.c
   dialog-search.c
