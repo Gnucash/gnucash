@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 #include <cstdlib>
 #include "dialog-object-references.h"
+#include "gnc-path.h"
 
 namespace
 {
@@ -71,6 +72,62 @@ TEST (ObjectReferencesTemplateTest, MissingTemplateDoesNotAbortOrShowDialog)
         },
         ::testing::ExitedWithCode (0), "");
 }
+
+struct InvalidTemplate
+{
+    const char *xml;
+};
+
+class ObjectReferencesInvalidTemplateTest : public ::testing::TestWithParam<InvalidTemplate>
+{
+};
+
+TEST_P (ObjectReferencesInvalidTemplateTest, DoesNotShowIncompleteDialog)
+{
+    ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+    EXPECT_EXIT (
+        {
+            const auto invalid = GetParam ();
+            auto directory = g_dir_make_tmp ("gnc-object-template-XXXXXX", nullptr);
+            g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
+            g_setenv ("GNC_BUILDDIR", directory, TRUE);
+            auto ui_directory = gnc_path_get_gtkbuilderdir ();
+            g_mkdir_with_parents (ui_directory, 0700);
+            auto filename = g_build_filename (ui_directory, "dialog-object-references.glade", nullptr);
+            if (!g_file_set_contents (filename, invalid.xml, -1, nullptr))
+                std::exit (2);
+            g_test_expect_message ("gnc.gui", G_LOG_LEVEL_WARNING,
+                                   "*Could not initialize object references dialog template*");
+            gnc_ui_object_references_show ("Invalid template", nullptr);
+            g_test_assert_expected_messages ();
+            auto windows = gtk_window_list_toplevels ();
+            bool empty = windows == nullptr;
+            g_list_free (windows);
+            g_remove (filename);
+            g_free (filename);
+            for (auto path = ui_directory; g_str_has_prefix (path, directory);)
+            {
+                g_rmdir (path);
+                auto parent = g_path_get_dirname (path);
+                g_free (path);
+                path = parent;
+                if (!g_str_has_prefix (path, directory))
+                {
+                    g_free (path);
+                    break;
+                }
+            }
+            g_free (directory);
+            std::exit (empty ? 0 : 1);
+        },
+        ::testing::ExitedWithCode (0), "Error building template class|Unable to retrieve object");
+}
+
+INSTANTIATE_TEST_SUITE_P (InvalidFiles, ObjectReferencesInvalidTemplateTest,
+    ::testing::Values (
+        InvalidTemplate {"<interface><broken></interface>"},
+        InvalidTemplate {"<interface><template class=\"OtherDialog\" parent=\"GtkDialog\"/></interface>"},
+        InvalidTemplate {"<interface><template class=\"GncObjectReferencesDialog\" parent=\"GtkDialog\"/></interface>"}));
 
 TEST_F (ObjectReferencesDialogTest, DisplaysExplanationAndOrderedNames)
 {
