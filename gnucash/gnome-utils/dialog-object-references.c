@@ -38,6 +38,13 @@ struct _GncObjectReferencesDialog
     GtkTreeView *listview;
 };
 
+enum
+{
+    PROP_0,
+    PROP_EXPLANATION,
+    PROP_OBJECT_NAMES
+};
+
 G_DEFINE_TYPE (GncObjectReferencesDialog, gnc_object_references_dialog, GTK_TYPE_DIALOG)
 
 static void
@@ -55,8 +62,75 @@ gnc_object_references_dialog_init (GncObjectReferencesDialog *self)
 }
 
 static void
+gnc_object_references_dialog_set_property (GObject *object, guint prop_id,
+                                           const GValue *value, GParamSpec *pspec)
+{
+    GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
+    switch (prop_id)
+    {
+    case PROP_EXPLANATION:
+        gtk_label_set_text (self->lbl_explanation, g_value_get_string (value));
+        break;
+    case PROP_OBJECT_NAMES:
+    {
+        GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model (self->listview));
+        const gchar * const *names = g_value_get_boxed (value);
+        for (const gchar * const *name = names; name && *name; ++name)
+        {
+            GtkTreeIter iter;
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set (store, &iter, 0, *name, -1);
+        }
+        break;
+    }
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gnc_object_references_dialog_get_property (GObject *object, guint prop_id,
+                                           GValue *value, GParamSpec *pspec)
+{
+    GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
+    switch (prop_id)
+    {
+    case PROP_EXPLANATION:
+        g_value_set_string (value, gtk_label_get_text (self->lbl_explanation));
+        break;
+    case PROP_OBJECT_NAMES:
+    {
+        GStrvBuilder *names = g_strv_builder_new ();
+        GtkTreeModel *model = gtk_tree_view_get_model (self->listview);
+        GtkTreeIter iter;
+        for (gboolean valid = gtk_tree_model_get_iter_first (model, &iter); valid;
+             valid = gtk_tree_model_iter_next (model, &iter))
+        {
+            gchar *name = NULL;
+            gtk_tree_model_get (model, &iter, 0, &name, -1);
+            g_strv_builder_take (names, name);
+        }
+        g_value_take_boxed (value, g_strv_builder_unref_to_strv (names));
+        break;
+    }
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gnc_object_references_dialog_class_init (GncObjectReferencesDialogClass *klass)
 {
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    object_class->set_property = gnc_object_references_dialog_set_property;
+    object_class->get_property = gnc_object_references_dialog_get_property;
+    g_object_class_install_property (object_class, PROP_EXPLANATION,
+        g_param_spec_string ("explanation", "Explanation", "Explanation of the object references", "",
+                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+    g_object_class_install_property (object_class, PROP_OBJECT_NAMES,
+        g_param_spec_boxed ("object-names", "Object names", "Display names in list order", G_TYPE_STRV,
+                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
     gchar *directory = gnc_path_get_gtkbuilderdir ();
     gchar *filename = g_build_filename (directory, "dialog-object-references.glade", NULL);
     gchar *contents = NULL;
@@ -86,17 +160,10 @@ gnc_object_references_get_display_names (const GList *objects)
 void
 gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
 {
-    GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG, NULL);
-    GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (dialog);
-    gtk_label_set_text (self->lbl_explanation, explanation_text);
     GStrv names = gnc_object_references_get_display_names (objlist);
-    GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model (self->listview));
-    for (gchar **name = names; name && *name; ++name)
-    {
-        GtkTreeIter iter;
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, *name, -1);
-    }
+    GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
+                                      "explanation", explanation_text,
+                                      "object-names", names, NULL);
     g_strfreev (names);
     gtk_widget_show_all (dialog);
     gtk_dialog_run (GTK_DIALOG (dialog));
