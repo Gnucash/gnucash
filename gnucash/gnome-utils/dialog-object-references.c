@@ -34,13 +34,22 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
+GStrv
+gnc_object_references_get_display_names (const GList *objects)
+{
+    GStrvBuilder *names = g_strv_builder_new ();
+    for (const GList *node = objects; node; node = node->next)
+        g_strv_builder_take (names, qof_instance_get_display_name (node->data));
+    return g_strv_builder_unref_to_strv (names);
+}
+
 void
 gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 {
     GtkWidget* dialog;
     GtkBuilder* builder;
     GtkWidget* box;
-    GList* node;
+    GStrv names = gnc_object_references_get_display_names (objlist);
     GtkLabel* explanation;
     GtkListStore* store;
     GtkWidget* listview;
@@ -62,14 +71,15 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Set up the list store */
     store = gtk_list_store_new( 1, G_TYPE_STRING );
-    for ( node = objlist; node != NULL; node = node->next )
+    for (gchar **name = names; *name; ++name)
     {
-        QofInstance* inst = node->data;
         GtkTreeIter iter;
 
         gtk_list_store_append( store, &iter );
-        gtk_list_store_set( store, &iter, 0, qof_instance_get_display_name( inst ), -1 );
+        gtk_list_store_set( store, &iter, 0, *name, -1 );
     }
+
+    g_strfreev (names);
 
     /* Set up the list view */
     listview = gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) );

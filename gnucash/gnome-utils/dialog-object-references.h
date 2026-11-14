@@ -40,6 +40,12 @@ extern "C" {
  *  that object may be deleted.
  */
 
+/** Copy the display names of a borrowed list of QofInstance objects.
+ * @param objects Objects in display order; neither list nor objects are retained.
+ * @return An owned NULL-terminated string vector, freed with g_strfreev().
+ */
+GStrv gnc_object_references_get_display_names (const GList *objects);
+
 void gnc_ui_object_references_show( const gchar* explanation, GList* objlist );
 
 /** @} */
