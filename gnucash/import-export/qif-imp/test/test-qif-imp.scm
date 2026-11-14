@@ -67,14 +67,14 @@
         (model (make-qif-price)))
     (qif-price:set-symbol! model "ABC")
     (qif-price:set-share-price! model "1")
-    (qif-price:set-date! model "1/1/04")
+    (qif-price:set-datestr! model "1/1/04")
     (test-equal "parse-price-line-decimal" model parsed))
 
   (let ((parsed (qif-file:parse-price-line "\"ABC\",1 3/4,\"1/1' 4\""))
         (model (make-qif-price)))
     (qif-price:set-symbol! model "ABC")
     (qif-price:set-share-price! model "7/4")
-    (qif-price:set-date! model "1/1' 4")
+    (qif-price:set-datestr! model "1/1' 4")
     (test-equal "parse-price-line-fraction" parsed model))
 
   (let ((parsed (qif-file:parse-price-line "\"ABC\",,\"1/1' 4\"")))
