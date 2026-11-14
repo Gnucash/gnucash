@@ -6,6 +6,8 @@
 #include <glib/gstdio.h>
 #include <gtest/gtest.h>
 #include <cstdlib>
+#include <clocale>
+#include <libintl.h>
 #include "dialog-object-references.h"
 #include "gnc-path.h"
 
@@ -15,6 +17,12 @@ class GtkEnvironment : public ::testing::Environment
 {
     void SetUp () override
     {
+        gtk_disable_setlocale ();
+        ASSERT_NE (std::setlocale (LC_ALL, "C"), nullptr);
+        auto locale_directory = gnc_path_get_localedir ();
+        bindtextdomain ("gnucash", locale_directory);
+        bind_textdomain_codeset ("gnucash", "UTF-8");
+        g_free (locale_directory);
         ASSERT_TRUE (gtk_init_check (nullptr, nullptr));
     }
 };
