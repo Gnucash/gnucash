@@ -168,7 +168,7 @@ gnucash/gnome-utils/gnc-frequency.c
 gnucash/gnome-utils/gnc-general-select.c
 gnucash/gnome-utils/gnc-gnome-utils.c
 gnucash/gnome-utils/gnc-gobject-utils.c
-gnucash/gnome-utils/gnc-gtk-utils.c
+gnucash/gnome-utils/gnc-gtk-utils.cpp
 gnucash/gnome-utils/gnc-gui-query.c
 gnucash/gnome-utils/gnc-icons.c
 gnucash/gnome-utils/gnc-keyring.c
