@@ -47,6 +47,7 @@
 #include "dialog-search.h"
 #include "search-param.h"
 #include "search-currency.h"
+#include "search-owner.h"
 #include "gnc-session.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
@@ -3498,8 +3499,9 @@ free_invoice_cb (gpointer user_data)
     g_free (sw);
 }
 
-GNCSearchWindow *
-gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book)
+static GNCSearchWindow *
+gnc_invoice_search_internal (GtkWindow *parent, GncInvoice *start, GncOwner *owner,
+                             QofBook *book, GncOwner *billto)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     struct _invoice_select_window *sw;
@@ -3551,8 +3553,8 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                _("Total Amount"), NULL, type,
                                                INVOICE_TOTAL, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Invoice Owner"), NULL, type,
-                                               INVOICE_OWNER, NULL);
+                                               _("Invoice Owner"), GNC_SEARCH_TYPE_INVOICE_OWNER, type,
+                                               INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice Notes"), NULL, type,
                                                INVOICE_NOTES, NULL);
@@ -3591,8 +3593,14 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                 _("Total Amount"), NULL, type,
                                                 INVOICE_TOTAL, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
-                                                _("Bill Owner"), NULL, type,
-                                                INVOICE_OWNER, NULL);
+                                               _("Chargeback Job"), GNC_ID_JOB, type,
+                                               INVOICE_BILLTO, OWNER_JOB, QOF_PARAM_GUID, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Chargeback Customer"), GNC_ID_OWNER, type,
+                                                INVOICE_BILLTO, OWNER_PARENT, QOF_PARAM_GUID, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Bill Owner"), GNC_SEARCH_TYPE_BILL_OWNER, type,
+                                                INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill Notes"), NULL, type,
                                                 INVOICE_NOTES, NULL);
@@ -3631,8 +3639,8 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                _("Total Amount"), NULL, type,
                                                INVOICE_TOTAL, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Voucher Owner"), NULL, type,
-                                               INVOICE_OWNER, NULL);
+                                               _("Voucher Owner"), GNC_SEARCH_TYPE_VOUCHER_OWNER, type,
+                                               INVOICE_OWNER, QOF_PARAM_GUID, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Voucher Notes"), NULL, type,
                                                INVOICE_NOTES, NULL);
@@ -3749,6 +3757,14 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
         }
     }
 
+    if (billto && gncOwnerGetGUID (billto))
+    {
+        qof_query_add_guid_match (q, qof_query_build_param_list
+                                  (INVOICE_BILLTO, QOF_PARAM_GUID, NULL),
+                                  gncOwnerGetGUID (billto), QOF_QUERY_AND);
+        q2 = qof_query_copy (q);
+    }
+
     /* Launch select dialog and return the result */
     sw = g_new0 (struct _invoice_select_window, 1);
 
@@ -3788,6 +3804,29 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                      buttons, NULL, new_invoice_cb,
                                      sw, free_invoice_cb, GNC_PREFS_GROUP_SEARCH,
                                      label, style_class);
+}
+
+GNCSearchWindow *
+gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book)
+{
+    return gnc_invoice_search_internal (parent, start, owner, book, NULL);
+}
+
+GNCSearchWindow *
+gnc_bill_search_for_job (GtkWindow *parent, GncJob *job, QofBook *book)
+{
+    GncOwner owner, vendor;
+
+    g_return_val_if_fail (job, NULL);
+
+    gncOwnerInitJob (&owner, job);
+
+    if (gncOwnerGetType (gncOwnerGetEndOwner (&owner)) == GNC_OWNER_VENDOR)
+        return gnc_invoice_search (parent, NULL, &owner, book);
+
+    /* A customer job is linked to a vendor bill through its chargeback owner. */
+    gncOwnerInitVendor (&vendor, NULL);
+    return gnc_invoice_search_internal (parent, NULL, &vendor, book, &owner);
 }
 
 DialogQueryView *

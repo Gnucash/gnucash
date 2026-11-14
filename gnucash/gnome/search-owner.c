@@ -52,6 +52,9 @@ struct _GNCSearchOwner
     GNCSearchCoreType parent_instance;
 
     QofGuidMatch    how;
+    gboolean       job_only;
+    gboolean       include_jobs;
+    GncOwnerType   end_owner_type;
 
     GncOwner    owner;
     GtkWindow * parent;
@@ -115,6 +118,43 @@ gnc_search_owner_new (void)
     return o;
 }
 
+static GNCSearchOwner *
+search_document_owner_new (GncOwnerType type)
+{
+    GNCSearchOwner *o = gnc_search_owner_new ();
+    o->include_jobs = TRUE;
+    o->end_owner_type = type;
+    o->owner.type = type;
+    return o;
+}
+
+GNCSearchOwner *
+gnc_search_invoice_owner_new (void)
+{
+    return search_document_owner_new (GNC_OWNER_CUSTOMER);
+}
+
+GNCSearchOwner *
+gnc_search_bill_owner_new (void)
+{
+    return search_document_owner_new (GNC_OWNER_VENDOR);
+}
+
+GNCSearchOwner *
+gnc_search_voucher_owner_new (void)
+{
+    return search_document_owner_new (GNC_OWNER_EMPLOYEE);
+}
+
+GNCSearchOwner *
+gnc_search_job_new (void)
+{
+    GNCSearchOwner *o = gnc_search_owner_new ();
+    o->job_only = TRUE;
+    gncOwnerInitJob (&o->owner, NULL);
+    return o;
+}
+
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
@@ -130,7 +170,13 @@ gncs_validate (GNCSearchCoreType *fe)
         gnc_error_dialog (GTK_WINDOW(fi->parent), "%s", _("You have not selected an owner"));
     }
 
-    /* XXX */
+    if (valid && fi->end_owner_type != GNC_OWNER_NONE &&
+        gncOwnerGetType (gncOwnerGetEndOwner (&fi->owner)) != fi->end_owner_type)
+    {
+        valid = FALSE;
+        gnc_error_dialog (GTK_WINDOW(fi->parent), "%s",
+                          _("The selected owner is not valid for this document type."));
+    }
 
     return valid;
 }
@@ -183,12 +229,28 @@ type_combo_changed (GtkWidget *widget, GNCSearchOwner *fe)
         set_owner_widget (fe);
 }
 
+static void
+owner_type_cell_data (GtkCellLayout *layout, GtkCellRenderer *cell,
+                      GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+    GNCSearchOwner *fi = data;
+    guint type;
+    gboolean sensitive;
+
+    gtk_tree_model_get (model, iter, GNC_COMBO_SEARCH_COL_VALUE, &type, -1);
+    sensitive = fi->end_owner_type == GNC_OWNER_NONE ||
+                type == fi->end_owner_type ||
+                (type == GNC_OWNER_JOB && fi->end_owner_type != GNC_OWNER_EMPLOYEE);
+    g_object_set (cell, "sensitive", sensitive, NULL);
+}
+
 static GtkWidget *
 make_type_menu (GNCSearchCoreType *fe)
 {
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
     GtkComboBox *combo;
     GncOwnerType type;
+    GList *cells;
 
     type = gncOwnerGetType (&(fi->owner));
 
@@ -197,6 +259,11 @@ make_type_menu (GNCSearchCoreType *fe)
     gnc_combo_box_search_add(combo, _("Vendor"), GNC_OWNER_VENDOR);
     gnc_combo_box_search_add(combo, _("Employee"), GNC_OWNER_EMPLOYEE);
     gnc_combo_box_search_add(combo, _("Job"), GNC_OWNER_JOB);
+
+    cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (combo));
+    gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), cells->data,
+                                        owner_type_cell_data, fi, NULL);
+    g_list_free (cells);
 
     g_signal_connect (combo, "changed", G_CALLBACK (type_combo_changed), fe);
     gnc_combo_box_search_set_active(combo, type);
@@ -256,8 +323,13 @@ gncs_get_widget (GNCSearchCoreType *fe)
      * Note that this will build the owner_choice and
      * put it in the owner_box we just created.
      */
-    type_menu = make_type_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
+    if (fi->job_only)
+        set_owner_widget (fi);
+    else
+    {
+        type_menu = make_type_menu (fe);
+        gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
+    }
 
     /* connect the owner box */
     gtk_box_pack_start (GTK_BOX (box), fi->owner_box, FALSE, FALSE, 3);
@@ -271,6 +343,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
     const GncGUID *guid;
     GList *l = NULL;
+    QofQueryPredData *predicate;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (GNC_IS_SEARCH_OWNER (fi), NULL);
@@ -278,7 +351,25 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     guid = gncOwnerGetGUID (&(fi->owner));
     l = g_list_prepend (l, (gpointer)guid);
 
-    return qof_query_guid_predicate (fi->how, l);
+    if (fi->include_jobs &&
+        (gncOwnerGetType (&fi->owner) == GNC_OWNER_CUSTOMER ||
+         gncOwnerGetType (&fi->owner) == GNC_OWNER_VENDOR))
+    {
+        QofQuery *q = qof_query_create_for (GNC_ID_JOB);
+        GList *jobs;
+
+        qof_query_set_book (q, qof_instance_get_book (qofOwnerGetOwner (&fi->owner)));
+        qof_query_add_guid_match (q, qof_query_build_param_list
+                                  (JOB_OWNER, QOF_PARAM_GUID, NULL),
+                                  guid, QOF_QUERY_AND);
+        for (jobs = qof_query_run (q); jobs; jobs = jobs->next)
+            l = g_list_prepend (l, (gpointer)gncJobGetGUID (jobs->data));
+        qof_query_destroy (q);
+    }
+
+    predicate = qof_query_guid_predicate (fi->how, l);
+    g_list_free (l);
+    return predicate;
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
@@ -290,6 +381,9 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 
     se = gnc_search_owner_new ();
     se->how = fse->how;
+    se->job_only = fse->job_only;
+    se->include_jobs = fse->include_jobs;
+    se->end_owner_type = fse->end_owner_type;
     gncOwnerCopy (&(fse->owner), &(se->owner));
 
     return (GNCSearchCoreType *)se;

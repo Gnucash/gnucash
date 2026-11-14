@@ -495,6 +495,19 @@ invoice_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
 }
 
 static void
+bill_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
+{
+    struct _job_select_window *sw = user_data;
+
+    g_return_if_fail (job_p && user_data);
+
+    if (!*job_p)
+        return;
+
+    gnc_bill_search_for_job (dialog, *job_p, sw->book);
+}
+
+static void
 payment_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
 {
     struct _job_select_window *sw = user_data;
@@ -548,6 +561,7 @@ gnc_job_search (GtkWindow *parent, GncJob *start, GncOwner *owner, QofBook *book
     {
         { N_("View/Edit Job"), edit_job_cb, NULL, TRUE},
         { N_("View Invoices"), invoice_job_cb, NULL, TRUE},
+        { N_("View Bills"), bill_job_cb, NULL, TRUE},
         { N_("Process Payment"), payment_job_cb, NULL, FALSE},
         { NULL },
     };

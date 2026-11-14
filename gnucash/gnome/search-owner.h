@@ -30,6 +30,15 @@ G_DECLARE_FINAL_TYPE (GNCSearchOwner, gnc_search_owner, GNC, SEARCH_OWNER, GNCSe
 
 GNCSearchOwner  *gnc_search_owner_new   (void);
 
+#define GNC_SEARCH_TYPE_INVOICE_OWNER "invoice-owner"
+#define GNC_SEARCH_TYPE_BILL_OWNER "bill-owner"
+#define GNC_SEARCH_TYPE_VOUCHER_OWNER "voucher-owner"
+GNCSearchOwner  *gnc_search_invoice_owner_new (void);
+GNCSearchOwner  *gnc_search_bill_owner_new (void);
+GNCSearchOwner  *gnc_search_voucher_owner_new (void);
+
+GNCSearchOwner  *gnc_search_job_new     (void);
+
 /* methods */
 
 #endif /* ! _GNCSEARCH_OWNER_H */
