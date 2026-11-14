@@ -45,11 +45,15 @@ enum
     PROP_OBJECT_NAMES
 };
 
+static gboolean template_loaded = FALSE;
+
 G_DEFINE_TYPE (GncObjectReferencesDialog, gnc_object_references_dialog, GTK_TYPE_DIALOG)
 
 static void
 gnc_object_references_dialog_init (GncObjectReferencesDialog *self)
 {
+    if (!template_loaded)
+        return;
     gtk_widget_init_template (GTK_WIDGET (self));
     gtk_widget_set_name (GTK_WIDGET (self), "gnc-id-object-reference");
     GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
@@ -66,6 +70,8 @@ gnc_object_references_dialog_set_property (GObject *object, guint prop_id,
                                            const GValue *value, GParamSpec *pspec)
 {
     GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
+    if (!template_loaded)
+        return;
     switch (prop_id)
     {
     case PROP_EXPLANATION:
@@ -93,6 +99,8 @@ gnc_object_references_dialog_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
     GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
+    if (!template_loaded)
+        return;
     switch (prop_id)
     {
     case PROP_EXPLANATION:
@@ -136,14 +144,20 @@ gnc_object_references_dialog_class_init (GncObjectReferencesDialogClass *klass)
     gchar *contents = NULL;
     gsize length = 0;
     GError *error = NULL;
-    if (!g_file_get_contents (filename, &contents, &length, &error))
-        g_error ("Could not load object references dialog: %s", error->message);
+    gboolean loaded = g_file_get_contents (filename, &contents, &length, &error);
+    g_free (filename);
+    g_free (directory);
+    if (!loaded)
+    {
+        g_warning ("Could not load object references dialog: %s", error->message);
+        g_error_free (error);
+        return;
+    }
     GBytes *template = g_bytes_new_take (contents, length);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
     gtk_widget_class_set_template (widget_class, template);
     g_bytes_unref (template);
-    g_free (filename);
-    g_free (directory);
+    template_loaded = TRUE;
     gtk_widget_class_bind_template_child (widget_class, GncObjectReferencesDialog, lbl_explanation);
     gtk_widget_class_bind_template_child (widget_class, GncObjectReferencesDialog, hbox_list);
 }
@@ -168,6 +182,10 @@ gnc_object_references_dialog_response_cb (GtkDialog *dialog,
 void
 gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
 {
+    gpointer dialog_class = g_type_class_ref (GNC_TYPE_OBJECT_REFERENCES_DIALOG);
+    g_type_class_unref (dialog_class);
+    if (!template_loaded)
+        return;
     GStrv names = gnc_object_references_get_display_names (objlist);
     GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
                                       "explanation", explanation_text,
