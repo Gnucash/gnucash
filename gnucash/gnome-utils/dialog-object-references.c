@@ -55,6 +55,11 @@ gnc_object_references_dialog_init (GncObjectReferencesDialog *self)
     if (!template_loaded)
         return;
     gtk_widget_init_template (GTK_WIDGET (self));
+    if (!GTK_IS_LABEL (self->lbl_explanation) || !GTK_IS_BOX (self->hbox_list))
+    {
+        g_warning ("Could not initialize object references dialog template");
+        return;
+    }
     gtk_widget_set_name (GTK_WIDGET (self), "gnc-id-object-reference");
     GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
     self->listview = GTK_TREE_VIEW (gtk_tree_view_new_with_model (GTK_TREE_MODEL (store)));
@@ -70,7 +75,7 @@ gnc_object_references_dialog_set_property (GObject *object, guint prop_id,
                                            const GValue *value, GParamSpec *pspec)
 {
     GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
-    if (!template_loaded)
+    if (!self->listview)
         return;
     switch (prop_id)
     {
@@ -99,7 +104,7 @@ gnc_object_references_dialog_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
     GncObjectReferencesDialog *self = GNC_OBJECT_REFERENCES_DIALOG (object);
-    if (!template_loaded)
+    if (!self->listview)
         return;
     switch (prop_id)
     {
@@ -191,6 +196,11 @@ gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
                                       "explanation", explanation_text,
                                       "object-names", names, "modal", TRUE, NULL);
     g_strfreev (names);
+    if (!GNC_OBJECT_REFERENCES_DIALOG (dialog)->listview)
+    {
+        gtk_widget_destroy (dialog);
+        return;
+    }
     g_signal_connect (dialog, "response", G_CALLBACK (gnc_object_references_dialog_response_cb), NULL);
     gtk_widget_show_all (dialog);
 }
