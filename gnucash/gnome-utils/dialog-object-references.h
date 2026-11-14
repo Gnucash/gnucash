@@ -15,20 +15,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
  * GNU General Public License for more details.                     *
  *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, see                            *
+ * <https://www.gnu.org/licenses/>.                                *
 \********************************************************************/
 
 #ifndef DIALOG_OBJECT_REFERENCES_H
 #define DIALOG_OBJECT_REFERENCES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
 
 /** @addtogroup GUI
     @{ */
@@ -40,12 +37,25 @@ extern "C" {
  *  that object may be deleted.
  */
 
+#define GNC_TYPE_OBJECT_REFERENCES_DIALOG (gnc_object_references_dialog_get_type ())
+G_DECLARE_FINAL_TYPE (GncObjectReferencesDialog, gnc_object_references_dialog,
+                      GNC, OBJECT_REFERENCES_DIALOG, GtkDialog)
+
+/** Copy the display names of a borrowed list of QofInstance objects.
+ * @param objects Objects in display order; neither list nor objects are retained.
+ * @return An owned NULL-terminated string vector, freed with g_strfreev().
+ */
+GStrv gnc_object_references_get_display_names (const GList *objects);
+
+/** Show the modal object-reference notice without running a nested event loop.
+ * @param explanation Explanation copied into the dialog before returning.
+ * @param objlist Borrowed QofInstance list; may be freed after this call returns.
+ * The dialog owns its displayed text and is destroyed on response or close.
+ */
 void gnc_ui_object_references_show( const gchar* explanation, GList* objlist );
 
 /** @} */
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif /* DIALOG_OBJECT_REFERENCES_H */
