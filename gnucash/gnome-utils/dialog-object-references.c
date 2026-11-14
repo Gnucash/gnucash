@@ -157,15 +157,22 @@ gnc_object_references_get_display_names (const GList *objects)
     return g_strv_builder_unref_to_strv (names);
 }
 
+static void
+gnc_object_references_dialog_response_cb (GtkDialog *dialog,
+                                           [[maybe_unused]] int response,
+                                           [[maybe_unused]] gpointer user_data)
+{
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 void
 gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
 {
     GStrv names = gnc_object_references_get_display_names (objlist);
     GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
                                       "explanation", explanation_text,
-                                      "object-names", names, NULL);
+                                      "object-names", names, "modal", TRUE, NULL);
     g_strfreev (names);
+    g_signal_connect (dialog, "response", G_CALLBACK (gnc_object_references_dialog_response_cb), NULL);
     gtk_widget_show_all (dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
 }

@@ -100,6 +100,105 @@ TEST_F (ObjectReferencesDialogTest, EmptyList)
     ASSERT_NE (view, nullptr);
     EXPECT_EQ (gtk_tree_model_iter_n_children (gtk_tree_view_get_model (GTK_TREE_VIEW (view)), nullptr), 0);
 }
+
+GtkWidget *
+find_reference_dialog ()
+{
+    auto windows = gtk_window_list_toplevels ();
+    GtkWidget *found = nullptr;
+    for (auto node = windows; node; node = node->next)
+        if (GNC_IS_OBJECT_REFERENCES_DIALOG (node->data))
+            found = GTK_WIDGET (node->data);
+    g_list_free (windows);
+    return found;
+}
+
+static gboolean
+close_nested_dialog (gpointer data)
+{
+    *static_cast<bool*> (data) = true;
+    if (auto dialog = find_reference_dialog ())
+        gtk_dialog_response (GTK_DIALOG (dialog), 0);
+    return G_SOURCE_REMOVE;
+}
+
+static void
+count_destroy ([[maybe_unused]] GtkWidget *widget, gpointer data)
+{
+    ++*static_cast<unsigned*> (data);
+}
+
+class ObjectReferencesPresentationTest : public ::testing::Test
+{
+protected:
+    GtkWidget *dialog = nullptr;
+    unsigned destroy_count = 0;
+
+    bool show ()
+    {
+        bool nested = false;
+        auto source = g_idle_add (close_nested_dialog, &nested);
+        gnc_ui_object_references_show ("Referenced objects", nullptr);
+        if (!nested)
+            g_source_remove (source);
+        dialog = find_reference_dialog ();
+        if (dialog)
+        {
+            g_object_ref (dialog);
+            g_signal_connect (dialog, "destroy", G_CALLBACK (count_destroy), &destroy_count);
+        }
+        return !nested;
+    }
+
+    void TearDown () override
+    {
+        if (dialog)
+        {
+            if (!destroy_count)
+                gtk_widget_destroy (dialog);
+            g_object_unref (dialog);
+        }
+    }
+};
+
+TEST_F (ObjectReferencesPresentationTest, ReturnsBeforeResponse)
+{
+    ASSERT_TRUE (show ());
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_TRUE (gtk_widget_get_visible (dialog));
+    EXPECT_EQ (destroy_count, 0u);
+}
+
+TEST_F (ObjectReferencesPresentationTest, ModalAfterShow)
+{
+    ASSERT_TRUE (show ());
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+}
+
+TEST_F (ObjectReferencesPresentationTest, OkDestroysOnce)
+{
+    ASSERT_TRUE (show ());
+    ASSERT_NE (dialog, nullptr);
+    gtk_dialog_response (GTK_DIALOG (dialog), 0);
+    EXPECT_EQ (destroy_count, 1u);
+    EXPECT_EQ (find_reference_dialog (), nullptr);
+}
+
+TEST_F (ObjectReferencesPresentationTest, WindowCloseDestroysOnce)
+{
+    ASSERT_TRUE (show ());
+    ASSERT_NE (dialog, nullptr);
+    gtk_window_close (GTK_WINDOW (dialog));
+    for (unsigned attempt = 0; !destroy_count && attempt < 100; ++attempt)
+    {
+        g_main_context_iteration (nullptr, FALSE);
+        g_usleep (1000);
+    }
+    EXPECT_EQ (destroy_count, 1u);
+    EXPECT_EQ (find_reference_dialog (), nullptr);
+}
+
 TEST (ObjectReferencesConstructionTest, PreservesTemplatePresentation)
 {
     auto dialog = GTK_WIDGET (g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG, nullptr));
