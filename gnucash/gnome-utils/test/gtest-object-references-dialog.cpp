@@ -3,7 +3,9 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <gtest/gtest.h>
+#include <cstdlib>
 #include "dialog-object-references.h"
 
 namespace
@@ -48,6 +50,27 @@ protected:
                                           "object-names", names, nullptr));
     }
 };
+
+TEST (ObjectReferencesTemplateTest, MissingTemplateDoesNotAbortOrShowDialog)
+{
+    ::testing::FLAGS_gtest_death_test_style = "threadsafe";
+    EXPECT_EXIT (
+        {
+            auto directory = g_dir_make_tmp ("gnc-object-references-XXXXXX", nullptr);
+            g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
+            g_setenv ("GNC_BUILDDIR", directory, TRUE);
+            g_test_expect_message ("gnc.gui", G_LOG_LEVEL_WARNING, "*Could not load object references dialog:*");
+            gnc_ui_object_references_show ("Unavailable template", nullptr);
+            g_test_assert_expected_messages ();
+            auto windows = gtk_window_list_toplevels ();
+            bool empty = windows == nullptr;
+            g_list_free (windows);
+            g_rmdir (directory);
+            g_free (directory);
+            std::exit (empty ? 0 : 1);
+        },
+        ::testing::ExitedWithCode (0), "");
+}
 
 TEST_F (ObjectReferencesDialogTest, DisplaysExplanationAndOrderedNames)
 {
