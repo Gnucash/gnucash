@@ -12,6 +12,7 @@ set (scm_test_report_with_srfi64_SOURCES
   test-html-chart.scm
   test-report-html.scm
   test-report.scm
+  test-saved-report-sandbox.scm
   )
 
 set(GUILE_DEPENDS
