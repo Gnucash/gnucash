@@ -2506,46 +2506,26 @@ main_window_update_page_color (GncPluginPage *page,
     main_window_find_tab_widget (window, page, &tab_widget);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(tab_widget));
+    const gchar *tab_css_class = "tab-bg-color";
+
     if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
         GtkCssProvider *provider = gtk_css_provider_new();
-        GtkStyleContext *stylectxt;
-        gchar *col_str, *widget_css;
-
-        if (!GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *event_box = gtk_event_box_new ();
-            g_object_ref (tab_widget);
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, event_box);
-            gtk_container_add (GTK_CONTAINER(event_box), tab_widget);
-            g_object_unref (tab_widget);
-            tab_widget = event_box;
-        }
-
-        stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
-        col_str = gdk_rgba_to_string (&tab_color);
-        widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", nullptr);
+        gchar *col_str = gdk_rgba_to_string (&tab_color);
+        gchar *widget_css = g_strconcat (".", tab_css_class, " {\n  background-color:", col_str, ";\n}\n", nullptr);
 
         gtk_css_provider_load_from_data (provider, widget_css, -1, nullptr);
         gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
                                         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_style_context_add_class (stylectxt, tab_css_class);
         g_object_unref (provider);
         g_free (col_str);
         g_free (widget_css);
     }
     else
-    {
-        if (GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-            g_object_ref (tab_hbox);
-            gtk_container_remove (GTK_CONTAINER(tab_widget), tab_hbox);
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, tab_hbox);
-            g_object_unref (tab_hbox);
-        }
-    }
+        gtk_style_context_remove_class (stylectxt, tab_css_class);
+
     g_free(color_string);
     LEAVE("done");
 }
