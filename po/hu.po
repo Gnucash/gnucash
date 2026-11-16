@@ -9,14 +9,15 @@
 # mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024, 2025.
 # ovari <ovari123@zoho.com>, 2022, 2023.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
+# Szia Tomi <sziatomi@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-04 20:51+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2026-11-16 01:51+0000\n"
+"Last-Translator: Szia Tomi <sziatomi@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -12424,7 +12425,7 @@ msgstr "Év"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:26
 msgid "Current Year"
-msgstr "Idei év"
+msgstr "Az idei év"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:29
 msgid "Now + 1 Year"
@@ -12432,7 +12433,7 @@ msgstr "Mostantól egy évig"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:32
 msgid "Whole Loan"
-msgstr "Teljes kölcsön"
+msgstr "A teljes kölcsön"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:46
 #: gnucash/gtkbuilder/assistant-loan.glade:155
@@ -12441,31 +12442,31 @@ msgstr "Kamatláb"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr "THM (folyamatos kamatos kamat)"
+msgstr "THM (napi összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr "THM (heti kamatos kamat)"
+msgstr "THM (heti összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr "THM (havi kamatos kamat)"
+msgstr "THM (havi összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr "THM (negyedéves kamatos kamat)"
+msgstr "THM (negyedéves összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Semi-annually)"
-msgstr "THM (féléves kamatos kamat)"
+msgstr "THM (féléves összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:64
 msgid "APR (Compounded Annually)"
-msgstr "THM (éves kamatos kamat)"
+msgstr "THM (éves összevonás)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "Fixed Rate"
-msgstr "fix kamatlábú"
+msgstr "fix kamatozású"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:78
 msgid "3/1 Year ARM"
@@ -12622,7 +12623,7 @@ msgstr "A törlesztés részletei"
 #: gnucash/gtkbuilder/assistant-loan.glade:730
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
-"A folytatáshoz minden kiválasztott költség beállítási lépésénél a beállító "
+"A folytatáshoz a kiválasztott költségek beállítási lépésénél a beállító "
 "mezőknek érvényes bejegyzéseket kell tartalmazni."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:801
@@ -12643,7 +12644,7 @@ msgstr "Letéti számla használata"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:943
 msgid "Part of Payment Transaction"
-msgstr "Törlesztési tranzakció része"
+msgstr "A törlesztési tranzakció része"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1009
 msgid "Payment Frequency"
@@ -12666,8 +12667,8 @@ msgid ""
 "Review the details below and if correct press \"Apply\" to create the "
 "schedule."
 msgstr ""
-"Tekintse át az alábbi részleteket, és ha minden helyes nyomja meg az "
-"Alkalmaz gombot az ütemezés létrehozásához."
+"Tekintse át az alábbi részleteket, és ha minden helyes kattintson az "
+"Alkalmaz gombra az ütemezés létrehozásához."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
 msgid "Range"
