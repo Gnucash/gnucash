@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 gnc-bayes-eval.py - how well does GnuCash guess the account of imported transactions,
-and would a proposed new algorithm do better?
+and would a new algorithm do better?
 
     python3 gnc-bayes-eval.py BOOK.gnucash --start-from OLD.gnucash [--alphas 0.03,0.1,0.3] [--thresholds 0.8,0.9,0.95]
     python3 gnc-bayes-eval.py BOOK.gnucash --from-ledger [--months 6] [--alphas 0.03,0.1,0.3] [--thresholds 0.8,0.9,0.95]
@@ -20,12 +20,14 @@ GnuCash remembers, for every bank account you import into, how often each word
 ("token") of an imported transaction was assigned to which account. This learned
 data is stored in your book. The script replays imports: it goes through
 transactions day by day, asks six algorithms which account they would
-suggest for each of them, and then learns the transaction:
+suggest for each of them, and then learns the transaction. Besides GnuCash
+and the first commit of PR #2348 there are four candidates; which one is
+best is open, that is what the results of different books are for:
 
  - "GnuCash 5.17": the current algorithm.
  - "naive Bayes": a multi-class naive Bayes classifier, words as in GnuCash
    5.17 (the first commit of PR #2348).
- - "NB+tok+corr+cut": the current proposal, naive Bayes with
+ - "NB+tok+corr+cut": naive Bayes with
    - tok:  words split at blanks and "/", ";" removed from the end of words,
            no weekday (see split_words); the stored learned data is
            converted on the fly, nothing has to be reset;
@@ -38,11 +40,11 @@ suggest for each of them, and then learns the transaction:
    - share: the probability lowered when many of the transaction's words
            were never seen (see known_share): fewer wrong suggestions, but
            also fewer correct ones.
- - "Dirichlet NB+tok+corr+cut": the proposal with a smoothing that adapts to
-   how common each word is, instead of the fixed alpha (see
-   dirichlet_log_scores). It does not depend on the number of accounts or
-   of distinct words.
- - "damped NB+tok+cut": the simplest alternative: no corrections, but naive
+ - "Dirichlet NB+tok+corr+cut": the same as NB+tok+corr+cut, but with a
+   smoothing that adapts to how common each word is, instead of the fixed
+   alpha (see dirichlet_log_scores). It does not depend on the number of
+   accounts or of distinct words.
+ - "damped NB+tok+cut": the simplest candidate: no corrections, but naive
    Bayes damped so that words that always occur together do not count as
    independent evidence (see damped_log_scores). It needs no new stored
    data and learns like the importer today.
@@ -73,9 +75,10 @@ replay the transactions of BOOK that are not in OLD.gnucash. OLD.gnucash is
 
 As in the GnuCash importer, a transaction is learned only if it did not get
 the correct suggestion: the importer learns when you choose or change the
-account by hand, not when you accept a suggestion. --learn-accepted learns
-accepted suggestions too, to see what that change to the importer would give. Accounts and transactions
-are matched by their GUIDs, which a copy or backup keeps.
+account by hand, not when you accept a suggestion. (The rows with
+corrections, "corr", learn every transaction: their corrections need the
+accepted suggestions too.) Accounts and transactions are matched by their
+GUIDs, which a copy or backup keeps.
 
 --from-ledger: start with no learned data at all, and learn every transaction
 of BOOK (this is a proposal to rebuild the learned data from the booked
@@ -85,7 +88,7 @@ This only knows the history contained in BOOK: if you start a new book every
 year, the first months have little to learn from.
 
 --alphas compares values of the smoothing parameter ALPHA of naive Bayes (see
-score_naive_bayes), e.g. 0.03, 0.1 (proposed) and 0.3; 0 is strict naive Bayes.
+score_naive_bayes), e.g. 0.03, 0.1 (default) and 0.3; 0 is strict naive Bayes.
 --thresholds compares values of the threshold a suggestion has to reach,
 e.g. 0.8, 0.9 (GnuCash) and 0.95. GnuCash's threshold is a user preference,
 and naive Bayes may be more (or less) cautious than GnuCash 5.17, so the best
@@ -93,7 +96,6 @@ value need not be the same for both. Given one or both options, the script
 replays every combination and prints, per threshold, the rows with alpha
 once for each alpha, and "GnuCash 5.17" and "Dirichlet NB..." once (they
 have no alpha).
---learn-accepted changes only the rows without corrections ("corr").
 
 Every table shows the manual effort, estimated as:
 
@@ -117,7 +119,7 @@ import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict, namedtuple
 
 THRESHOLD = 0.90  # GnuCash only suggests an account if its probability is at least 90 %
-ALPHA = 0.1       # smoothing for the proposed algorithm (see score_naive_bayes)
+ALPHA = 0.1       # default smoothing of naive Bayes (see score_naive_bayes)
 RATE = 0.3        # learning rate of the corrections (see Corrections)
 MU = 300          # Dirichlet smoothing (see dirichlet_log_scores)
 GAMMA = 0.7       # damping of naive Bayes (see damped_log_scores)
@@ -234,7 +236,7 @@ def tokens_gnucash_517(tx, weekday_names):
 
 
 def split_words(text):
-    """Proposed tokenizer: split at blanks and "/", strip ";" from the end of
+    """New tokenizer: split at blanks and "/", strip ";" from the end of
     each word, keep the case.
 
     ";" is not bank text: GnuCash joins purpose and payee name with "; ", so
@@ -247,8 +249,8 @@ def split_words(text):
     return {w.rstrip(";") for w in words} - {""}
 
 
-def tokens_proposed(tx):
-    """Proposed: the words of description and memo, split with split_words.
+def tokens_split(tx):
+    """New: the words of description and memo, split with split_words.
     Unlike GnuCash 5.17 without the weekday name: it says nothing about the
     account, and leaving it out gave fewer wrong suggestions."""
     return split_words(tx.description + " " + tx.memo)
@@ -353,7 +355,7 @@ def score_gnucash_517(learned, tokens):
 
 
 def score_naive_bayes(learned, tokens, alpha=ALPHA):
-    """Proposed: a multi-class naive Bayes classifier (multinomial, with smoothing).
+    """PR #2348: a multi-class naive Bayes classifier (multinomial, with smoothing).
 
     The question it answers: given the tokens of a transaction, how probable is
     each account? Bayes' rule turns this around:
@@ -550,7 +552,7 @@ def best_of(log_score):
 
 
 class Corrections:
-    """Proposed: naive Bayes plus learned corrections (logistic regression on
+    """Naive Bayes plus learned corrections (logistic regression on
     top of naive Bayes).
 
     Naive Bayes treats tokens as independent. Tokens that always occur
@@ -828,7 +830,7 @@ def print_comparison(thresholds, alphas, runs):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Compare GnuCash's import account matching with a proposed new algorithm "
+        description="Compare GnuCash's import account matching with new algorithms "
                     "by replaying imports. Read-only.")
     parser.add_argument("book")
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -838,9 +840,6 @@ def main():
     mode.add_argument("--from-ledger", action="store_true",
                       help="start with no learned data and learn all transactions of BOOK")
     parser.add_argument("--months", type=int, default=6, help="--from-ledger: months to score (default 6)")
-    parser.add_argument("--learn-accepted", action="store_true",
-                        help="--start-from: also learn transactions whose suggestion was correct "
-                             "(GnuCash does not do this; for comparison)")
     parser.add_argument("--alphas", help="compare smoothing values for naive Bayes, comma separated, e.g. 0.03,0.1,0.3")
     parser.add_argument("--thresholds", help="compare thresholds, comma separated, e.g. 0.8,0.9,0.95")
     parser.add_argument("--weekdays", help="weekday names as GnuCash stored them, Monday first, "
@@ -854,7 +853,7 @@ def main():
         # start: the old book's learned data; replay: what is in BOOK but not in the old book
         _, start, old_transactions = read_book(args.start_from)
         skip = {guid for guid, _, _, _ in old_transactions}
-        learn_correct, first_date = args.learn_accepted, None
+        learn_correct, first_date = False, None
     else:
         # start: nothing; replay: all of BOOK, the last N months are scored
         start, skip = new_learned_data(), set()
@@ -887,7 +886,7 @@ def main():
 
     # Each row is a function (threshold, alpha) -> replay results, and whether
     # it uses alpha. GnuCash 5.17 and naive Bayes use GnuCash's tokens and the
-    # stored data as it is; the "+tok" rows the proposed tokens and the stored data
+    # stored data as it is; the "+tok" rows the new tokens and the stored data
     # converted to them. The corrections start empty in every run, and learn
     # every transaction.
     tokens_517 = lambda tx: tokens_gnucash_517(tx, weekday_names)
@@ -895,9 +894,9 @@ def main():
     nb = lambda alpha: lambda lrn, tok: score_naive_bayes(lrn, tok, alpha)
     nb_log = lambda alpha: lambda lrn, tok: naive_bayes_log_scores(lrn, tok, alpha)
 
-    def proposed(log_scores, rule):
+    def with_corrections(log_scores, rule):
         return lambda threshold, alpha: replay(
-            transactions, tokens_proposed, log_scores(alpha), converted, True, first_date,
+            transactions, tokens_split, log_scores(alpha), converted, True, first_date,
             threshold, Corrections(), rule)
 
     runs = {
@@ -907,12 +906,12 @@ def main():
         "naive Bayes": (lambda threshold, alpha: replay(
             transactions, tokens_517, nb(alpha), start, learn_correct, first_date,
             threshold), True),
-        "NB+tok+corr+cut": (proposed(nb_log, concentration_cut()), True),
-        "NB+tok+corr+cut+share": (proposed(nb_log, chain(concentration_cut(), known_share())), True),
-        "Dirichlet NB+tok+corr+cut": (proposed(lambda alpha: dirichlet_log_scores, concentration_cut()), False),
+        "NB+tok+corr+cut": (with_corrections(nb_log, concentration_cut()), True),
+        "NB+tok+corr+cut+share": (with_corrections(nb_log, chain(concentration_cut(), known_share())), True),
+        "Dirichlet NB+tok+corr+cut": (with_corrections(lambda alpha: dirichlet_log_scores, concentration_cut()), False),
         # no corrections: learns like the importer today
         "damped NB+tok+cut": (lambda threshold, alpha: replay(
-            transactions, tokens_proposed, lambda lrn, tok: best_of(damped_log_scores(lrn, tok, alpha)),
+            transactions, tokens_split, lambda lrn, tok: best_of(damped_log_scores(lrn, tok, alpha)),
             converted, learn_correct, first_date, threshold, None, concentration_cut()), True),
     }
     scenarios = {name: run(THRESHOLD, ALPHA) for name, (run, _) in runs.items()}
