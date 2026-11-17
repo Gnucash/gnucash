@@ -15,11 +15,8 @@ my $license_text_c = <<'END';
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program; if not, see                             *
+ * <https://www.gnu.org/licenses/>                                  *
  *                                                                  *
 \********************************************************************/
 
@@ -38,11 +35,7 @@ my $license_text_scm = <<'END';
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, contact:
-;;
-;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
-;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;; along with this program; if not, see <https://www.gnu.org/licenses/>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 END
@@ -148,9 +141,5 @@ close(FD);
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program; if not, contact:
-
-  Free Software Foundation           Voice:  +1-617-542-5942
-  51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
-  Boston, MA  02110-1301,  USA       gnu@gnu.org
+  along with this program; if not, see <https://www.gnu.org/licenses/>
 =cut

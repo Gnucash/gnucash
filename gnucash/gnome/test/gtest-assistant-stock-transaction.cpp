@@ -13,13 +13,8 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, you can retrieve it from        *
- * https://www.gnu.org/licenses/old-licenses/gpl-2.0.html            *
- * or contact:                                                      *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program; if not, see                             *
+ * <https://www.gnu.org/licenses/>                                  *
  ********************************************************************/
 #include "config.h"
 #include <glib.h>

@@ -28,11 +28,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program; if not, see                             *
+ * <https://www.gnu.org/licenses/>                                  *
  *                                                                  *
 \********************************************************************/
 
