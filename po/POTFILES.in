@@ -118,6 +118,7 @@ gnucash/gnome/top-level.c
 gnucash/gnome/window-autoclear.c
 gnucash/gnome/window-reconcile.cpp
 gnucash/gnome/window-report.cpp
+gnucash/gnome-search/dialog-search-account.c
 gnucash/gnome-search/dialog-search.c
 gnucash/gnome-search/gnc-general-search.c
 gnucash/gnome-search/search-account.c
