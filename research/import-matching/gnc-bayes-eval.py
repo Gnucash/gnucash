@@ -208,7 +208,8 @@ def read_xml(path):
 
 
 def parse_date(text):
-    return datetime.date.fromisoformat(text[:10])
+    # Older sqlite books store "YYYYMMDDhhmmss", newer ones and XML "YYYY-MM-DD hh:mm:ss".
+    return datetime.date.fromisoformat(text[:10] if text[4] == "-" else text[:8])
 
 
 def read_book(path):
