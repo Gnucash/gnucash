@@ -1448,6 +1448,53 @@ test_gnc_pricedb_get_nearest_price (PriceDBFixture *fixture, gconstpointer pData
     g_assert_cmpint(result.denom, ==, 1331);
 }
 
+/* No currency in the fixture is quoted against both AMZN and BGN, so a
+ * conversion between them can only be found by chaining through more
+ * than one pivot currency: AMZN -> XY1 -> XY2 -> BGN. This exercises
+ * indirect_price_conversion()'s multi-hop search rather than the
+ * single-pivot case covered by test_gnc_pricedb_get_nearest_price.
+ */
+static void
+test_gnc_pricedb_get_nearest_price_multihop (PriceDBFixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_instance_get_book(QOF_INSTANCE(fixture->pricedb));
+    time64 t = gnc_dmy2time64(15, 8, 2011);
+    gnc_commodity *xy1 = gnc_commodity_new (book, "1", "ISO4217", "XY1", "997", 100);
+    gnc_commodity *xy2 = gnc_commodity_new (book, "2", "ISO4217", "XY2", "998", 100);
+    gnc_commodity *xy3 = gnc_commodity_new (book, "3", "ISO4217", "XY3", "999", 100);
+    gnc_commodity *xy4 = gnc_commodity_new (book, "4", "ISO4217", "XY4", "999", 100);
+
+    gnc_pricedb_add_price(fixture->pricedb,
+                          construct_price(book, fixture->com->amzn, xy1, t,
+                                         PRICE_SOURCE_USER_PRICE,
+                                         gnc_numeric_create(2, 1)));
+    gnc_pricedb_add_price(fixture->pricedb,
+                          construct_price(book, xy1, xy2, t,
+                                         PRICE_SOURCE_USER_PRICE,
+                                         gnc_numeric_create(3, 1)));
+    gnc_pricedb_add_price(fixture->pricedb,
+                          construct_price(book, xy2, xy3, t,
+                                         PRICE_SOURCE_USER_PRICE,
+                                         gnc_numeric_create(5, 1)));
+    gnc_pricedb_add_price(fixture->pricedb,
+                          construct_price(book, xy3, fixture->com->bgn, t,
+                                         PRICE_SOURCE_USER_PRICE,
+                                         gnc_numeric_create(7, 1)));
+
+    /* 1 AMZN = 2 XY1 = 6 XY2 = 30 XY3 = 210 BGN */
+    gnc_numeric result = gnc_pricedb_get_nearest_price (fixture->pricedb,
+                                                        fixture->com->amzn,
+                                                        fixture->com->bgn, t);
+    g_assert_cmpint(result.num, ==, 210);
+    g_assert_cmpint(result.denom, ==, 1);
+
+    /* XY4 has no prices at all, so no path can reach it. */
+    result = gnc_pricedb_get_nearest_price (fixture->pricedb,
+                                            fixture->com->amzn,
+                                            xy4, t);
+    g_assert_cmpint(gnc_numeric_zero_p(result), ==, TRUE);
+}
+
 static void
 test_gnc_pricedb_get_nearest_before_price (PriceDBFixture *fixture, gconstpointer pData)
 {
@@ -1778,6 +1825,7 @@ GNC_TEST_ADD (suitename, "gnc price list equal", PriceDBFixture, NULL, setup, te
     GNC_TEST_ADD (suitename, "gnc pricedb convert balance nearest before price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_nearest_before_price_t64, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get latest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_latest_price, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get nearest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_nearest_price, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb get nearest price multihop", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_nearest_price_multihop, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get nearest before price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_nearest_before_price, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach pricelist", Fixture, NULL, setup, test_pricedb_foreach_pricelist, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach currencies hash", Fixture, NULL, setup, test_pricedb_foreach_currencies_hash, teardown);
