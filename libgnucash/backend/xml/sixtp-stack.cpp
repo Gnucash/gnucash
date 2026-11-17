@@ -25,56 +25,24 @@
 #include "sixtp-stack.h"
 
 void
-sixtp_stack_frame_destroy (sixtp_stack_frame* sf)
-{
-    GSList* lp;
-
-    /* cleanup all the child data */
-    for (lp = sf->data_from_children; lp; lp = lp->next)
-    {
-        sixtp_child_result_destroy ((sixtp_child_result*) lp->data);
-    }
-    g_slist_free (sf->data_from_children);
-    sf->data_from_children = NULL;
-
-    g_free (sf);
-}
-
-sixtp_stack_frame*
-sixtp_stack_frame_new (sixtp* next_parser, char* tag)
-{
-    sixtp_stack_frame* new_frame;
-
-    new_frame = g_new0 (sixtp_stack_frame, 1);
-    new_frame->parser = next_parser;
-    new_frame->tag = tag;
-    new_frame->data_for_children = NULL;
-    new_frame->data_from_children = NULL;
-    new_frame->frame_data = NULL;
-    new_frame->line = new_frame->col = -1;
-
-    return new_frame;
-}
-
-void
-sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f)
+sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
 {
     gchar* is = g_strnfill (indent, ' ');
 
     fprintf (f, "%s(stack-frame %p\n", is, sf);
     fprintf (f, "%s             (line %d) (col %d)\n", is, sf->line, sf->col);
     fprintf (f, "%s             (parser %p)\n", is, sf->parser);
-    fprintf (f, "%s             (tag %s)\n", is, sf->tag ? sf->tag : "(null)");
+    fprintf (f, "%s             (tag %s)\n", is,
+             sf->tag.empty () ? "(null)" : sf->tag.c_str ());
     fprintf (f, "%s             (data-for-children %p)\n", is,
              sf->data_for_children);
 
     {
-        GSList* lp;
         fprintf (f, "%s             (data-from-children", is);
-        for (lp = sf->data_from_children; lp; lp = lp->next)
+        for (auto& cr : sf->data_from_children)
         {
             fputc (' ', f);
-            sixtp_child_result_print ((sixtp_child_result*) lp->data, f);
+            sixtp_child_result_print (&cr, f);
         }
         fprintf (f, ")\n");
     }
@@ -84,73 +52,76 @@ sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f)
     g_free (is);
 }
 
-GSList*
-sixtp_pop_and_destroy_frame (GSList* frame_stack)
-{
-    sixtp_stack_frame* dead_frame = (sixtp_stack_frame*) frame_stack->data;
-    GSList* result;
-
-    result = g_slist_next (frame_stack);
-    sixtp_stack_frame_destroy (dead_frame);
-    g_slist_free_1 (frame_stack);
-    return (result);
-}
-
 void
-sixtp_print_frame_stack (GSList* stack, FILE* f)
+sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack, FILE* f)
 {
-    /* first, some debugging output */
-    GSList* printcopy = g_slist_reverse (g_slist_copy (stack));
-    GSList* lp;
+    /* stack.back() is the innermost frame, so walk it front-to-back for
+       outermost-to-innermost debugging output. */
     int indent = 0;
 
-    for (lp = printcopy; lp; lp = lp->next)
+    for (auto it = stack.rbegin (); it != stack.rend (); ++it)
     {
-        sixtp_stack_frame* frame = (sixtp_stack_frame*) lp->data;
-        sixtp_stack_frame_print (frame, indent, f);
+        sixtp_stack_frame_print (&*it, indent, f);
         indent += 2;
     }
-
 }
 
 
 /* Parser context */
-sixtp_parser_context*
+_sixtp_parser_context_struct::_sixtp_parser_context_struct (
+    sixtp* initial_parser, gpointer global_data, gpointer top_level_data)
+    : handler (), data (), top_frame_data (top_level_data)
+{
+    handler.startElement = sixtp_sax_start_handler;
+    handler.endElement = sixtp_sax_end_handler;
+    handler.characters = sixtp_sax_characters_handler;
+    handler.getEntity = sixtp_sax_get_entity_handler;
+
+    data.parsing_ok = TRUE;
+    data.global_data = global_data;
+
+    /* reserve some headroom so early pushes (account tree, transaction
+       lists, ...) don't force repeated reallocations */
+    data.stack.reserve (32);
+    data.stack.emplace_back (initial_parser, std::string ());
+}
+
+_sixtp_parser_context_struct::~_sixtp_parser_context_struct ()
+{
+    /* Destroying the vector destroys every remaining frame (and,
+       transitively, any child results still attached to them),
+       including the top frame at index 0. */
+    data.stack.clear ();
+    data.saxParserCtxt->userData = NULL;
+    data.saxParserCtxt->sax = NULL;
+    xmlFreeParserCtxt (data.saxParserCtxt);
+    data.saxParserCtxt = NULL;
+}
+
+std::unique_ptr<sixtp_parser_context>
 sixtp_context_new (sixtp* initial_parser, gpointer global_data,
                    gpointer top_level_data)
 {
-    sixtp_parser_context* ret;
+    auto ret = std::make_unique<sixtp_parser_context> (initial_parser,
+                                                        global_data,
+                                                        top_level_data);
 
-    ret = g_new0 (sixtp_parser_context, 1);
-
-    ret->handler.startElement = sixtp_sax_start_handler;
-    ret->handler.endElement = sixtp_sax_end_handler;
-    ret->handler.characters = sixtp_sax_characters_handler;
-    ret->handler.getEntity = sixtp_sax_get_entity_handler;
-
-    ret->data.parsing_ok = TRUE;
-    ret->data.stack = NULL;
-    ret->data.global_data = global_data;
-
-    ret->top_frame = sixtp_stack_frame_new (initial_parser, NULL);
-
-    ret->top_frame_data = top_level_data;
-
-    ret->data.stack = g_slist_prepend (ret->data.stack,
-                                       (gpointer) ret->top_frame);
+    /* top is only ever used here, before any further push can move it -
+       every later reference to the top frame goes through
+       data.stack.front() instead of a cached pointer. */
+    sixtp_stack_frame& top = ret->data.stack.back ();
 
     if (initial_parser->start_handler)
     {
-        if (!initial_parser->start_handler (NULL,
+        if (!initial_parser->start_handler (sixtp_no_children (),
                                             &ret->top_frame_data,
                                             &ret->data.global_data,
-                                            &ret->top_frame->data_for_children,
-                                            &ret->top_frame->frame_data,
+                                            &top.data_for_children,
+                                            &top.frame_data,
                                             NULL, NULL))
         {
             sixtp_handle_catastrophe (&ret->data);
-            sixtp_context_destroy (ret);
-            return NULL;
+            return nullptr; /* ret's destructor runs the teardown */
         }
     }
 
@@ -160,28 +131,18 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
 void
 sixtp_context_run_end_handler (sixtp_parser_context* ctxt)
 {
-    if (ctxt->top_frame->parser->end_handler)
+    sixtp_stack_frame& top = ctxt->data.stack.front ();
+
+    if (top.parser->end_handler)
     {
         ctxt->data.parsing_ok &=
-            ctxt->top_frame->parser->end_handler (
-                ctxt->top_frame->data_for_children,
-                ctxt->top_frame->data_from_children,
-                NULL,
+            top.parser->end_handler (
+                top.data_for_children,
+                top.data_from_children,
+                sixtp_no_children (),
                 ctxt->top_frame_data,
                 ctxt->data.global_data,
-                &ctxt->top_frame->frame_data,
+                &top.frame_data,
                 NULL);
     }
-}
-
-void
-sixtp_context_destroy (sixtp_parser_context* context)
-{
-    sixtp_stack_frame_destroy (context->top_frame);
-    g_slist_free (context->data.stack);
-    context->data.saxParserCtxt->userData = NULL;
-    context->data.saxParserCtxt->sax = NULL;
-    xmlFreeParserCtxt (context->data.saxParserCtxt);
-    context->data.saxParserCtxt = NULL;
-    g_free (context);
 }

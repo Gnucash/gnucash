@@ -264,7 +264,7 @@ dom_tree_to_order (xmlNodePtr node, QofBook* book)
 
 static gboolean
 gnc_order_end_handler (gpointer data_for_children,
-                       GSList* data_from_children, GSList* sibling_data,
+                       const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                        gpointer parent_data, gpointer global_data,
                        gpointer* result, const gchar* tag)
 {
