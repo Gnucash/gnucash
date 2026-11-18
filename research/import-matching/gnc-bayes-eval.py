@@ -34,6 +34,7 @@ best is open, that is what the results of different books are for:
    - corr: learned corrections (see Corrections). They learn every
            transaction, also accepted suggestions (a change to the
            importer), because they need to see the correct cases too;
+           the counts still learn like the importer;
    - cut:  no suggestion if no word of the transaction is typical for the
            suggested account (see concentration).
  - "NB+tok+corr+cut+share": the same, and
@@ -75,10 +76,10 @@ replay the transactions of BOOK that are not in OLD.gnucash. OLD.gnucash is
 
 As in the GnuCash importer, a transaction is learned only if it did not get
 the correct suggestion: the importer learns when you choose or change the
-account by hand, not when you accept a suggestion. (The rows with
-corrections, "corr", learn every transaction: their corrections need the
-accepted suggestions too.) Accounts and transactions are matched by their
-GUIDs, which a copy or backup keeps.
+account by hand, not when you accept a suggestion. (In the rows with
+corrections, "corr", the corrections learn every transaction: they need the
+accepted suggestions too. The counts learn like the importer.) Accounts and
+transactions are matched by their GUIDs, which a copy or backup keeps.
 
 --from-ledger: start with no learned data at all, and learn every transaction
 of BOOK (this is a proposal to rebuild the learned data from the booked
@@ -704,8 +705,8 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
     threshold: the probability a suggestion has to reach. It also changes
         what is learned, since correct suggestions are not learned.
     corrections: a Corrections object for "NB + corrections". score must then
-        return naive Bayes log scores (naive_bayes_log_scores), and every
-        transaction is learned.
+        return naive Bayes log scores (naive_bayes_log_scores). The
+        corrections learn every transaction; the counts follow learn_correct.
     adjust: a rule on the best account (see "Rules on the best account"):
         (learned data of the bank, tokens, best account, probability) ->
         probability, applied before the threshold.
@@ -731,23 +732,26 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
     results = Counter()
     per_account = defaultdict(Counter)
     for date, day in itertools.groupby(transactions, key=lambda tx: tx.date):
-        to_learn = list(day)
+        day = list(day)
+        # whether the counts learn each transaction; unscored ones are always learned
+        learn_counts = [True] * len(day)
         if first_date is None or date > first_date:
-            day, to_learn = to_learn, []
-            for tx in day:
+            for i, tx in enumerate(day):
                 best, probability = suggest(tx)
                 result = judge(tx, best, probability, threshold)
                 results[result] += 1
                 per_account[tx.account][result] += 1
-                if learn_correct or corrections is not None or result != "correct":
-                    to_learn.append(tx)
-        for tx in to_learn:
+                # like the importer: the counts do not learn accepted suggestions
+                learn_counts[i] = learn_correct or result != "correct"
+        for tx, learn in zip(day, learn_counts):
             if corrections is not None:
-                # the corrections learn from naive Bayes' error before the counts change
+                # the corrections learn every transaction, from naive Bayes'
+                # error before the counts change
                 corrections.learn(tx.bank, score(learned[tx.bank], make_tokens(tx)), make_tokens(tx), tx.account)
-            for token in make_tokens(tx):
-                counts = learned[tx.bank][token]
-                counts[tx.account] = counts.get(tx.account, 0) + 1
+            if learn:
+                for token in make_tokens(tx):
+                    counts = learned[tx.bank][token]
+                    counts[tx.account] = counts.get(tx.account, 0) + 1
     return results, per_account
 
 
@@ -889,7 +893,7 @@ def main():
     # it uses alpha. GnuCash 5.17 and naive Bayes use GnuCash's tokens and the
     # stored data as it is; the "+tok" rows the new tokens and the stored data
     # converted to them. The corrections start empty in every run, and learn
-    # every transaction.
+    # every transaction; the counts learn like the importer (learn_correct).
     tokens_517 = lambda tx: tokens_gnucash_517(tx, weekday_names)
     converted = {bank: convert_learned_data(start[bank], weekday_names) for bank in start}
     nb = lambda alpha: lambda lrn, tok: score_naive_bayes(lrn, tok, alpha)
@@ -897,7 +901,7 @@ def main():
 
     def with_corrections(log_scores, rule):
         return lambda threshold, alpha: replay(
-            transactions, tokens_split, log_scores(alpha), converted, True, first_date,
+            transactions, tokens_split, log_scores(alpha), converted, learn_correct, first_date,
             threshold, Corrections(), rule)
 
     runs = {
