@@ -459,7 +459,7 @@ void
 GncFilterInvoicesDialogInternal::set_preset (Preset p)
 {
     m_preset = p;
-    GtkToggleButton *toggle;
+    GtkToggleButton *toggle = nullptr;
 
     switch (p)
     {
@@ -1026,7 +1026,7 @@ GncFilterInvoicesDialogInternal::query_filter_base (QofQuery *query, bool empty)
 
     if (show_inv || filter_empty)
     {
-        GncInvoiceType inv_type;
+        GncInvoiceType inv_type = GNC_INVOICE_CUST_INVOICE;
 
         switch (m_owner_type)
         {
@@ -1050,7 +1050,7 @@ GncFilterInvoicesDialogInternal::query_filter_base (QofQuery *query, bool empty)
 
     if (show_cred || filter_empty)
     {
-        GncInvoiceType credit_type;
+        GncInvoiceType credit_type = GNC_INVOICE_CUST_CREDIT_NOTE;
 
         switch (m_owner_type)
         {

@@ -349,7 +349,7 @@ void
 Page::create_table_columns ()
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
-    const char *id_name;
+    const char *id_name = nullptr;
 
     switch (m_owner_type)
     {
@@ -459,7 +459,7 @@ Page::Page (GncPluginPageInvoicesOwner &p,
             GncFilterInvoicesDialog::OwnerType owner) : m_plugin_page (&p),
                                                         m_owner_type (owner)
 {
-    const char *title;
+    const char *title = nullptr;
 
     switch (m_owner_type)
     {
