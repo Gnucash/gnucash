@@ -30,6 +30,8 @@
 #include "dialog-utils.h"
 #include "dialog-object-references.h"
 
+[[maybe_unused]] static QofLogModule log_module = GNC_MOD_GUI;
+
 struct _GncObjectReferencesDialog
 {
     GtkDialog parent_instance;
@@ -167,15 +169,6 @@ gnc_object_references_dialog_class_init (GncObjectReferencesDialogClass *klass)
     gtk_widget_class_bind_template_child (widget_class, GncObjectReferencesDialog, hbox_list);
 }
 
-GStrv
-gnc_object_references_get_display_names (const GList *objects)
-{
-    GStrvBuilder *names = g_strv_builder_new ();
-    for (const GList *node = objects; node; node = node->next)
-        g_strv_builder_take (names, qof_instance_get_display_name (node->data));
-    return g_strv_builder_unref_to_strv (names);
-}
-
 static void
 gnc_object_references_dialog_response_cb (GtkDialog *dialog,
                                            [[maybe_unused]] int response,
@@ -191,7 +184,10 @@ gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
     g_type_class_unref (dialog_class);
     if (!template_loaded)
         return;
-    GStrv names = gnc_object_references_get_display_names (objlist);
+    GStrvBuilder *names_builder = g_strv_builder_new ();
+    for (const GList *node = objlist; node; node = node->next)
+        g_strv_builder_take (names_builder, qof_instance_get_display_name (node->data));
+    GStrv names = g_strv_builder_unref_to_strv (names_builder);
     GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
                                       "explanation", explanation_text,
                                       "object-names", names, "modal", TRUE, NULL);

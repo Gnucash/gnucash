@@ -41,12 +41,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GncObjectReferencesDialog, gnc_object_references_dialog,
                       GNC, OBJECT_REFERENCES_DIALOG, GtkDialog)
 
-/** Copy the display names of a borrowed list of QofInstance objects.
- * @param objects Objects in display order; neither list nor objects are retained.
- * @return An owned NULL-terminated string vector, freed with g_strfreev().
- */
-GStrv gnc_object_references_get_display_names (const GList *objects);
-
 /** Show the modal object-reference notice without running a nested event loop.
  * @param explanation Explanation copied into the dialog before returning.
  * @param objlist Borrowed QofInstance list; may be freed after this call returns.
