@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev googletest xvfb xauth
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -30,9 +30,10 @@ jobs:
         run: |
           cd build
           ninja
-          ninja distcheck
+          xvfb-run -a ninja distcheck
         env:
           CTEST_OUTPUT_ON_FAILURE: On
+          GNC_REQUIRE_GUI_TESTS: 1
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
@@ -49,7 +50,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev googletest xvfb xauth
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -67,9 +68,10 @@ jobs:
         run: |
           cd build
           ninja
-          ninja check
+          xvfb-run -a ninja check
         env:
           CTEST_OUTPUT_ON_FAILURE: On
+          GNC_REQUIRE_GUI_TESTS: 1
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
