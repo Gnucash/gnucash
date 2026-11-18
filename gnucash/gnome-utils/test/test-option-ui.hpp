@@ -112,7 +112,9 @@ struct Editor
             if (GTK_IS_TREE_VIEW(widget))
                 static_cast<Editor*>(data)->trees.push_back(GTK_TREE_VIEW(widget));
         }, this);
-        if (trees.size() != 1u)
+        auto categories = option.get_ui_type() == GncOptionUIType::ACCOUNT_CATEGORIES ||
+            option.get_ui_type() == GncOptionUIType::SECURITY_CATEGORIES;
+        if (trees.size() != (categories ? 2u : 1u))
             throw std::runtime_error{"Option editor has unexpected tree views"};
         gtk_widget_show_all(window);
         while (gtk_events_pending())
@@ -201,10 +203,10 @@ struct Editor
             bool found;
             bool sensitive;
         } search{this, id, column, false, false};
-        gtk_tree_model_foreach(gtk_tree_view_get_model(trees[0]),
+        gtk_tree_model_foreach(gtk_tree_view_get_model(trees[1]),
             +[](GtkTreeModel* model, GtkTreePath*, GtkTreeIter* iter, void* data) -> gboolean {
                 auto search = static_cast<Search*>(data);
-                auto view = search->editor->trees[0];
+                auto view = search->editor->trees[1];
                 std::string id;
                 if (GNC_IS_TREE_VIEW_ACCOUNT(view))
                 {

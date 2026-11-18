@@ -1713,6 +1713,34 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
 %template(gnc_register_number_range_option) gnc_register_number_range_option<double>;
 
 %inline %{
+    /* Register the account-category editor and always save its assignments,
+     * including assignments unchanged from the book-dependent defaults. */
+    static void
+    gnc_register_account_categories_option(GncOptionDBPtr& db,
+                                            const char* section, const char* name,
+                                            const char* key, const char* doc_string,
+                                            std::string value)
+    {
+        GncOption option{section, name, key, doc_string, value,
+                GncOptionUIType::ACCOUNT_CATEGORIES};
+        option.set_always_save(true);
+        db->register_option(section, std::move(option));
+    }
+
+    /* Register the holding-category/target editor and always save its
+     * definitions, including unchanged book-dependent defaults. */
+    static void
+    gnc_register_security_categories_option(GncOptionDBPtr& db,
+                                             const char* section, const char* name,
+                                             const char* key, const char* doc_string,
+                                             std::string value)
+    {
+        GncOption option{section, name, key, doc_string, value,
+                GncOptionUIType::SECURITY_CATEGORIES};
+        option.set_always_save(true);
+        db->register_option(section, std::move(option));
+    }
+
     /* qof_book_set_data isn't exported by sw-engine and we need it to set up a
      * commodity namespace table to test currencies.*/
     static void

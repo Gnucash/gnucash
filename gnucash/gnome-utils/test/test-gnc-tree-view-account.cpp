@@ -8,11 +8,10 @@ TEST(AccountTree, account_sensitivity)
     Book book;
     auto parent = Book::id(book.parent);
     auto child = Book::id(book.child);
-    Editor editor{GncOption{GncOptionAccountListValue{"Accounts", "Accounts", "a", "",
-        GncOptionUIType::ACCOUNT_LIST, GncOptionAccountTypeList{ACCT_TYPE_BANK}}}};
-    auto view = GNC_TREE_VIEW_ACCOUNT(editor.trees[0]);
+    Editor editor{GncOptionUIType::ACCOUNT_CATEGORIES, "(explicit)"};
+    auto view = GNC_TREE_VIEW_ACCOUNT(editor.trees[1]);
     gnc_tree_view_account_set_sensitive_func(view, nullptr, nullptr);
-    auto standard = gtk_tree_view_get_column(editor.trees[0], 0);
+    auto standard = gtk_tree_view_get_column(editor.trees[1], 0);
     auto source = +[](Account*, GtkTreeViewColumn*, GtkCellRenderer*) { return g_strdup("Custom"); };
     auto custom = gnc_tree_view_account_add_custom_column(view, "Custom", source, nullptr);
     auto property = gnc_tree_view_account_add_property_column(view, "Name", "name");
@@ -67,10 +66,9 @@ TEST(AccountTree, account_sensitivity)
 TEST(AccountTree, account_editing_callbacks)
 {
     Book book;
-    Editor editor{GncOption{GncOptionAccountListValue{"Accounts", "Accounts", "a", "",
-        GncOptionUIType::ACCOUNT_LIST, GncOptionAccountTypeList{ACCT_TYPE_BANK}}}};
-    auto view = GNC_TREE_VIEW_ACCOUNT(editor.trees[0]);
-    auto column = gtk_tree_view_get_column(editor.trees[0], 0);
+    Editor editor{GncOptionUIType::ACCOUNT_CATEGORIES, "(explicit)"};
+    auto view = GNC_TREE_VIEW_ACCOUNT(editor.trees[1]);
+    auto column = gtk_tree_view_get_column(editor.trees[1], 0);
     auto cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
     GtkCellRenderer* renderer = nullptr;
     for (auto node = cells; node; node = node->next)

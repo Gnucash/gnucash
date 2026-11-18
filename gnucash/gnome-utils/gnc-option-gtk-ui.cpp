@@ -20,6 +20,7 @@
 #include <gnc-option.hpp>
 #include <gnc-option-impl.hpp>
 #include "gnc-option-gtk-ui.hpp"
+#include "gnc-allocation-categories.hpp"
 #include <config.h>  // for scanf format string
 #include <memory>
 #include <algorithm>
@@ -1122,6 +1123,20 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     gtk_widget_show_all(enclosing);
 }
 
+/* Route account-category options to the native allocation category editor. */
+template<> void
+create_option_widget<GncOptionUIType::ACCOUNT_CATEGORIES>(GncOption& option, GtkGrid* page_box, int row)
+{
+    gnc_create_allocation_categories_widget(option, page_box, row);
+}
+
+/* Route holding-category options to the editor with optional target weights. */
+template<> void
+create_option_widget<GncOptionUIType::SECURITY_CATEGORIES>(GncOption& option, GtkGrid* page_box, int row)
+{
+    gnc_create_allocation_categories_widget(option, page_box, row);
+}
+
 class GncGtkAccountSelUIItem : public GncOptionGtkUIItem
 {
 public:
@@ -2008,6 +2023,10 @@ gnc_options_ui_factory_initialize(void)
                                  create_option_widget<GncOptionUIType::DATE_BOTH>);
     GncOptionUIFactory::set_func(GncOptionUIType::ACCOUNT_LIST,
                                  create_option_widget<GncOptionUIType::ACCOUNT_LIST>);
+    GncOptionUIFactory::set_func(GncOptionUIType::ACCOUNT_CATEGORIES,
+                                 create_option_widget<GncOptionUIType::ACCOUNT_CATEGORIES>);
+    GncOptionUIFactory::set_func(GncOptionUIType::SECURITY_CATEGORIES,
+                                 create_option_widget<GncOptionUIType::SECURITY_CATEGORIES>);
     GncOptionUIFactory::set_func(GncOptionUIType::ACCOUNT_SEL,
                                  create_option_widget<GncOptionUIType::ACCOUNT_SEL>);
     GncOptionUIFactory::set_func(GncOptionUIType::LIST,

@@ -105,8 +105,24 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 void
 GncOptionsDialog::set_sensitive(bool sensitive) noexcept
 {
-    gtk_widget_set_sensitive (GTK_WIDGET(m_apply_button), sensitive);
-    gtk_widget_set_sensitive (GTK_WIDGET(m_ok_button), sensitive);
+    // Validate unapplied editor contents before enabling Apply or OK. Category
+    // errors such as duplicate names or malformed targets block saving; target
+    // completeness/total warnings remain advisory and do not invalidate input.
+    bool valid = true;
+    if (m_option_db)
+        m_option_db->foreach_section([&valid](GncOptionSectionPtr& section) {
+            section->foreach_option([&valid](GncOption& option) {
+                // Internal options have no user control to validate. Existing
+                // GTK editor types report valid unless they opt into validation.
+                if (option.is_internal())
+                    return;
+                auto ui_item = dynamic_cast<const GncOptionGtkUIItem*>(option.get_ui_item());
+                if (ui_item && !ui_item->is_valid())
+                    valid = false;
+            });
+        });
+    gtk_widget_set_sensitive (GTK_WIDGET(m_apply_button), sensitive && valid);
+    gtk_widget_set_sensitive (GTK_WIDGET(m_ok_button), sensitive && valid);
     gtk_button_set_label (m_cancel_button,
                           sensitive ? _("_Cancel") : _("_Close"));
 }
@@ -278,6 +294,17 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
         return -1;
 
     if (strncmp(name, "__", 2) == 0)
+        return -1;
+
+    // Internal options can retain legacy values for saved-report restoration,
+    // but have no controls. Omit a page if all its options are internal; keep
+    // those values in the database so migration code can still read them.
+    bool has_visible_options = false;
+    section->foreach_option([&has_visible_options](GncOption& option) {
+        if (!option.is_internal())
+            has_visible_options = true;
+    });
+    if (!has_visible_options)
         return -1;
 
     auto page_label = gtk_label_new(_(name));

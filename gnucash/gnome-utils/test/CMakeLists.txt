@@ -30,8 +30,10 @@ gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
 set(GNOME_UTILS_GUI_TESTS
+  test-gnc-allocation-categories
   test-gnc-option-gtk-ui
   test-gnc-tree-view-account
+  test-dialog-options
 )
 
 get_guile_env()
@@ -47,5 +49,7 @@ endforeach()
 
 set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-load-gnome-utils-module.scm
   test-option-ui.hpp
+  test-gnc-allocation-categories.cpp
   test-gnc-option-gtk-ui.cpp
-  test-gnc-tree-view-account.cpp)
+  test-gnc-tree-view-account.cpp
+  test-dialog-options.cpp)
