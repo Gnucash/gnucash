@@ -3,6 +3,7 @@ set(scm_test_reports_standard_SOURCES
 )
 
 set(scm_test_with_srfi64_SOURCES
+  test-asset-allocation.scm
   test-standard-category-report.scm
   test-standard-net-linechart.scm
   test-standard-net-barchart.scm

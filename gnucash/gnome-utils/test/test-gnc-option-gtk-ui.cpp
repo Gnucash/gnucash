@@ -110,6 +110,91 @@ TEST(OptionGtkUI, chart_choices)
     option->set_ui_item({});
 }
 
+TEST(OptionGtkUI, report_chart_controls)
+{
+    Book book;
+    auto values = scm_c_eval_string(
+        "(use-modules (gnucash engine) (gnucash app-utils) (gnucash reports standard asset-allocation))"
+        "(define allocation-chart-test-options (allocation-options-generator #:targets? #t))"
+        "(map (lambda (name) (gnc-lookup-option allocation-chart-test-options \"Chart\" name))"
+        " '(\"Time Frame\" \"Measure\" \"Chart Type\" \"Units\"))");
+    scm_gc_protect_object(values);
+    auto window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    auto grid = gtk_grid_new();
+    gtk_container_add(GTK_CONTAINER(window), grid);
+    std::vector<GncOption*> options;
+    for (auto remaining = values; scm_is_pair(remaining); remaining = scm_cdr(remaining))
+    {
+        auto option = static_cast<GncOption*>(scm_to_pointer(scm_car(remaining)));
+        GncOptionUIFactory::create(*option, GTK_GRID(grid), options.size());
+        options.push_back(option);
+    }
+    for (auto index : {1, 0, 2, 3})
+        gnc_option_changed_option_cb(nullptr, options[index]);
+    auto combo = [&options](size_t index) {
+        auto item = dynamic_cast<GncOptionGtkUIItem*>(options[index]->get_ui_item());
+        return GTK_COMBO_BOX(item->get_widget());
+    };
+    EXPECT_EQ(gtk_tree_model_iter_n_children(gtk_combo_box_get_model(combo(2)), nullptr), 4);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 1);
+    EXPECT_TRUE(gtk_widget_get_sensitive(GTK_WIDGET(combo(2))));
+    EXPECT_FALSE(gtk_widget_get_sensitive(GTK_WIDGET(combo(3))));
+    auto unit_model = gtk_combo_box_get_model(combo(3));
+    GtkTreeIter unit_iter;
+    ASSERT_TRUE(gtk_tree_model_iter_nth_child(unit_model, &unit_iter, nullptr, 1));
+    gchar* unit_label;
+    gtk_tree_model_get(unit_model, &unit_iter, 0, &unit_label, -1);
+    EXPECT_STREQ(unit_label, "Currency");
+    g_free(unit_label);
+    gtk_combo_box_set_active(combo(1), 1);
+    EXPECT_EQ(gtk_tree_model_iter_n_children(gtk_combo_box_get_model(combo(2)), nullptr), 2);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 0);
+    EXPECT_TRUE(gtk_widget_get_sensitive(GTK_WIDGET(combo(3))));
+    for (auto option : options)
+        option->set_ui_item({});
+    gtk_widget_destroy(window);
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    grid = gtk_grid_new();
+    gtk_container_add(GTK_CONTAINER(window), grid);
+    for (size_t index = 0; index < options.size(); ++index)
+        GncOptionUIFactory::create(*options[index], GTK_GRID(grid), index);
+    for (auto index : {1, 0, 2, 3})
+        gnc_option_changed_option_cb(nullptr, options[index]);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(1)), 0);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 1);
+    gtk_combo_box_set_active(combo(2), 2);
+    gtk_combo_box_set_active(combo(0), 1);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 2);
+    auto chart_item = dynamic_cast<GncOptionGtkUIItem*>(options[2]->get_ui_item());
+    EXPECT_TRUE(scm_is_eq(chart_item->get_widget_scm_value(*options[2]), scm_from_utf8_symbol("line")));
+    gtk_combo_box_set_active(combo(0), 0);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 1);
+    gtk_combo_box_set_active(combo(2), 0);
+    gtk_combo_box_set_active(combo(0), 1);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 0);
+    gtk_combo_box_set_active(combo(2), 1);
+    gtk_combo_box_set_active(combo(0), 0);
+    gtk_combo_box_set_active(combo(2), 3);
+    gtk_combo_box_set_active(combo(1), 1);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 1);
+    gtk_combo_box_set_active(combo(0), 1);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 1);
+    gtk_combo_box_set_active(combo(2), 3);
+    gtk_combo_box_set_active(combo(0), 0);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 0);
+    gtk_combo_box_set_active(combo(1), 0);
+    EXPECT_EQ(gtk_combo_box_get_active(combo(2)), 0);
+    gtk_combo_box_set_active(combo(1), 1);
+    gtk_combo_box_set_active(combo(2), 1);
+    for (auto option : options)
+        option->set_option_from_ui_item();
+    EXPECT_TRUE(options[1]->get_value<std::string>() == "drift");
+    EXPECT_TRUE(options[2]->get_value<std::string>() == "stacked-bar");
+    for (auto option : options)
+        option->set_ui_item({});
+    gtk_widget_destroy(window);
+    scm_gc_unprotect_object(values);
+}
 }
 
 int main(int argc, char** argv)

@@ -470,6 +470,8 @@ gnucash/report/reports/reports.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm
 gnucash/report/reports/standard/advanced-portfolio.scm
+gnucash/report/reports/standard/asset-allocation-by-accounts.scm
+gnucash/report/reports/standard/asset-allocation.scm
 gnucash/report/reports/standard/balance-forecast.scm
 gnucash/report/reports/standard/balance-sheet.scm
 gnucash/report/reports/standard/balsheet-eg.scm
