@@ -132,6 +132,19 @@ flicker_data (const char *challenge)
     char* code = g_strdup_printf ("0FFF%s", challenge);
     guint challenge_length = strlen (code);
 
+    /* bitarray has G_N_ELEMENTS (bitarray) rows; each loop iteration writes
+       rows i and i+1, so i+1 must stay within bounds. A bank/FinTS server
+       is untrusted input: reject it growing bitarray writes out of bounds
+       instead of assuming the challenge length is safe. */
+    static const guint max_challenge_length = G_N_ELEMENTS (bitarray) - 1;
+    if (challenge_length > max_challenge_length)
+    {
+        g_warning ("flicker_data: challenge too long (%u bytes), "
+                   "truncating to %u to avoid writing past bitarray",
+                   challenge_length, max_challenge_length);
+        challenge_length = max_challenge_length;
+    }
+
     /* Swap the position of the bits in pairs throughout the bank challenge
        (low-order nibble first). */
     for (guint i = 0; i < challenge_length; i += 2)
