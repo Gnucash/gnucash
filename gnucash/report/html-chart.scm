@@ -27,7 +27,8 @@
 (use-modules (gnucash json builder))            ;for building JSON options
 (use-modules (gnucash report html-utilities))
 (use-modules (gnucash report report-utilities))
-(use-modules (srfi srfi-9))
+(use-modules (srfi srfi-1))                     ;for filter-map
+(use-modules (srfi srfi-9))                     ;for define-record-type
 (use-modules (ice-9 match))
 
 ;; html-chart.scm
@@ -411,7 +412,9 @@
 
 // format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
 function numformat(amount) {
-   return amount.toLocaleString(undefined, {style:formsty, currency:curriso});
+  // Merge optional per-chart number-format overrides into the currency/style defaults.
+  return amount.toLocaleString(undefined, Object.assign(
+    {style:formsty, currency:curriso}, chartjsoptions.options.numberFormat));
 }
 ")
 
@@ -501,6 +504,25 @@ document.getElementById(chartid).onclick = function(evt) {
   }
 }\n\n")
 
+(define JS-Number-Cell-Style "
+var numberCells = document.getElementById('number-style-' + chartid).querySelectorAll('td');
+// Select the stylesheet's positive or negative number style for this tick.
+function numberCellStyle(context) {
+  return window.getComputedStyle(numberCells[context.tick && context.tick.value < 0 ? 1 : 0]);
+}
+numberCellAxes.forEach(function(axis) {
+  var ticks = chartjsoptions.options.scales[axis].ticks;
+  ticks.color = function(context) { return numberCellStyle(context).color; };
+  ticks.font = function(context) {
+    var style = numberCellStyle(context);
+    var size = parseFloat(style.fontSize);
+    // Convert CSS pixel line-height to a font-size ratio for Chart.js.
+    return {family: style.fontFamily, size: size, style: style.fontStyle,
+            weight: style.fontWeight,
+            lineHeight: style.lineHeight === 'normal' ? 'normal' : parseFloat(style.lineHeight) / size};
+  };
+});\n")
+
 (define (get-options-string chart)
   (string-join
    (string-split
@@ -519,12 +541,26 @@ document.getElementById(chartid).onclick = function(evt) {
 
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
+      ;; Only opted-in axes inherit the report's numeric-cell font and colors.
+         (number-cell-axes
+          (filter-map
+           (lambda (scale)
+             (let ((ticks (assq-ref (cdr scale) 'ticks)))
+               (and ticks (assq-ref ticks 'useNumberCellStyle) (car scale))))
+           (gnc:html-chart-get chart '(options scales))))
          ;; Use a unique chart-id for each chart. This prevents charts
          ;; clashing on multi-column reports
          (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include "chartjs-4/chart.umd.js"))
 
+    ;; Canvas text cannot inherit table-cell CSS. Hidden signed samples expose
+    ;; the selected stylesheet's positive and negative number styles to JavaScript.
+    (unless (null? number-cell-axes)
+      (push (string-append
+             (format #f "<table id='number-style-~a' aria-hidden='true' style='display:none'>" id)
+             "<tbody><tr><td class='number-cell'>0</td>"
+             "<td class='number-cell neg'>-1</td></tr></tbody></table>\n")))
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
     (push (format #f "<div style='width:~a;height:~a;'>\n"
@@ -557,6 +593,11 @@ document.getElementById(chartid).onclick = function(evt) {
     (push "if (chartjsoptions.options.plugins.tooltip.showNonZeroOnly) { chartjsoptions.options.plugins.tooltip.filter = tooltipFilter; }\n")
     (push JS-setup)
 
+    ;; Apply sampled styles before Chart.js measures and draws the tick labels.
+    (unless (null? number-cell-axes)
+      (push (format #f "var numberCellAxes = ~a;\n"
+                    (scm->json-string (list->vector (map symbol->string number-cell-axes)))))
+      (push JS-Number-Cell-Style))
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")
     (push "})();\n")
     (push "</script>")

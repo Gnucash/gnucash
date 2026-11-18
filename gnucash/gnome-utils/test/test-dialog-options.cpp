@@ -2,7 +2,7 @@
 
 namespace
 {
-TEST(DialogOptions, ValidatesCategories)
+TEST(DialogOptions, ValidatesCategoriesAndSelectsVisiblePages)
 {
     Book book;
     GncOptionDB options;
@@ -14,6 +14,26 @@ TEST(DialogOptions, ValidatesCategories)
     auto dialog = std::make_unique<GncOptionsDialog>("Allocation test", nullptr);
     dialog->build_contents(&options, false);
     EXPECT_EQ(gtk_notebook_get_n_pages(GTK_NOTEBOOK(dialog->get_notebook())), 3);
+    auto notebook = GTK_NOTEBOOK(dialog->get_notebook());
+    for (auto section : {"General", "Accounts", "Categories", "Accounts"})
+    {
+        ASSERT_TRUE(dialog->select_page(section));
+        auto index = gtk_notebook_get_current_page(notebook);
+        auto page = gtk_notebook_get_nth_page(notebook, index);
+        EXPECT_STREQ(gtk_notebook_get_tab_label_text(notebook, page), section);
+        auto view = GTK_TREE_VIEW(dialog->get_page_list_view());
+        GtkTreeModel* model;
+        GtkTreeIter iter;
+        ASSERT_TRUE(gtk_tree_selection_get_selected(gtk_tree_view_get_selection(view), &model, &iter));
+        gint selected;
+        gtk_tree_model_get(model, &iter, 0, &selected, -1);
+        EXPECT_EQ(selected, index);
+    }
+    auto selected = gtk_notebook_get_current_page(notebook);
+    EXPECT_FALSE(dialog->select_page("Missing"));
+    EXPECT_FALSE(dialog->select_page("Hidden"));
+    EXPECT_FALSE(dialog->select_page(nullptr));
+    EXPECT_EQ(gtk_notebook_get_current_page(notebook), selected);
     struct Buttons { GtkWidget* apply{}; GtkWidget* ok{}; } buttons;
     Editor::visit(dialog->get_widget(), +[](GtkWidget* widget, void* data) {
         auto buttons = static_cast<Buttons*>(data);

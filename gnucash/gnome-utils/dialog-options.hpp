@@ -84,6 +84,10 @@ public:
     inline void build_contents(GncOptionDB* odb){
         build_contents(odb, true); }
     void build_contents(GncOptionDB* odb, bool show_dialog);
+    /** Select a page by its untranslated section name, updating tabs and sidebar.
+     * Return false for a null or unknown name without changing the selection.
+     */
+    bool select_page(const char* section);
     /** Enable Apply and OK only when requested and all noninternal GTK options
      * are valid. Use Cancel for pending changes, Close otherwise.
      */

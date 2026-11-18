@@ -313,6 +313,9 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
 
     /* Build this options page */
     auto page_content_box = create_content_box();
+    // Keep the untranslated section name for navigation requests. The page
+    // owns this copy, which is freed automatically when the page is destroyed.
+    g_object_set_data_full(G_OBJECT(page_content_box), "option-section", g_strdup(name), g_free);
     auto options_box = create_options_box(page_content_box);
 
     /* Create all the options */
@@ -348,6 +351,31 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
             gnc_option_changed_option_cb(nullptr, &option);
         });
     return setup_notebook_pages(dlg, page_content_box, name);
+}
+
+bool
+GncOptionsDialog::select_page(const char* section)
+{
+    if (!section)
+        return false;
+    auto notebook = GTK_NOTEBOOK(m_notebook);
+    for (int index = 0; index < gtk_notebook_get_n_pages(notebook); ++index)
+    {
+        auto page = gtk_notebook_get_nth_page(notebook, index);
+        // URL fragments use canonical section names, not translated labels.
+        auto name = static_cast<const char*>(g_object_get_data(G_OBJECT(page), "option-section"));
+        if (g_strcmp0(name, section) != 0)
+            continue;
+        // Larger dialogs use a sidebar instead of visible notebook tabs.
+        // Update both selectors so they agree regardless of presentation.
+        auto view = GTK_TREE_VIEW(m_page_list_view);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(gtk_tree_view_get_model(view), &iter, nullptr, index))
+            gtk_tree_selection_select_iter(gtk_tree_view_get_selection(view), &iter);
+        gtk_notebook_set_current_page(notebook, index);
+        return true;
+    }
+    return false;
 }
 
 /**
