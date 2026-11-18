@@ -100,6 +100,8 @@ struct _GncTreeViewAccount
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
     GSourceFunc                       filter_destroy;
+    gnc_tree_view_account_filter_func sensitive_fn;
+    gpointer                          sensitive_data;
 
     GtkTreeViewColumn *name_column;
     GtkTreeViewColumn *code_column;
@@ -654,12 +656,40 @@ update_cell_renderers (GList *renderers, gchar *account_color)
     }
 }
 
+/* Restore only sensitivity changed by this view's predicate. */
+static void
+restore_cell_sensitivity (GtkCellRenderer *renderer, GncTreeViewAccount *view)
+{
+    if (g_object_get_data (G_OBJECT (renderer), "gnc-account-sensitivity-owner") != view)
+        return;
+    g_object_set_data (G_OBJECT (renderer), "gnc-account-sensitivity-owner", NULL);
+    g_object_set (renderer, "sensitive", TRUE, NULL);
+}
+
+/* Dim an otherwise sensitive cell, preserving independent renderer restrictions. */
+static void
+apply_cell_sensitivity (GtkCellRenderer *renderer, GncTreeViewAccount *view, gboolean sensitive)
+{
+    gboolean was_sensitive;
+
+    if (sensitive)
+        return;
+    g_object_get (renderer, "sensitive", &was_sensitive, NULL);
+    if (was_sensitive)
+    {
+        g_object_set_data (G_OBJECT (renderer), "gnc-account-sensitivity-owner", view);
+        g_object_set (renderer, "sensitive", FALSE, NULL);
+    }
+}
+
 /* Colorizes a cell in the account tree view if
  * - a color is assigned to the given account
  * - the user enabled account colorization in the preferences
  * Only the account color column is special: it will always
  * be colored if a valid color was set, regardless of the
  * preference setting.
+ * Also applies the optional account sensitivity predicate to all
+ * renderers in the column without changing row visibility or selection.
  */
 static void
 acc_color_data_func (GtkTreeViewColumn *col,
@@ -707,8 +737,45 @@ acc_color_data_func (GtkTreeViewColumn *col,
     else
         update_cell_renderers (renderers, acc_cond_color);
 
+    if (view->sensitive_fn)
+    {
+        Account *account = gnc_tree_view_account_get_account_from_iter (model, iter);
+        gboolean sensitive = account && view->sensitive_fn (account, view->sensitive_data);
+        for (GList *node = renderers; node; node = node->next)
+        {
+            restore_cell_sensitivity (node->data, view);
+            apply_cell_sensitivity (node->data, view, sensitive);
+        }
+    }
     g_list_free (renderers);
     g_free (acc_color);
+}
+
+/** Install a rendering-only sensitivity predicate and redraw the view.
+ *  Removing an installed predicate restores only sensitivity it changed. The
+ *  caller retains ownership of data; see the public declaration for its lifetime.
+ */
+void
+gnc_tree_view_account_set_sensitive_func (GncTreeViewAccount *view,
+                                         gnc_tree_view_account_filter_func func,
+                                         gpointer data)
+{
+    g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view));
+    if (view->sensitive_fn && !func)
+    {
+        GList *columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (view));
+        for (GList *column = columns; column; column = column->next)
+        {
+            GList *renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column->data));
+            for (GList *node = renderers; node; node = node->next)
+                restore_cell_sensitivity (node->data, view);
+            g_list_free (renderers);
+        }
+        g_list_free (columns);
+    }
+    view->sensitive_fn = func;
+    view->sensitive_data = data;
+    gtk_widget_queue_draw (GTK_WIDGET (view));
 }
 
 /** Tell the GncTreeViewAccount code to show or not show the
@@ -1923,18 +1990,24 @@ static void col_source_helper(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     Account *account;
     gchar *text;
     GncTreeViewAccountColumnSource col_source_cb;
+    GncTreeViewAccount *view;
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
+    view = g_object_get_data (G_OBJECT (col), "tree-view");
+    if (GNC_IS_TREE_VIEW_ACCOUNT (view))
+        restore_cell_sensitivity (cell, view);
     col_source_cb = (GncTreeViewAccountColumnSource) _col_source_cb;
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
     text = col_source_cb(account, col, cell);
     g_object_set (G_OBJECT (cell), "text", text, "xalign", 1.0, NULL);
     g_free(text);
+    if (GNC_IS_TREE_VIEW_ACCOUNT (view) && view->sensitive_fn)
+        apply_cell_sensitivity (cell, view, account && view->sensitive_fn (account, view->sensitive_data));
 }
 
 /**
- * If col_edited_cb is null, the editing callback (helper) will be
- * effectively disconnected.
+ * Replace the editing callback without retaining duplicate signal connections.
+ * A null callback disables editing and disconnects the helper.
  **/
 void
 gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
@@ -1944,12 +2017,12 @@ gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
 {
     GtkTreeModel *s_model;
 
+    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+    g_signal_handlers_disconnect_by_func(G_OBJECT(renderer), col_edited_helper, s_model);
     if (col_edited_cb == NULL)
     {
         g_object_set(G_OBJECT(renderer), "editable", FALSE, NULL);
         g_object_set_data(G_OBJECT(renderer), "column_edited_callback", col_edited_cb);
-        s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
-        g_signal_handlers_disconnect_by_func(G_OBJECT(renderer), col_edited_cb, s_model);
         g_object_set_data(G_OBJECT(renderer), "column_view", column);
     }
     else
@@ -1957,7 +2030,6 @@ gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
         g_object_set(G_OBJECT(renderer), "editable", TRUE, NULL);
         g_object_set_data(G_OBJECT(renderer), "column_edited_callback",
                           col_edited_cb);
-        s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
         g_signal_connect(G_OBJECT(renderer), "edited",
                          (GCallback) col_edited_helper, s_model);
         g_object_set_data(G_OBJECT(renderer), "column_view", column);
@@ -1999,6 +2071,7 @@ gnc_tree_view_account_add_custom_column_renderer(GncTreeViewAccount *account_vie
 
     column = gtk_tree_view_column_new_with_attributes (column_title,
              renderer, NULL);
+    g_object_set_data (G_OBJECT (column), "tree-view", account_view);
     if (col_edited_cb)
     {
         gtva_setup_column_renderer_edited_cb(account_view, column,

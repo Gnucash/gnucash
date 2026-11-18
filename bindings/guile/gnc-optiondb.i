@@ -2096,6 +2096,54 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
         option->set_ui_item_selectable(selectable);
     }
 
+    /* Return the current dropdown choice, including unapplied selections in
+     * the Options dialog. Without an attached dropdown, use the stored value.
+     * Intended for symbol-keyed multichoice options; missing option returns #f. */
+    static SCM
+    gnc_optiondb_lookup_choice(GncOptionDBPtr& odb, const char* section,
+                               const char* name)
+    {
+        auto option{odb->find_option(section, name)};
+        if (!option)
+            return SCM_BOOL_F;
+        auto item{option->get_ui_item()};
+        auto selected{item ? item->get_choice() : std::optional<uint16_t>{}};
+        auto index{selected ? *selected : option->get_value<uint16_t>()};
+        return scm_from_utf8_symbol(option->permissible_value(index));
+    }
+
+    /* Filter an attached dropdown to the supplied symbol keys, preserving
+     * original choice indices. Keep a compatible selection or use fallback.
+     * Without a widget or any recognized choices, leave the option unchanged. */
+    static void
+    gnc_optiondb_set_option_choices(GncOptionDBPtr& odb, const char* section,
+                                   const char* name, SCM values, SCM fallback)
+    {
+        auto option{odb->find_option(section, name)};
+        if (!option)
+            return;
+        auto item{option->get_ui_item()};
+        if (!item)
+            return;
+        std::vector<uint16_t> choices;
+        for (auto remaining = values; scm_is_pair(remaining);
+             remaining = scm_cdr(remaining))
+        {
+            auto key{scm_symbol_to_string(scm_car(remaining))};
+            auto text{scm_to_utf8_string(key)};
+            auto index{option->permissible_value_index(text)};
+            free (text);
+            if (index < option->num_permissible_values())
+                choices.push_back(index);
+        }
+        if (choices.empty())
+            return;
+        auto text{scm_to_utf8_string(scm_symbol_to_string(fallback))};
+        auto selected{option->permissible_value_index(text)};
+        free (text);
+        item->set_choices(*option, choices, selected);
+    }
+
     static void
     gnc_optiondb_foreach(GncOptionDBPtr& odb, SCM thunk)
     {

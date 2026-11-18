@@ -134,7 +134,8 @@
   (define (option-op option)
     (let ((value (GncOption-get-value option))
           (default-value (GncOption-get-default-value option)))
-      (if (not (equal? value default-value))
+            (if (or (GncOption-always-save option)
+              (not (equal? value default-value)))
           (display (string-append
                       "(let ((option (gnc:lookup-option " toplevel-name "\n"
                       "                                 "

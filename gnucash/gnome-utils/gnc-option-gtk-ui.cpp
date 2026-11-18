@@ -22,7 +22,9 @@
 #include "gnc-option-gtk-ui.hpp"
 #include <config.h>  // for scanf format string
 #include <memory>
+#include <algorithm>
 #include <cstdint>
+#include <libguile.h>
 #include <qof.h>
 #include <gnc-engine.h> // for GNC_MOD_GUI
 #include <gnc-commodity.h> // for GNC_COMMODITY
@@ -373,7 +375,7 @@ create_multichoice_widget(GncOption& option)
 
     g_return_val_if_fail(num_values >= 0, NULL);
     auto renderer = gtk_cell_renderer_text_new();
-    auto store = gtk_list_store_new(1, G_TYPE_STRING);
+    auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_UINT);
     /* Add values to the list store, entry and tooltip */
     for (decltype(num_values) i = 0; i < num_values; i++)
     {
@@ -381,7 +383,7 @@ create_multichoice_widget(GncOption& option)
         auto itemstring = option.permissible_value_name(i);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set(store, &iter, 0,
-                           (itemstring && *itemstring) ? _(itemstring) : "", -1);
+                           (itemstring && *itemstring) ? _(itemstring) : "", 1, i, -1);
     }
     /* Create the new Combo with tooltip and add the store */
     auto widget{GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)))};
@@ -395,25 +397,79 @@ create_multichoice_widget(GncOption& option)
 
 class GncGtkMultichoiceUIItem : public GncOptionGtkUIItem
 {
+    /* Return the active row's original option index, not its filtered position.
+     * An absent active row returns zero. */
+    uint16_t selected_index() const
+    {
+        auto widget{GTK_COMBO_BOX(get_widget())};
+        GtkTreeIter iter;
+        guint index{};
+        if (gtk_combo_box_get_active_iter(widget, &iter))
+            gtk_tree_model_get(gtk_combo_box_get_model(widget), &iter, 1, &index, -1);
+        return index;
+    }
 public:
     GncGtkMultichoiceUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::MULTICHOICE} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_COMBO_BOX(get_widget())};
-        gtk_combo_box_set_active(widget, option.get_value<uint16_t>());
+        auto model{gtk_combo_box_get_model(widget)};
+        GtkTreeIter iter;
+        auto valid{gtk_tree_model_get_iter_first(model, &iter)};
+        while (valid)
+        {
+            guint index{};
+            gtk_tree_model_get(model, &iter, 1, &index, -1);
+            if (index == option.get_value<uint16_t>())
+            {
+                gtk_combo_box_set_active_iter(widget, &iter);
+                return;
+            }
+            valid = gtk_tree_model_iter_next(model, &iter);
+        }
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        option.set_value<uint16_t>(static_cast<uint16_t>(gtk_combo_box_get_active(widget)));
+        option.set_value<uint16_t>(selected_index());
     }
     SCM get_widget_scm_value(const GncOption& option) const override
     {
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        auto id{gtk_combo_box_get_active(widget)};
-        auto value{option.permissible_value(id)};
+        auto value{option.permissible_value(selected_index())};
         return scm_from_utf8_symbol(value);
+    }
+    /* Expose the unapplied dropdown selection without changing the option. */
+    std::optional<uint16_t> get_choice() const override
+    {
+        return selected_index();
+    }
+    /* Rebuild the dropdown with original option indices. Keep a compatible
+     * selection or use selected, which must belong to the nonempty choices.
+     * Suppress intermediate change callbacks and mark the UI item dirty. */
+    uint16_t set_choices(GncOption& option, const std::vector<uint16_t>& choices,
+                         uint16_t selected) override
+    {
+        auto widget{GTK_COMBO_BOX(get_widget())};
+        if (std::find(choices.begin(), choices.end(), selected_index()) != choices.end())
+            selected = selected_index();
+        auto store{gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_UINT)};
+        int active{};
+        for (auto index : choices)
+        {
+            GtkTreeIter iter;
+            gtk_list_store_append(store, &iter);
+            gtk_list_store_set(store, &iter, 0, _(option.permissible_value_name(index)),
+                               1, static_cast<guint>(index), -1);
+            if (index == selected)
+                active = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store), nullptr) - 1;
+        }
+        g_signal_handlers_block_by_func(widget, reinterpret_cast<gpointer>(gnc_option_changed_widget_cb), &option);
+        gtk_combo_box_set_model(widget, GTK_TREE_MODEL(store));
+        gtk_combo_box_set_active(widget, active);
+        g_signal_handlers_unblock_by_func(widget, reinterpret_cast<gpointer>(gnc_option_changed_widget_cb), &option);
+        g_object_unref(store);
+        set_dirty(true);
+        return selected;
     }
 };
 
@@ -871,8 +927,8 @@ show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
 class GncGtkAccountListUIItem : public GncOptionGtkUIItem
 {
 public:
-    explicit GncGtkAccountListUIItem(GtkWidget* widget) :
-        GncOptionGtkUIItem{widget, GncOptionUIType::ACCOUNT_LIST} {}
+    explicit GncGtkAccountListUIItem(GtkWidget* widget, GncOptionUIType type) :
+        GncOptionGtkUIItem{widget, type} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_TREE_VIEW_ACCOUNT(get_widget())};
@@ -955,7 +1011,7 @@ create_account_widget(GncOption& option, char *name)
                 avi.include_type[type] = TRUE;
         }
 
-        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
+        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT(tree), &avi);
         g_list_free (acct_type_list);
     }
     else
@@ -968,7 +1024,7 @@ create_account_widget(GncOption& option, char *name)
         for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
             avi.include_type[i] = TRUE;
         avi.show_hidden = TRUE;
-        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
+        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT(tree), &avi);
     }
 
     scroll_win = gtk_scrolled_window_new(NULL, NULL);
@@ -983,7 +1039,7 @@ create_account_widget(GncOption& option, char *name)
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 10);
 
-    option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
+    option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree, option.get_ui_type()));
     option.set_ui_item_from_option();
 
     if (multiple_selection)
