@@ -49,6 +49,10 @@ jobs:
       run: |
         cd $HOME/gnucash/build
         ninja
+        export XDG_DATA_DIRS="$PREFIX/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+        export GDK_PIXBUF_MODULE_FILE="$PWD/gdk-pixbuf-loaders.cache"
+        GDK_PIXBUF_CACHE="$("$PREFIX/bin/pkgconf" --variable=gdk_pixbuf_cache_file gdk-pixbuf-2.0)"
+        sed "s|^\"lib/|\"$PREFIX/lib/|" "$GDK_PIXBUF_CACHE" > "$GDK_PIXBUF_MODULE_FILE"
         ninja check
       env:
         CTEST_OUTPUT_ON_FAILURE: On

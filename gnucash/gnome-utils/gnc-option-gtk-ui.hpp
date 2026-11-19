@@ -82,6 +82,10 @@ public:
     void set_widget(GtkWidget* widget);
     virtual GtkWidget* get_widget() const { return m_widget; }
     virtual SCM get_widget_scm_value(const GncOption&) const;
+/** Whether pending input permits Apply/OK. Valid by default; advisory warnings
+ *  should not invalidate otherwise usable input.
+ */
+    virtual bool is_valid() const noexcept { return true; }
 private:
     GtkWidget* m_widget;
 };

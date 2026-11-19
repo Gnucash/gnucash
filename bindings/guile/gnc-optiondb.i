@@ -1713,6 +1713,34 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
 %template(gnc_register_number_range_option) gnc_register_number_range_option<double>;
 
 %inline %{
+    /* Register the account-category editor and always save its assignments,
+     * including assignments unchanged from the book-dependent defaults. */
+    static void
+    gnc_register_account_categories_option(GncOptionDBPtr& db,
+                                            const char* section, const char* name,
+                                            const char* key, const char* doc_string,
+                                            std::string value)
+    {
+        GncOption option{section, name, key, doc_string, value,
+                GncOptionUIType::ACCOUNT_CATEGORIES};
+        option.set_always_save(true);
+        db->register_option(section, std::move(option));
+    }
+
+    /* Register the holding-category/target editor and always save its
+     * definitions, including unchanged book-dependent defaults. */
+    static void
+    gnc_register_security_categories_option(GncOptionDBPtr& db,
+                                             const char* section, const char* name,
+                                             const char* key, const char* doc_string,
+                                             std::string value)
+    {
+        GncOption option{section, name, key, doc_string, value,
+                GncOptionUIType::SECURITY_CATEGORIES};
+        option.set_always_save(true);
+        db->register_option(section, std::move(option));
+    }
+
     /* qof_book_set_data isn't exported by sw-engine and we need it to set up a
      * commodity namespace table to test currencies.*/
     static void
@@ -2094,6 +2122,54 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
     {
         auto option{odb->find_option(section, name)};
         option->set_ui_item_selectable(selectable);
+    }
+
+    /* Return the current dropdown choice, including unapplied selections in
+     * the Options dialog. Without an attached dropdown, use the stored value.
+     * Intended for symbol-keyed multichoice options; missing option returns #f. */
+    static SCM
+    gnc_optiondb_lookup_choice(GncOptionDBPtr& odb, const char* section,
+                               const char* name)
+    {
+        auto option{odb->find_option(section, name)};
+        if (!option)
+            return SCM_BOOL_F;
+        auto item{option->get_ui_item()};
+        auto selected{item ? item->get_choice() : std::optional<uint16_t>{}};
+        auto index{selected ? *selected : option->get_value<uint16_t>()};
+        return scm_from_utf8_symbol(option->permissible_value(index));
+    }
+
+    /* Filter an attached dropdown to the supplied symbol keys, preserving
+     * original choice indices. Keep a compatible selection or use fallback.
+     * Without a widget or any recognized choices, leave the option unchanged. */
+    static void
+    gnc_optiondb_set_option_choices(GncOptionDBPtr& odb, const char* section,
+                                   const char* name, SCM values, SCM fallback)
+    {
+        auto option{odb->find_option(section, name)};
+        if (!option)
+            return;
+        auto item{option->get_ui_item()};
+        if (!item)
+            return;
+        std::vector<uint16_t> choices;
+        for (auto remaining = values; scm_is_pair(remaining);
+             remaining = scm_cdr(remaining))
+        {
+            auto key{scm_symbol_to_string(scm_car(remaining))};
+            auto text{scm_to_utf8_string(key)};
+            auto index{option->permissible_value_index(text)};
+            free (text);
+            if (index < option->num_permissible_values())
+                choices.push_back(index);
+        }
+        if (choices.empty())
+            return;
+        auto text{scm_to_utf8_string(scm_symbol_to_string(fallback))};
+        auto selected{option->permissible_value_index(text)};
+        free (text);
+        item->set_choices(*option, choices, selected);
     }
 
     static void

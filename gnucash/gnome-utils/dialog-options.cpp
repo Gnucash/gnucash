@@ -105,8 +105,24 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 void
 GncOptionsDialog::set_sensitive(bool sensitive) noexcept
 {
-    gtk_widget_set_sensitive (GTK_WIDGET(m_apply_button), sensitive);
-    gtk_widget_set_sensitive (GTK_WIDGET(m_ok_button), sensitive);
+    // Validate unapplied editor contents before enabling Apply or OK. Category
+    // errors such as duplicate names or malformed targets block saving; target
+    // completeness/total warnings remain advisory and do not invalidate input.
+    bool valid = true;
+    if (m_option_db)
+        m_option_db->foreach_section([&valid](GncOptionSectionPtr& section) {
+            section->foreach_option([&valid](GncOption& option) {
+                // Internal options have no user control to validate. Existing
+                // GTK editor types report valid unless they opt into validation.
+                if (option.is_internal())
+                    return;
+                auto ui_item = dynamic_cast<const GncOptionGtkUIItem*>(option.get_ui_item());
+                if (ui_item && !ui_item->is_valid())
+                    valid = false;
+            });
+        });
+    gtk_widget_set_sensitive (GTK_WIDGET(m_apply_button), sensitive && valid);
+    gtk_widget_set_sensitive (GTK_WIDGET(m_ok_button), sensitive && valid);
     gtk_button_set_label (m_cancel_button,
                           sensitive ? _("_Cancel") : _("_Close"));
 }
@@ -280,12 +296,26 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
     if (strncmp(name, "__", 2) == 0)
         return -1;
 
+    // Internal options can retain legacy values for saved-report restoration,
+    // but have no controls. Omit a page if all its options are internal; keep
+    // those values in the database so migration code can still read them.
+    bool has_visible_options = false;
+    section->foreach_option([&has_visible_options](GncOption& option) {
+        if (!option.is_internal())
+            has_visible_options = true;
+    });
+    if (!has_visible_options)
+        return -1;
+
     auto page_label = gtk_label_new(_(name));
     PINFO("Page_label is %s", _(name));
     gtk_widget_show(page_label);
 
     /* Build this options page */
     auto page_content_box = create_content_box();
+    // Keep the untranslated section name for navigation requests. The page
+    // owns this copy, which is freed automatically when the page is destroyed.
+    g_object_set_data_full(G_OBJECT(page_content_box), "option-section", g_strdup(name), g_free);
     auto options_box = create_options_box(page_content_box);
 
     /* Create all the options */
@@ -321,6 +351,31 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
             gnc_option_changed_option_cb(nullptr, &option);
         });
     return setup_notebook_pages(dlg, page_content_box, name);
+}
+
+bool
+GncOptionsDialog::select_page(const char* section)
+{
+    if (!section)
+        return false;
+    auto notebook = GTK_NOTEBOOK(m_notebook);
+    for (int index = 0; index < gtk_notebook_get_n_pages(notebook); ++index)
+    {
+        auto page = gtk_notebook_get_nth_page(notebook, index);
+        // URL fragments use canonical section names, not translated labels.
+        auto name = static_cast<const char*>(g_object_get_data(G_OBJECT(page), "option-section"));
+        if (g_strcmp0(name, section) != 0)
+            continue;
+        // Larger dialogs use a sidebar instead of visible notebook tabs.
+        // Update both selectors so they agree regardless of presentation.
+        auto view = GTK_TREE_VIEW(m_page_list_view);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(gtk_tree_view_get_model(view), &iter, nullptr, index))
+            gtk_tree_selection_select_iter(gtk_tree_view_get_selection(view), &iter);
+        gtk_notebook_set_current_page(notebook, index);
+        return true;
+    }
+    return false;
 }
 
 /**

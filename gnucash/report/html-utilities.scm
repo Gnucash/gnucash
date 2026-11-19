@@ -282,13 +282,15 @@
    (gnc:html-markup-p message)))
 
 
-(define (gnc:html-make-options-link report-id)
+;; Make a paragraph linking to the report's options, optionally selecting section.
+;; The default empty section preserves the existing one-argument link behavior.
+(define* (gnc:html-make-options-link report-id #:optional (section ""))
    (if report-id
     (gnc:html-markup-p
      (gnc:html-markup-anchor
       (gnc-build-url URL-TYPE-OPTIONS
        (string-append "report-id=" (format #f "~a" report-id))
-       "")
+       section)
       (G_ "Edit report options")))))
 
 (define* (gnc:html-render-options-changed options #:optional plaintext?)

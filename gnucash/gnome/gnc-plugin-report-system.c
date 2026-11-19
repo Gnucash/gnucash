@@ -187,7 +187,7 @@ gnc_report_system_options_url_cb (const char *location, const char *label,
             return FALSE;
         }
 
-        gnc_report_edit_options (report, GTK_WINDOW(result->parent));
+        gnc_report_edit_options_on_page (report, GTK_WINDOW(result->parent), label);
 
         return TRUE;
     }

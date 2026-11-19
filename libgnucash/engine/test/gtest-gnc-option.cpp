@@ -83,6 +83,20 @@ TEST(GncOption, test_string_stream_out)
     EXPECT_EQ(oss.str(), option.get_value<std::string>());
 }
 
+TEST(GncOption, test_always_save_is_opt_in)
+{
+    GncOption option{"Accounts", "Selection", "a", "", std::string{"initial"}};
+    EXPECT_FALSE(option.always_save());
+    option.set_always_save(true);
+    EXPECT_TRUE(option.always_save());
+    EXPECT_FALSE(option.is_changed());
+    option.reset_default_value();
+    EXPECT_TRUE(option.always_save());
+    EXPECT_EQ("initial", option.get_value<std::string>());
+    option.set_always_save(false);
+    EXPECT_FALSE(option.always_save());
+}
+
 TEST(GncOption, test_string_stream_in)
 {
     GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
@@ -601,6 +615,27 @@ TEST_F(GncOptionAccountTest, test_option_value_constructor)
     EXPECT_EQ(2U, option.get_value().size());
     EXPECT_EQ(2U, option.get_default_value().size());
     EXPECT_EQ(acclist[0], option.get_value()[0]);
+}
+
+TEST_F(GncOptionAccountTest, test_empty_account_list_retains_legacy_fallback)
+{
+    auto defaults = list_of_types({ACCT_TYPE_BANK});
+    ASSERT_FALSE(defaults.empty());
+    GncOptionAccountListValue option{"Accounts", "Accounts", "a", "Accounts",
+                                   GncOptionUIType::ACCOUNT_LIST, defaults};
+    EXPECT_EQ(defaults, option.get_value());
+    EXPECT_FALSE(option.is_changed());
+    option.set_value({});
+    EXPECT_EQ(defaults, option.get_value());
+    EXPECT_TRUE(option.is_changed());
+    EXPECT_TRUE(option.is_dirty());
+    EXPECT_EQ(defaults, option.get_default_value());
+    option.mark_saved();
+    EXPECT_FALSE(option.is_dirty());
+    EXPECT_EQ(defaults, option.get_value());
+    option.reset_default_value();
+    EXPECT_EQ(defaults, option.get_value());
+    EXPECT_FALSE(option.is_changed());
 }
 
 TEST_F(GncOptionAccountTest, test_option_no_value_limited_constructor)

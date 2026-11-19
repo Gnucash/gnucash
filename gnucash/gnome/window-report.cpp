@@ -193,15 +193,45 @@ gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report,
 gboolean
 gnc_report_edit_options(SCM report, GtkWindow *parent)
 {
+    return gnc_report_edit_options_on_page(report, parent, nullptr);
+}
+
+gboolean
+gnc_report_edit_options_on_page(SCM report, GtkWindow *parent, const char *section)
+{
     SCM set_editor        = scm_c_eval_string("gnc:report-set-editor-widget!");
     SCM get_report_type   = scm_c_eval_string("gnc:report-type");
     SCM ptr;
     GncOptionDB* odb;
     GtkWidget *options_widget = nullptr;
 
+    auto select_section = [section](GtkWidget *widget)
+    {
+        if (section && *section && widget)
+        {
+            auto dialog = static_cast<GncOptionsDialog *>(
+                g_object_get_data(G_OBJECT(widget), "optionwin"));
+            if (dialog)
+                dialog->select_page(section);
+        }
+    };
+
     /* If the options editor widget already exists we simply raise it */
     if (gnc_report_raise_editor (report))
+    {
+        if (!section || !*section)
+            return TRUE;
+        SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
+        SCM editor = scm_call_1(get_editor, report);
+        if (editor == SCM_BOOL_F)
+            return TRUE;
+#define FUNC_NAME "gnc-report-edit-options-on-page"
+        options_widget = static_cast<GtkWidget *>(
+            SWIG_MustGetPtr(editor, SWIG_TypeQuery("_p_GtkWidget"), 1, 0));
+#undef FUNC_NAME
+        select_section(options_widget);
         return TRUE;
+    }
 
     /* Check if this report has options to edit */
     odb = gnc_get_report_optiondb(report);
@@ -230,6 +260,7 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
 #undef FUNC_NAME
     scm_call_2 (set_editor, report, ptr);
 
+    select_section(options_widget);
     return TRUE;
 }
 
