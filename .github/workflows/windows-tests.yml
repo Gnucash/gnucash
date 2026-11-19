@@ -7,6 +7,7 @@ jobs:
         name: Windows ucrt64 CI Tests
         env:
           TZ: America/Los_Angeles
+          GUILE_AUTO_COMPILE: '0'
         defaults:
           run:
             shell: msys2 {0}

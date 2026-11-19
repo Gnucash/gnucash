@@ -24,10 +24,20 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_OWNER             (gnc_search_owner_get_type ())
+#define GNC_SEARCH_TYPE_INVOICE_OWNER "invoice-owner"
+#define GNC_SEARCH_TYPE_BILL_OWNER "bill-owner"
+#define GNC_SEARCH_TYPE_VOUCHER_OWNER "voucher-owner"
+
+G_BEGIN_DECLS
+
 G_DECLARE_FINAL_TYPE (GNCSearchOwner, gnc_search_owner, GNC, SEARCH_OWNER, GNCSearchCoreType)
 
 GNCSearchOwner  *gnc_search_owner_new   (void);
+GNCSearchOwner  *gnc_search_invoice_owner_new (void);
+GNCSearchOwner  *gnc_search_bill_owner_new (void);
+GNCSearchOwner  *gnc_search_voucher_owner_new (void);
+GNCSearchOwner  *gnc_search_job_new     (void);
 
-/* methods */
+G_END_DECLS
 
 #endif /* ! _GNCSEARCH_OWNER_H */
