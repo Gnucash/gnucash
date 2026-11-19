@@ -8,12 +8,38 @@
 #include <cstdlib>
 #include <clocale>
 #include <libintl.h>
+#include "qofinstance.h"
 #include "dialog-object-references.h"
 #include "gnc-path.h"
 
 namespace
 {
 static bool s_have_display = false;
+
+struct NamedInstance
+{
+    QofInstance parent;
+    const char *name;
+};
+struct NamedInstanceClass { QofInstanceClass parent; };
+G_DEFINE_TYPE (NamedInstance, named_instance, QOF_TYPE_INSTANCE)
+
+static gchar *
+named_instance_display_name (const QofInstance *instance)
+{
+    return g_strdup (reinterpret_cast<const NamedInstance*> (instance)->name);
+}
+
+static void
+named_instance_class_init (NamedInstanceClass *klass)
+{
+    QOF_INSTANCE_CLASS (klass)->get_display_name = named_instance_display_name;
+}
+
+static void
+named_instance_init ([[maybe_unused]] NamedInstance *instance)
+{
+}
 
 class GtkEnvironment : public ::testing::Environment
 {
@@ -49,6 +75,8 @@ class ObjectReferencesDialogTest : public ::testing::Test
 {
 protected:
     GtkWidget *dialog = nullptr;
+    GList *objects = nullptr;
+
     void SetUp () override
     {
         if (!s_have_display)
@@ -58,12 +86,24 @@ protected:
     {
         if (dialog)
             gtk_widget_destroy (dialog);
+        clear_objects ();
     }
-    void create (const char * const *names)
+    void clear_objects ()
+    {
+        g_list_free_full (objects, g_object_unref);
+        objects = nullptr;
+    }
+    void add_object (const char *name)
+    {
+        auto object = static_cast<NamedInstance*> (g_object_new (named_instance_get_type (), nullptr));
+        object->name = name;
+        objects = g_list_append (objects, object);
+    }
+    void create ()
     {
         dialog = GTK_WIDGET (g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
                                           "explanation", "These objects refer to this account.",
-                                          "object-names", names, nullptr));
+                                          "object-list", objects, nullptr));
     }
 };
 
@@ -154,8 +194,9 @@ INSTANTIATE_TEST_SUITE_P (InvalidFiles, ObjectReferencesInvalidTemplateTest,
 
 TEST_F (ObjectReferencesDialogTest, DisplaysExplanationAndOrderedNames)
 {
-    const char *names[] = {"Invoice B", "Rechnung Ä", "Invoice B", nullptr};
-    create (names);
+    for (const auto name : {"Invoice B", "Rechnung Ä", "Invoice B"})
+        add_object (name);
+    create ();
     auto label = find_child (dialog, GTK_TYPE_LABEL);
     ASSERT_NE (label, nullptr);
     EXPECT_STREQ (gtk_label_get_text (GTK_LABEL (label)), "These objects refer to this account.");
@@ -178,12 +219,11 @@ TEST_F (ObjectReferencesDialogTest, DisplaysExplanationAndOrderedNames)
     EXPECT_NE (gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), 0), nullptr);
 }
 
-TEST_F (ObjectReferencesDialogTest, CopiesNamesBeforeCallerReleasesThem)
+TEST_F (ObjectReferencesDialogTest, CopiesNamesBeforeCallerReleasesObjects)
 {
-    auto names = g_new0 (gchar*, 2);
-    names[0] = g_strdup ("Owned row");
-    create (names);
-    g_strfreev (names);
+    add_object ("Owned row");
+    create ();
+    clear_objects ();
     auto view = find_child (dialog, GTK_TYPE_TREE_VIEW);
     ASSERT_NE (view, nullptr);
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
@@ -197,8 +237,7 @@ TEST_F (ObjectReferencesDialogTest, CopiesNamesBeforeCallerReleasesThem)
 
 TEST_F (ObjectReferencesDialogTest, EmptyList)
 {
-    const char *names[] = {nullptr};
-    create (names);
+    create ();
     auto view = find_child (dialog, GTK_TYPE_TREE_VIEW);
     ASSERT_NE (view, nullptr);
     EXPECT_EQ (gtk_tree_model_iter_n_children (gtk_tree_view_get_model (GTK_TREE_VIEW (view)), nullptr), 0);
