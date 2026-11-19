@@ -45,7 +45,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-11-01 14:51+0000\n"
+"PO-Revision-Date: 2026-11-07 09:45+0000\n"
 "Last-Translator: Christian Wehling <cwehli@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -55,7 +55,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -20129,7 +20129,7 @@ msgstr "Wert mit Symbol"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:362
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 msgid "Amount Num."
-msgstr "Wert numerisch."
+msgstr "Betrag numerisch."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:363
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
