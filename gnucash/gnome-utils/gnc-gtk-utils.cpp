@@ -22,8 +22,12 @@
 \********************************************************************/
 
 #include <config.h>
+#include <string.h>
 
 #include "gnc-gtk-utils.h"
+
+#include <string>
+#include <string_view>
 
 #define LAST_INDEX "last_index"
 #define CHANGED_ID "changed_id"
@@ -182,6 +186,141 @@ gnc_cbwe_add_completion (GtkComboBox *cbwe)
     g_object_unref(completion);
 }
 
+static std::string
+utf8_normalize_and_fold (std::string_view text)
+{
+    char *norm = g_utf8_normalize (text.data(), text.size(), G_NORMALIZE_NFC);
+    char *folded = norm ? g_utf8_casefold (norm, -1) : nullptr;
+    std::string rv{folded ? folded : ""};
+    g_free (folded);
+    g_free (norm);
+    return rv;
+}
+
+/** True if text (empty counts) is a case-insensitive substring of at
+ *  least one row of the entry text column.  A null model, as while a
+ *  list is being rebuilt, allows everything.
+ *
+ *  @param cbwe A pointer to a GtkComboBox with entry widget.
+ *
+ *  @param text The candidate entry text. */
+static bool
+text_matches_a_row (GtkComboBox *cbwe, std::string_view text)
+{
+    auto model = gtk_combo_box_get_model (cbwe);
+    if (!model || text.empty())
+        return true;
+
+    int column = gtk_combo_box_get_entry_text_column (cbwe);
+    if (column < 0)
+        column = 0;
+
+    auto needle = utf8_normalize_and_fold (text);
+    if (needle.empty())
+        return false;
+
+    GtkTreeIter iter;
+    for (bool ok = gtk_tree_model_get_iter_first (model, &iter); ok;
+         ok = gtk_tree_model_iter_next (model, &iter))
+    {
+        char *name = nullptr;
+        gtk_tree_model_get (model, &iter, column, &name, -1);
+        if (!name) continue;
+        auto hay = utf8_normalize_and_fold (name);
+        g_free (name);
+        if (hay.find (needle) != std::string::npos)
+            return true;
+    }
+    return false;
+}
+
+
+/**  Refuse any edit that would leave the entry text matching no row.
+ *   Insertions (typing, paste) are checked here and deletions in the
+ *   next function.  Trimming either end of matching text is always
+ *   safe, but deleting from the middle ("Australia" -> "Ausralia") is
+ *   not.
+ *
+ *   @param editable The entry being edited.
+ *
+ *   @param new_text The text about to be inserted.
+ *
+ *   @param len Length of new_text in bytes, or -1 if NUL-terminated.
+ *
+ *   @param position Character offset of the insertion.
+ *
+ *   @param cbwe A pointer to a GtkComboBox with entry widget. */
+static void
+gnc_cbwe_insert_text_cb (GtkEditable *editable, gchar *new_text, gint len,
+                         gint *position, GtkComboBox *cbwe)
+{
+    const char *cur = gtk_entry_get_text (GTK_ENTRY (editable));
+    if (len < 0)
+        len = strlen (new_text);
+    const char *at = g_utf8_offset_to_pointer (cur, *position);
+
+    std::string candidate (cur, at - cur);
+    candidate.append (new_text, len).append (at);
+
+    if (!text_matches_a_row (cbwe, candidate))
+        g_signal_stop_emission_by_name (editable, "insert-text");
+}
+
+
+/**  See gnc_cbwe_insert_text_cb: the same check for deletions.
+ *
+ *   @param editable The entry being edited.
+ *
+ *   @param start Character offset of the first deleted character.
+ *
+ *   @param end Character offset just past the last deleted character,
+ *   or -1 for the end of the text.
+ *
+ *   @param cbwe A pointer to a GtkComboBox with entry widget. */
+static void
+gnc_cbwe_delete_text_cb (GtkEditable *editable, gint start, gint end,
+                         GtkComboBox *cbwe)
+{
+    const char *cur = gtk_entry_get_text (GTK_ENTRY (editable));
+    if (end < 0)
+        end = g_utf8_strlen (cur, -1);
+    const char *s = g_utf8_offset_to_pointer (cur, start);
+    const char *e = g_utf8_offset_to_pointer (cur, end);
+
+    std::string candidate (cur, s - cur);
+    candidate.append (e);
+
+    if (!text_matches_a_row (cbwe, candidate))
+        g_signal_stop_emission_by_name (editable, "delete-text");
+}
+
+
+/**  The entry got focus: select all of its text so that typing replaces
+ *   the value instead of editing inside it.
+ *
+ *   @param entry The entry that got focus.
+ *
+ *   @param event Unused.
+ *
+ *   @param unused Unused. */
+static gboolean
+gnc_cbwe_focus_in_cb (GtkEntry *entry, GdkEventFocus*, gpointer)
+{
+    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+    return FALSE;
+}
+
+/** Make a combo box with an entry require a list item.  The first item
+ *  is selected if none is, the last valid row is restored when focus
+ *  leaves the entry holding text that matches none, and typing is
+ *  limited to text that is still a case-insensitive substring of at
+ *  least one row of the entry text column.  The whole text is selected
+ *  on focus-in so that typing replaces the value.
+ *
+ *  Don't use this where free text is legitimate; use
+ *  gnc_cbwe_add_completion() alone there.
+ *
+ *  @param cbwe A pointer to a GtkComboBox with entry widget. */
 void
 gnc_cbwe_require_list_item (GtkComboBox *cbwe)
 {
@@ -219,6 +358,15 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
                      G_CALLBACK(gnc_cbwe_match_selected_cb), cbwe);
     g_signal_connect(entry, "focus-out-event",
                      G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
+
+    /* Searching by typing is fine, but the text may never drift to
+     * something that matches no row. */
+    g_signal_connect(entry, "insert-text",
+                     G_CALLBACK(gnc_cbwe_insert_text_cb), cbwe);
+    g_signal_connect(entry, "delete-text",
+                     G_CALLBACK(gnc_cbwe_delete_text_cb), cbwe);
+    g_signal_connect(entry, "focus-in-event",
+                     G_CALLBACK(gnc_cbwe_focus_in_cb), nullptr);
 
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
