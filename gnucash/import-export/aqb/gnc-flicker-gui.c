@@ -86,7 +86,7 @@ struct Flickerdraw {
 static struct Flickerdraw flickerdraw;
 
 static GncFlickerGui *flickergui = NULL;
-static _Bool bitarray[255][5];
+static _Bool bitarray[510][5];
 
 /* this function will return number corresponding 0,1,2..,9,A,B,C,D,E,F */
 static guint
@@ -131,6 +131,19 @@ flicker_data (const char *challenge)
     /* prepend synchronization identifier */
     char* code = g_strdup_printf ("0FFF%s", challenge);
     guint challenge_length = strlen (code);
+
+    /* bitarray has G_N_ELEMENTS (bitarray) rows; each loop iteration writes
+       rows i and i+1, so i+1 must stay within bounds. A bank/FinTS server
+       is untrusted input: reject it growing bitarray writes out of bounds
+       instead of assuming the challenge length is safe. */
+    static const guint max_challenge_length = G_N_ELEMENTS (bitarray) - 1;
+    if (challenge_length > max_challenge_length)
+    {
+        g_warning ("flicker_data: challenge too long (%u bytes), "
+                   "truncating to %u to avoid writing past bitarray",
+                   challenge_length, max_challenge_length);
+        challenge_length = max_challenge_length;
+    }
 
     /* Swap the position of the bits in pairs throughout the bank challenge
        (low-order nibble first). */
