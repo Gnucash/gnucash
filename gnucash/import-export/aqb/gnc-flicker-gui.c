@@ -86,7 +86,7 @@ struct Flickerdraw {
 static struct Flickerdraw flickerdraw;
 
 static GncFlickerGui *flickergui = NULL;
-static _Bool bitarray[255][5];
+static _Bool bitarray[510][5];
 
 /* this function will return number corresponding 0,1,2..,9,A,B,C,D,E,F */
 static guint
