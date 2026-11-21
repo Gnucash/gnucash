@@ -44,6 +44,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string>
 #include <unordered_set>
 
 #include "Account.h"
@@ -835,6 +836,50 @@ gnc_transaction_balance_trading_more_splits (Transaction *trans, Account *root)
     g_list_free(splits_dup);
 }
 
+/** Destroy a zero imbalance split left on an already balanced transaction.
+ * add_balance_split() removes such a split, but is never reached when the
+ * transaction balances, so the split would otherwise linger. As there,
+ * a split with a memo or action is kept.
+ */
+static void
+remove_zero_imbalance_split (Transaction *trans)
+{
+    auto currency = xaccTransGetCurrency (trans);
+    if (!currency)
+        return;
+
+    const std::string accname = std::string (_("Imbalance")) + "-" +
+        gnc_commodity_get_mnemonic (currency);
+
+    for (GList *node = trans->splits; node; node = node->next)
+    {
+        auto split = GNC_SPLIT (node->data);
+        if (!xaccTransStillHasSplit (trans, split))
+            continue;
+
+        if (!gnc_numeric_zero_p (xaccSplitGetValue (split)) ||
+            !gnc_numeric_zero_p (xaccSplitGetAmount (split)))
+            continue;
+
+        /* Same account that get_balance_split() uses. */
+        if (auto acc = xaccSplitGetAccount (split); !acc ||
+            xaccAccountGetType (acc) != ACCT_TYPE_BANK ||
+            !gnc_commodity_equiv (xaccAccountGetCommodity (acc), currency) ||
+            accname != xaccAccountGetName (acc))
+            continue;
+
+        if (auto text = xaccSplitGetMemo (split); text && *text)
+            continue;
+
+        if (auto text = xaccSplitGetAction (split); text && *text)
+            continue;
+
+        PINFO ("Removing zero imbalance split");
+        xaccSplitDestroy (split);
+        return;
+    }
+}
+
 /** Correct transaction imbalances.
  * @param trans The Transaction
  * @param root The (hidden) root account, for the book default currency.
@@ -857,6 +902,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
     /* Return immediately if things are balanced. */
     if (xaccTransIsBalanced (trans))
     {
+        remove_zero_imbalance_split (trans);
         LEAVE ("transaction is balanced");
         return;
     }
