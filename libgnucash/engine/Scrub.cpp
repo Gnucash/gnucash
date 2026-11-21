@@ -324,6 +324,21 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
         return false;
     }
 
+    auto null_or_empty = [](const char* str) -> bool { return !str || !*str; };
+    if (xaccTransStillHasSplit (trans, split) &&
+        gnc_numeric_zero_p (value) &&
+        gnc_numeric_zero_p (amount) &&
+        null_or_empty (xaccSplitGetMemo (split)) &&
+        null_or_empty (xaccSplitGetAction (split)) &&
+        xaccAccountGetType (account) == ACCT_TYPE_BANK &&
+        make_imbalance_account_name (currency) == xaccAccountGetName (account))
+    {
+        if (!dry_run)
+            xaccSplitDestroy (split);
+        LEAVE ("(split=%p) zero imbalance", split);
+        return true;
+    }
+
     scu = MIN (xaccAccountGetCommoditySCU (account),
                gnc_commodity_get_fraction (currency));
 
