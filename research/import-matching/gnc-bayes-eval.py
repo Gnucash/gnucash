@@ -137,6 +137,7 @@ KNN_MIN = 0.3      # nearest neighbours: lowest similarity that counts
 VETO = 0.6         # NB + kNN veto: share of the neighbours' votes NB's account needs
 WRONG_COST = 10  # a wrong suggestion counts as much as this many missing ones (see effort)
 PREFIX = "import-map-bayes/"
+IMPORT_TYPES = {"BANK", "CREDIT", "CASH", "ASSET", "LIABILITY"}  # account types the importer imports into
 
 Transaction = namedtuple("Transaction", "date bank description memo amount account")
 
@@ -778,6 +779,8 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
     adjust: a rule on the best account (see "Rules on the best account"):
         (learned data of the bank, tokens, best account, probability) ->
         probability, applied before the threshold.
+    Returns (results, per_account): Counters of "correct" / "none" /
+    "wrong", in all and per (import account, target account).
     observe: for experiments; called for every scored transaction as
         observe(tx, learned data of the bank, tokens, best account,
         probability, result) before the transaction is learned.
@@ -813,7 +816,7 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
                 if observe is not None:
                     observe(tx, learned[tx.bank], make_tokens(tx), best, probability, result)
                 results[result] += 1
-                per_account[tx.account][result] += 1
+                per_account[tx.bank, tx.account][result] += 1
                 # like the importer: the counts do not learn accepted suggestions
                 learn_counts[i] = learn_correct or result != "correct"
         for tx, learn in zip(day, learn_counts):
@@ -846,7 +849,7 @@ def replay_model(model, transactions, first_date=None, threshold=THRESHOLD, obse
                 if observe is not None:
                     observe(tx, None, None, best, probability, result)
                 results[result] += 1
-                per_account[tx.account][result] += 1
+                per_account[tx.bank, tx.account][result] += 1
                 day_results[i] = result
         for tx, result in zip(day, day_results):
             model.learn(tx, result)
@@ -981,7 +984,9 @@ def default_weekday_names():
 def import_accounts(accounts, learned, start, start_from):
     """The accounts to replay, and the ones skipped.
 
-    An import account is one with learned data. With --start-from it must
+    An import account is one with learned data, of a type the importer
+    imports into (IMPORT_TYPES): an expense account can carry learned data
+    too, but nothing is imported into it. With --start-from it must
     have learned data in the old book: an account without any there has no
     history, so every transaction would be scored against an empty map and
     get no suggestion. That happens with accounts whose transactions are
@@ -989,11 +994,13 @@ def import_accounts(accounts, learned, start, start_from):
     out accounts that were first imported after the old book; they would
     start from nothing in GnuCash too, but would learn.)
     Without --start-from, BOOK's learned data decides."""
+    def importable(bank):
+        return bank in accounts and accounts[bank][2] in IMPORT_TYPES
     if start_from:
-        banks = {bank for bank in start if start[bank] and bank in accounts}
-        skipped = {bank for bank in learned if bank in accounts} - banks
+        banks = {bank for bank in start if start[bank] and importable(bank)}
+        skipped = {bank for bank in learned if importable(bank)} - banks
     else:
-        banks, skipped = {bank for bank in learned if bank in accounts}, set()
+        banks, skipped = {bank for bank in learned if importable(bank)}, set()
     return banks, skipped
 
 
@@ -1024,6 +1031,25 @@ def print_results(scenarios):
         cells = [f"{results[r]:5} ({100 * results[r] / max(1, sum(results.values())):4.1f}%)"
                  for r in ("correct", "none", "wrong")]
         print(f"{name:{w}} {cells[0]:>14} {cells[1]:>15} {cells[2]:>14} {effort(results):7}")
+
+
+def print_per_import_account(scenarios, accounts, verbose):
+    """One table per import account, the largest first, labelled by its
+    type and a number (e.g. "CREDIT 2"); the name only with verbose.
+    Results lumped over all import accounts can hide that an algorithm is
+    good on one account and bad on another (e.g. a CSV and an OFX account)."""
+    per_bank = {name: defaultdict(Counter) for name in scenarios}
+    for name, (_, per_account) in scenarios.items():
+        for (bank, _), counts in per_account.items():
+            per_bank[name][bank].update(counts)
+    first = per_bank[next(iter(scenarios))]
+    numbers = Counter()  # per account type
+    for bank in sorted(first, key=lambda b: -sum(first[b].values())):
+        type_ = accounts[bank][2]
+        numbers[type_] += 1
+        label = f"{type_} {numbers[type_]}" + (f" ({full_name(accounts, bank)})" if verbose else "")
+        print(f"\n{label}: {sum(first[bank].values())} transactions")
+        print_results({name: (per_bank[name][bank], None) for name in scenarios})
 
 
 def print_comparison(thresholds, alphas, runs):
@@ -1141,6 +1167,9 @@ def main():
     scenarios = {name: run(THRESHOLD, ALPHA, diagnoses[name].observe if args.diagnose else None)
                  for name, (run, _) in runs.items()}
     print_results(scenarios)
+    if len(banks) > 1:
+        print("\n" + "-" * 70)
+        print_per_import_account(scenarios, accounts, args.verbose)
     if args.diagnose:
         print_diagnoses(diagnoses)
 
@@ -1153,7 +1182,13 @@ def main():
         print("\nPer account (correct/total, w = wrong):")
         widths = [max(17, len(name)) for name in scenarios]  # one column per row name
         print("  " + " ".join(f"{name:>{w}}" for name, w in zip(scenarios, widths)))
-        per_account = [per for _, per in scenarios.values()]
+        # per target account, summed over the import accounts
+        per_account = []
+        for _, per in scenarios.values():
+            per_target = defaultdict(Counter)
+            for (_, account), counts in per.items():
+                per_target[account].update(counts)
+            per_account.append(per_target)
         cell = lambda c: f"{c['correct']}/{sum(c.values())}" + (f" ({c['wrong']}w)" if c["wrong"] else "")
         for account in sorted(per_account[0], key=lambda a: -sum(per_account[0][a].values())):
             print("  " + " ".join(f"{cell(per[account]):>{w}}" for per, w in zip(per_account, widths)),
