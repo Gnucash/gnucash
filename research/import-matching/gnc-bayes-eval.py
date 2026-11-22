@@ -100,12 +100,12 @@ have no alpha).
 
 Every table shows the manual effort, estimated as:
 
-    effort = no suggestion + 5 * wrong
+    effort = no suggestion + 10 * wrong
 
 A wrong suggestion is much more work than a missing one: it has to be noticed
 and then corrected (about two missing ones), some are overlooked and have to
 be found and rebooked later, and as soon as wrong suggestions occur, every
-suggestion has to be checked carefully. So it counts five times (WRONG_COST).
+suggestion has to be checked carefully. So it counts ten times (WRONG_COST).
 """
 
 import argparse
@@ -126,7 +126,7 @@ MU = 300          # Dirichlet smoothing (see dirichlet_log_scores)
 GAMMA = 0.7       # damping of naive Bayes (see damped_log_scores)
 CONCENTRATION_CUT = 0.5  # see concentration_cut
 KNOWN_SHARE_BETA = 0.25  # see known_share
-WRONG_COST = 5   # a wrong suggestion counts as much as this many missing ones (see effort)
+WRONG_COST = 10  # a wrong suggestion counts as much as this many missing ones (see effort)
 PREFIX = "import-map-bayes/"
 
 Transaction = namedtuple("Transaction", "date bank description memo amount account")
@@ -800,7 +800,7 @@ def bank_transactions(all_transactions, accounts, banks, skip=()):
 def effort(results):
     """Estimated manual work: no suggestion + WRONG_COST * wrong.
 
-    Example: 91 without suggestion, 42 wrong -> 91 + 5 * 42 = 301."""
+    Example: 91 without suggestion, 42 wrong -> 91 + 10 * 42 = 511."""
     return results["none"] + WRONG_COST * results["wrong"]
 
 
@@ -815,7 +815,7 @@ def print_results(scenarios):
 
 def print_comparison(thresholds, alphas, runs):
     """Every combination of threshold and smoothing value alpha, with
-    effort = no suggestion + 5 * wrong (see effort).
+    effort = no suggestion + 10 * wrong (see effort).
     runs: {row name: (function(threshold, alpha) -> (results, per_account),
                       True if the row uses alpha)}.
     Rows without alpha (GnuCash 5.17; Dirichlet NB, which uses mu) are
