@@ -161,7 +161,11 @@ gnc_add_css_file (void)
     {
         gchar *str;
         str = g_build_filename (var, "gtk-3.0.css", (char *)NULL);
-        gtk_css_provider_load_from_path (provider_user, str, &error);
+        if (!gtk_css_provider_load_from_path (provider_user, str, &error))
+        {
+            PWARN ("Could not load user CSS '%s': %s", str, error->message);
+            g_clear_error (&error);
+        }
         g_free (str);
     }
     g_object_unref (provider_user);
