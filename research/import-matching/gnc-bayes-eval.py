@@ -5,7 +5,7 @@ and would a new algorithm do better?
 
     python3 gnc-bayes-eval.py BOOK.gnucash --start-from OLD.gnucash [--alphas 0.03,0.1,0.3] [--thresholds 0.8,0.9,0.95]
     python3 gnc-bayes-eval.py BOOK.gnucash --from-ledger [--months 6] [--alphas 0.03,0.1,0.3] [--thresholds 0.8,0.9,0.95]
-        further options: [--weekdays Mon,Tue,...] [--verbose]
+        further options: [--weekdays Mon,Tue,...] [--diagnose] [--verbose]
 
 The books are opened READ-ONLY (XML, compressed or not, or SQLite). Nothing is written.
 Only the Python standard library is used, so that testers can run this without
@@ -20,35 +20,36 @@ GnuCash remembers, for every bank account you import into, how often each word
 ("token") of an imported transaction was assigned to which account. This learned
 data is stored in your book. The script replays imports: it goes through
 transactions day by day, asks six algorithms which account they would
-suggest for each of them, and then learns the transaction. Besides GnuCash
-and the first commit of PR #2348 there are four candidates; which one is
-best is open, that is what the results of different books are for:
+suggest for each of them, and then learns the transaction. Which one is best
+is open, that is what the results of different books are for. Abbreviations:
+
+   tok:  words split at blanks and "/", ";" removed from the end of words,
+         no weekday (see split_words); the stored learned data is converted
+         on the fly, nothing has to be reset;
+   corr: learned corrections (see Corrections). They learn every
+         transaction, also accepted suggestions (a change to the importer),
+         because they need to see the correct cases too; the counts still
+         learn like the importer;
+   cut:  no suggestion if no word of the transaction is typical for the
+         suggested account (see concentration).
+
+The rows:
 
  - "GnuCash 5.17": the current algorithm.
- - "naive Bayes": a multi-class naive Bayes classifier, words as in GnuCash
-   5.17 (the first commit of PR #2348).
- - "NB+tok+corr+cut": naive Bayes with
-   - tok:  words split at blanks and "/", ";" removed from the end of words,
-           no weekday (see split_words); the stored learned data is
-           converted on the fly, nothing has to be reset;
-   - corr: learned corrections (see Corrections). They learn every
-           transaction, also accepted suggestions (a change to the
-           importer), because they need to see the correct cases too;
-           the counts still learn like the importer;
-   - cut:  no suggestion if no word of the transaction is typical for the
-           suggested account (see concentration).
- - "NB+tok+corr+cut+share": the same, and
-   - share: the probability lowered when many of the transaction's words
-           were never seen (see known_share): fewer wrong suggestions, but
-           also fewer correct ones.
- - "Dirichlet NB+tok+corr+cut": the same as NB+tok+corr+cut, but with a
-   smoothing that adapts to how common each word is, instead of the fixed
-   alpha (see dirichlet_log_scores). It does not depend on the number of
-   accounts or of distinct words.
- - "damped NB+tok+cut": the simplest candidate: no corrections, but naive
-   Bayes damped so that words that always occur together do not count as
-   independent evidence (see damped_log_scores). It needs no new stored
-   data and learns like the importer today.
+ - "NB+tok": a multi-class naive Bayes classifier (see score_naive_bayes)
+   with the new words. The basis of the others.
+ - "NB+tok+corr+cut": naive Bayes with corrections and the cut.
+ - "damped NB+tok+cut": naive Bayes damped so that words that always occur
+   together do not count as independent evidence (see damped_log_scores),
+   and the cut. Learns like the importer today.
+ - "kNN+tok": not naive Bayes: the account of the most similar earlier
+   transactions of the same import account (see NearestNeighbours). It
+   needs no learned data, the transactions are in the book.
+ - "damped NB+tok+kNN veto": damped naive Bayes suggests, but not if the
+   most similar earlier transactions went mostly to other accounts (see
+   NaiveBayesAndNeighbours). Meant for payees whose transactions go to
+   several accounts, e.g. a shop where you buy for different purposes:
+   there it should give no suggestion rather than a wrong one.
 
 Each suggestion is compared with the account you actually booked, and counted as
 correct, wrong, or missing (no account reached the 90 % threshold). Each
@@ -95,8 +96,14 @@ e.g. 0.8, 0.9 (GnuCash) and 0.95. GnuCash's threshold is a user preference,
 and naive Bayes may be more (or less) cautious than GnuCash 5.17, so the best
 value need not be the same for both. Given one or both options, the script
 replays every combination and prints, per threshold, the rows with alpha
-once for each alpha, and "GnuCash 5.17" and "Dirichlet NB..." once (they
+once for each alpha, and "GnuCash 5.17" and "kNN+tok" once (they
 have no alpha).
+
+--diagnose adds two tables. By payee history: each transaction is sorted by
+what earlier transactions with nearly the same words did: none ("new"), all
+booked to one account, or to several ("ambiguous"). Calibration: how often
+the best account was the booked one, by its probability; for a well
+calibrated algorithm about 90 % of the suggestions with 0.9 are correct.
 
 Every table shows the manual effort, estimated as:
 
@@ -122,10 +129,12 @@ from collections import Counter, defaultdict, namedtuple
 THRESHOLD = 0.90  # GnuCash only suggests an account if its probability is at least 90 %
 ALPHA = 0.1       # default smoothing of naive Bayes (see score_naive_bayes)
 RATE = 0.3        # learning rate of the corrections (see Corrections)
-MU = 300          # Dirichlet smoothing (see dirichlet_log_scores)
 GAMMA = 0.7       # damping of naive Bayes (see damped_log_scores)
 CONCENTRATION_CUT = 0.5  # see concentration_cut
-KNOWN_SHARE_BETA = 0.25  # see known_share
+KNN_POWER = 4      # nearest neighbours: weight of a neighbour = similarity^KNN_POWER
+KNN_PRIOR = 0.05   # nearest neighbours: votes of an unknown account (see NearestNeighbours)
+KNN_MIN = 0.3      # nearest neighbours: lowest similarity that counts
+VETO = 0.6         # NB + kNN veto: share of the neighbours' votes NB's account needs
 WRONG_COST = 10  # a wrong suggestion counts as much as this many missing ones (see effort)
 PREFIX = "import-map-bayes/"
 
@@ -488,51 +497,6 @@ def damped_log_scores(learned, tokens, alpha=ALPHA, gamma=GAMMA):
     return log_score
 
 
-def dirichlet_log_scores(learned, tokens, mu=MU):
-    """Naive Bayes log scores with Dirichlet smoothing instead of a fixed alpha:
-
-        log P(a) + sum over the known tokens t of log P(t | a)
-
-        P(t | a) = (n(t, a) + mu * P(t)) / (N(a) + mu)
-        P(t)     = n(t) / N        how frequent t is over all accounts
-
-    A fixed alpha adds the same to every token. Here each token is smoothed in
-    proportion to how common it is (Zhai & Lafferty 2001): a rare token (a
-    name, an IBAN) gets almost no smoothing and counts nearly as strictly as
-    with alpha = 0; a common one (bank text) gets a lot and hardly tells the
-    accounts apart. mu does not depend on the number of distinct tokens, so
-    it does not drift as the history grows, and it does not need to be
-    adjusted to the number of accounts.
-
-    Example, N = 10000, mu = 100, accounts Band (N = 500) and Other (N = 100):
-        a name seen once, with Band:  mu * P(t) = 100 * 1/10000 = 0.01
-            Band: (1 + 0.01) / 600 = 0.00168, Other: 0.01 / 200 = 0.00005
-            34 times more likely for Band (alpha = 0.1 with 1000 distinct
-            tokens: (1.1 / 600) / (0.1 / 200) = 3.7 times)
-        "SEPA", 2000 times, 100 with Band, 20 with Other:  mu * P(t) = 20
-            Band: (100 + 20) / 600 = 0.2,  Other: (20 + 20) / 200 = 0.2
-            equally likely: it says nothing, as it should."""
-    account_totals = Counter()
-    for counts in learned.values():
-        account_totals.update(counts)
-    grand_total = sum(account_totals.values())
-    token_totals = {t: sum(learned[t].values()) for t in tokens if t in learned}
-    known_tokens = [t for t, n in token_totals.items() if n > 0]
-    if not known_tokens or grand_total == 0:
-        return {}
-
-    log_score = {}
-    for account, total in account_totals.items():
-        if total <= 0:
-            continue
-        score = math.log(total / grand_total)                                    # P(a)
-        for token in known_tokens:
-            smoothing = mu * token_totals[token] / grand_total                   # mu * P(t)
-            score += math.log((learned[token].get(account, 0) + smoothing) / (total + mu))
-        log_score[account] = score
-    return log_score
-
-
 def probabilities(log_score):
     """Scale log scores to probabilities that add up to 1:
     P(a) = exp(score(a)) / sum of exp(score(a')) over all a'.
@@ -646,35 +610,139 @@ def concentration_cut(cut=CONCENTRATION_CUT):
     return rule
 
 
-def known_share(beta=KNOWN_SHARE_BETA, letters_only=True):
-    """Rule: scale the probability by the share of the transaction's tokens
-    that were seen before,
+# ---------------------------------------------------------------------------
+# Models that learn more than the counts (see replay_model)
+#
+# Each has suggest(tx) -> (best account, probability) and learn(tx, result),
+# result being "correct" / "none" / "wrong", or None for a transaction that
+# was not scored (history).
+# ---------------------------------------------------------------------------
 
-        P'(best) = P(best) * k^beta,   k = known tokens / all tokens
+class NearestNeighbours:
+    """Not naive Bayes: suggest the account of the most similar earlier
+    transactions of the same import account. Needs no learned data at all:
+    the earlier transactions are in the book (here: the old book's and the
+    replayed ones; every transaction is learned, with its booked account).
 
-    A text with one new invoice number among many known words keeps most of
-    its probability; a short one where only the town is known does not.
-    letters_only: count only tokens containing a letter, so dates and numbers
-    (new each time, and harmless) count neither as known nor as unknown.
+    Similarity of two transactions A, B (cosine, words weighted by rarity):
 
-    Example, beta = 0.25, P(best) = 0.97, "BLUE LOTUS SPRINGFIELD": only
-    SPRINGFIELD known, k = 1/3: 0.97 * (1/3)^0.25 = 0.74, no suggestion."""
-    def rule(learned, tokens, best, probability):
-        words = [t for t in tokens if not letters_only or any(c.isalpha() for c in t)]
-        if not words:
-            return probability
-        k = sum(1 for t in words if t in learned) / len(words)
-        return probability * k ** beta
-    return rule
+        s(A, B) = sum over t in A and B of w_t^2 / (|A| * |B|),  |A| = sqrt(sum over t in A of w_t^2)
+        w_t = log(1 + M / m(t))
+
+        M: number of earlier transactions, m(t): those containing t
+
+    A common word ("SEPA", "Dauerauftrag") weighs little, a name or IBAN a
+    lot. A word never seen weighs as if seen once (a new name makes the
+    transaction less similar to everything); a never seen word without a
+    letter (date, reference number) weighs 0.
+
+    Probability, over the neighbours j with s_j >= KNN_MIN:
+
+        P(a) = sum over j booked to a of s_j^p / (sum over all j of s_j^p + prior)
+
+    p (KNN_POWER) makes the nearest neighbours count most; prior
+    (KNN_PRIOR) stands for "an account not among the neighbours", so a
+    single neighbour is never certain.
+
+    Example, p = 4, prior = 0.05: one earlier transaction with s = 1:
+    P = 1 / 1.05 = 0.95. A shop seen 10 times with Food, 6 with Household,
+    4 with Gifts, all s = 1: P(Food) = 10 / 20.05 = 0.50, no suggestion.
+    One neighbour with s = 0.8: 0.41 / 0.46 = 0.89, no suggestion."""
+
+    def __init__(self, history, power=KNN_POWER, prior=KNN_PRIOR, min_similarity=KNN_MIN):
+        self.seen = []                       # (bank, tokens, account) of every learned transaction
+        self.postings = defaultdict(list)    # (bank, token) -> indices into seen
+        self.frequency = defaultdict(Counter)  # bank -> token -> m(t)
+        self.size = Counter()                # bank -> M
+        self.power, self.prior, self.min_similarity = power, prior, min_similarity
+        for tx in history:
+            self.learn(tx, None)
+
+    def weight(self, bank, token):
+        m = self.frequency[bank][token]
+        if m == 0 and not any(c.isalpha() for c in token):
+            return 0.0
+        return math.log(1 + self.size[bank] / max(m, 1))
+
+    def distribution(self, tx):
+        """({account: P(account)}, similarity of the nearest neighbour);
+        ({}, 0.0) if no earlier transaction is similar enough."""
+        bank = tx.bank
+        w = {t: self.weight(bank, t) for t in tokens_split(tx)}
+        norm = math.sqrt(sum(x * x for x in w.values()))
+        if norm == 0:
+            return {}, 0.0
+        # dot products with every earlier transaction sharing a word
+        dot = Counter()
+        for t, x in w.items():
+            for j in self.postings[bank, t]:
+                dot[j] += x * x
+        votes, nearest = Counter(), 0.0
+        for j, d in dot.items():
+            _, tokens, account = self.seen[j]
+            s = d / (norm * math.sqrt(sum(self.weight(bank, u) ** 2 for u in tokens)))
+            if s >= self.min_similarity:
+                votes[account] += s ** self.power
+                nearest = max(nearest, s)
+        total = sum(votes.values()) + self.prior
+        return {a: v / total for a, v in votes.items()}, nearest
+
+    def suggest(self, tx):
+        p, _ = self.distribution(tx)
+        if not p:
+            return None, 0.0
+        best = max(p, key=p.get)
+        return best, p[best]
+
+    def learn(self, tx, result):
+        tokens = tokens_split(tx)
+        for t in tokens:
+            self.postings[tx.bank, t].append(len(self.seen))
+        self.seen.append((tx.bank, tokens, tx.account))
+        self.frequency[tx.bank].update(tokens)
+        self.size[tx.bank] += 1
 
 
-def chain(*rules):
-    """Apply several rules one after another."""
-    def rule(learned, tokens, best, probability):
-        for r in rules:
-            probability = r(learned, tokens, best, probability)
-        return probability
-    return rule
+class NaiveBayesAndNeighbours:
+    """Damped naive Bayes, with a veto by the nearest neighbours. They fail
+    in different places: kNN knows when the same payee went to several
+    accounts, but has nothing to say about a payee without a similar earlier
+    transaction; naive Bayes generalises from single known words, but is
+    overconfident when words repeat each other.
+
+    Damped naive Bayes suggests (see damped_log_scores). No suggestion if
+    there are neighbours (see NearestNeighbours) and naive Bayes' account
+    has less than VETO of their probability.
+
+    Example: a shop booked 10 x to Food, 6 x to Household, 4 x to Gifts:
+    kNN gives Food 0.5 < 0.6, so no suggestion, whatever naive Bayes says.
+
+    The counts learn like the importer (learn_correct), kNN learns every
+    transaction."""
+
+    def __init__(self, start, history, learn_correct, alpha=ALPHA, veto=VETO):
+        self.learned = new_learned_data()
+        for bank, tokens in start.items():
+            for token, counts in tokens.items():
+                self.learned[bank][token] = dict(counts)
+        self.neighbours = NearestNeighbours(history)
+        self.learn_correct, self.alpha, self.veto = learn_correct, alpha, veto
+
+    def suggest(self, tx):
+        best, probability = best_of(damped_log_scores(self.learned[tx.bank], tokens_split(tx), self.alpha))
+        if best is None:
+            return None, 0.0
+        p_knn, _ = self.neighbours.distribution(tx)
+        if p_knn and p_knn.get(best, 0.0) < self.veto:
+            return best, 0.0
+        return best, probability
+
+    def learn(self, tx, result):
+        self.neighbours.learn(tx, result)
+        if result is None or self.learn_correct or result != "correct":
+            for token in tokens_split(tx):
+                counts = self.learned[tx.bank][token]
+                counts[tx.account] = counts.get(tx.account, 0) + 1
 
 
 # ---------------------------------------------------------------------------
@@ -689,7 +757,7 @@ def judge(tx, suggestion, probability, threshold=THRESHOLD):
 
 
 def replay(transactions, make_tokens, score, start=None, learn_correct=True, first_date=None,
-           threshold=THRESHOLD, corrections=None, adjust=None):
+           threshold=THRESHOLD, corrections=None, adjust=None, observe=None):
     """Replay imports: go through the transactions day by day, score them, then
     learn them.
 
@@ -710,6 +778,9 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
     adjust: a rule on the best account (see "Rules on the best account"):
         (learned data of the bank, tokens, best account, probability) ->
         probability, applied before the threshold.
+    observe: for experiments; called for every scored transaction as
+        observe(tx, learned data of the bank, tokens, best account,
+        probability, result) before the transaction is learned.
 
     Transactions of the same day are not learned from each other, since they
     typically arrive in the same import. Learning works as in GnuCash: every
@@ -739,6 +810,8 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
             for i, tx in enumerate(day):
                 best, probability = suggest(tx)
                 result = judge(tx, best, probability, threshold)
+                if observe is not None:
+                    observe(tx, learned[tx.bank], make_tokens(tx), best, probability, result)
                 results[result] += 1
                 per_account[tx.account][result] += 1
                 # like the importer: the counts do not learn accepted suggestions
@@ -753,6 +826,146 @@ def replay(transactions, make_tokens, score, start=None, learn_correct=True, fir
                     counts = learned[tx.bank][token]
                     counts[tx.account] = counts.get(tx.account, 0) + 1
     return results, per_account
+
+
+def replay_model(model, transactions, first_date=None, threshold=THRESHOLD, observe=None):
+    """replay for a model with suggest(tx) and learn(tx, result) (see
+    "Models that learn more than the counts"): score the transactions of a
+    day, then learn them. What a model learns is up to the model.
+    first_date, threshold, observe and the results as in replay (observe
+    gets None for the learned data and the tokens)."""
+    results = Counter()
+    per_account = defaultdict(Counter)
+    for date, day in itertools.groupby(transactions, key=lambda tx: tx.date):
+        day = list(day)
+        day_results = [None] * len(day)  # None: not scored, only learned
+        if first_date is None or date > first_date:
+            for i, tx in enumerate(day):
+                best, probability = model.suggest(tx)
+                result = judge(tx, best, probability, threshold)
+                if observe is not None:
+                    observe(tx, None, None, best, probability, result)
+                results[result] += 1
+                per_account[tx.account][result] += 1
+                day_results[i] = result
+        for tx, result in zip(day, day_results):
+            model.learn(tx, result)
+    return results, per_account
+
+
+# ---------------------------------------------------------------------------
+# Diagnostics (--diagnose)
+# ---------------------------------------------------------------------------
+
+NEAR = 0.8  # Jaccard similarity from which two transactions count as the same payee
+PAYEE_KINDS = ("new", "one account", "ambiguous")
+P_BINS = (0.5, 0.7, 0.9, 0.95, 0.99)  # lower bounds of the probability bins (see calibration)
+
+
+def letter_words(tx):
+    """The words of a transaction that contain a letter (split as in
+    tokens_split). Dates, amounts and reference numbers change every time,
+    so they would make the same payee look different."""
+    return {w for w in tokens_split(tx) if any(c.isalpha() for c in w)}
+
+
+def jaccard(a, b):
+    return len(a & b) / len(a | b) if a | b else 0.0
+
+
+def payee_kinds(history, transactions, near=NEAR):
+    """Sort each transaction by what the same payee did before: the earlier
+    transactions of the same import account whose letter words are
+    near-identical (Jaccard similarity >= near):
+
+        new:          there are none
+        one account:  they were all booked to one account
+        ambiguous:    they were booked to two or more accounts (a shop where
+                      you buy for different purposes)
+
+    history: transactions before the replay (the old book), or empty.
+    Earlier means an earlier day: transactions of the same day are not
+    compared, as the replay does not learn them from each other.
+    Returns {id(tx): kind} for the transactions in transactions.
+
+    Speed-up: J(W, V) >= near implies that V contains all but at most
+    (1 - near) * |W| of W's words. So V contains at least one of W's
+    p = floor((1 - near) * |W|) + 1 rarest words, and only transactions
+    with one of those need to be compared."""
+    everything = sorted(history + transactions, key=lambda tx: tx.date)
+    words = [letter_words(tx) for tx in everything]
+    frequency = Counter(w for ws in words for w in ws)
+    postings = defaultdict(list)  # (import account, word) -> indices of earlier transactions
+    scored = {id(tx) for tx in transactions}
+    kinds = {}
+    for _, day in itertools.groupby(range(len(everything)), key=lambda i: everything[i].date):
+        day = list(day)
+        for i in day:
+            tx, w = everything[i], words[i]
+            if id(tx) not in scored:
+                continue
+            p = int((1 - near) * len(w) + 1e-9) + 1  # 1e-9: 0.2 * 5 is 0.9999... in floating point
+            rare = sorted(w, key=lambda word: (frequency[word], word))[:p]
+            candidates = {j for word in rare for j in postings[tx.bank, word]}
+            accounts = {everything[j].account for j in candidates if jaccard(w, words[j]) >= near}
+            kinds[id(tx)] = PAYEE_KINDS[min(len(accounts), 2)]
+        # only now: the same day's transactions are not history for each other
+        for i in day:
+            for word in words[i]:
+                postings[everything[i].bank, word].append(i)
+    return kinds
+
+
+class Diagnosis:
+    """Collects, through replay's observe, for one row:
+
+    by_kind:     {payee kind: Counter of correct / none / wrong} (see payee_kinds)
+    calibration: {bin: Counter of "correct" / "other"}: how often the best
+                 account is the booked one, by its probability, whether or
+                 not it reached the threshold. A rule that withdraws a
+                 suggestion (concentration cut) sets the probability to 0,
+                 so those land in the lowest bin.
+
+    Calibrated means: of the suggestions with probability about 0.9, about
+    90 % are correct. Example: 200 suggestions in the bin 0.95-0.99, 160
+    correct: 80 %, so the model is overconfident there."""
+
+    def __init__(self, kinds):
+        self.kinds = kinds
+        self.by_kind = defaultdict(Counter)
+        self.calibration = defaultdict(Counter)
+
+    def observe(self, tx, learned, tokens, best, probability, result):
+        self.by_kind[self.kinds[id(tx)]][result] += 1
+        if best is not None:
+            bin_ = sum(probability >= bound for bound in P_BINS)  # 0: below 0.5
+            self.calibration[bin_]["correct" if best == tx.account else "other"] += 1
+
+
+def print_diagnoses(diagnoses):
+    """Two tables, one line per row: correct / none / wrong by payee kind,
+    and the share correct by probability bin."""
+    w = max(len(name) for name in diagnoses)
+    any_diagnosis = next(iter(diagnoses.values()))
+    sizes = {kind: sum(any_diagnosis.by_kind[kind].values()) for kind in PAYEE_KINDS}
+    print(f"\nBy payee history (earlier transactions with near-identical words, Jaccard >= {NEAR:g}; "
+          f"letter words only): correct / no suggestion / wrong")
+    print(f"{'':{w}} " + " ".join(f"{f'{kind} ({sizes[kind]})':>20}" for kind in PAYEE_KINDS))
+    for name, d in diagnoses.items():
+        cells = ["/".join(str(d.by_kind[kind][r]) for r in ("correct", "none", "wrong")) for kind in PAYEE_KINDS]
+        print(f"{name:{w}} " + " ".join(f"{c:>20}" for c in cells))
+
+    bounds = (0.0,) + P_BINS + (1.0,)
+    labels = [f"<{P_BINS[0]:g}"] + [f"{lo:g}-{hi:g}" for lo, hi in zip(bounds[1:-2], bounds[2:-1])] + [f">={P_BINS[-1]:g}"]
+    print("\nCalibration: share correct of the best account, by its probability (number in brackets)")
+    print(f"{'':{w}} " + " ".join(f"{label:>13}" for label in labels))
+    for name, d in diagnoses.items():
+        cells = []
+        for b in range(len(labels)):
+            c = d.calibration[b]
+            n = c["correct"] + c["other"]
+            cells.append(f"{100 * c['correct'] / n:3.0f}% ({n})" if n else "-")
+        print(f"{name:{w}} " + " ".join(f"{c:>13}" for c in cells))
 
 
 # ---------------------------------------------------------------------------
@@ -818,7 +1031,7 @@ def print_comparison(thresholds, alphas, runs):
     effort = no suggestion + 10 * wrong (see effort).
     runs: {row name: (function(threshold, alpha) -> (results, per_account),
                       True if the row uses alpha)}.
-    Rows without alpha (GnuCash 5.17; Dirichlet NB, which uses mu) are
+    Rows without alpha (GnuCash 5.17, kNN) are
     printed once per threshold. A blank line separates the thresholds."""
     w = max(len(name) for name in runs)  # width of the name column
     print(f"\n{'':{w}} {'threshold':>9} {'alpha':>6} {'correct':>8} {'no suggestion':>14} "
@@ -849,6 +1062,8 @@ def main():
     parser.add_argument("--thresholds", help="compare thresholds, comma separated, e.g. 0.8,0.9,0.95")
     parser.add_argument("--weekdays", help="weekday names as GnuCash stored them, Monday first, "
                                            "comma separated (default: from your system language)")
+    parser.add_argument("--diagnose", action="store_true",
+                        help="results by payee history (new, one account, ambiguous) and calibration")
     parser.add_argument("--verbose", action="store_true", help="results per account (shows account names)")
     args = parser.parse_args()
     weekday_names = args.weekdays.split(",") if args.weekdays else default_weekday_names()
@@ -856,12 +1071,12 @@ def main():
     accounts, learned, all_transactions = read_book(args.book)
     if args.start_from:
         # start: the old book's learned data; replay: what is in BOOK but not in the old book
-        _, start, old_transactions = read_book(args.start_from)
+        old_accounts, start, old_transactions = read_book(args.start_from)
         skip = {guid for guid, _, _, _ in old_transactions}
         learn_correct, first_date = False, None
     else:
         # start: nothing; replay: all of BOOK, the last N months are scored
-        start, skip = new_learned_data(), set()
+        start, skip, old_accounts, old_transactions = new_learned_data(), set(), accounts, []
         learn_correct = True
         last_date = max(date for _, date, _, _ in all_transactions)
         first_date = last_date - datetime.timedelta(days=round(30.44 * args.months))
@@ -869,6 +1084,7 @@ def main():
     if not banks:
         raise SystemExit("No learned import data (Bayesian matching) found.")
     transactions = bank_transactions(all_transactions, accounts, banks, skip)
+    history = bank_transactions(old_transactions, old_accounts, banks)  # empty with --from-ledger
     scored = [tx for tx in transactions if first_date is None or tx.date > first_date]
     if not scored:
         raise SystemExit("No transactions to replay.")
@@ -890,37 +1106,43 @@ def main():
     print()
 
     # Each row is a function (threshold, alpha) -> replay results, and whether
-    # it uses alpha. GnuCash 5.17 and naive Bayes use GnuCash's tokens and the
-    # stored data as it is; the "+tok" rows the new tokens and the stored data
-    # converted to them. The corrections start empty in every run, and learn
-    # every transaction; the counts learn like the importer (learn_correct).
+    # it uses alpha. GnuCash 5.17 uses GnuCash's tokens and the stored data as
+    # it is; the "+tok" rows the new tokens and the stored data converted to
+    # them. The corrections start empty in every run, and learn every
+    # transaction; the counts learn like the importer (learn_correct).
     tokens_517 = lambda tx: tokens_gnucash_517(tx, weekday_names)
     converted = {bank: convert_learned_data(start[bank], weekday_names) for bank in start}
     nb = lambda alpha: lambda lrn, tok: score_naive_bayes(lrn, tok, alpha)
     nb_log = lambda alpha: lambda lrn, tok: naive_bayes_log_scores(lrn, tok, alpha)
 
-    def with_corrections(log_scores, rule):
-        return lambda threshold, alpha: replay(
-            transactions, tokens_split, log_scores(alpha), converted, learn_correct, first_date,
-            threshold, Corrections(), rule)
-
     runs = {
-        "GnuCash 5.17": (lambda threshold, alpha: replay(
+        "GnuCash 5.17": (lambda threshold, alpha, observe=None: replay(
             transactions, tokens_517, score_gnucash_517, start, learn_correct, first_date,
-            threshold), False),
-        "naive Bayes": (lambda threshold, alpha: replay(
-            transactions, tokens_517, nb(alpha), start, learn_correct, first_date,
-            threshold), True),
-        "NB+tok+corr+cut": (with_corrections(nb_log, concentration_cut()), True),
-        "NB+tok+corr+cut+share": (with_corrections(nb_log, chain(concentration_cut(), known_share())), True),
-        "Dirichlet NB+tok+corr+cut": (with_corrections(lambda alpha: dirichlet_log_scores, concentration_cut()), False),
-        # no corrections: learns like the importer today
-        "damped NB+tok+cut": (lambda threshold, alpha: replay(
+            threshold, observe=observe), False),
+        "NB+tok": (lambda threshold, alpha, observe=None: replay(
+            transactions, tokens_split, nb(alpha), converted, learn_correct, first_date,
+            threshold, observe=observe), True),
+        "NB+tok+corr+cut": (lambda threshold, alpha, observe=None: replay(
+            transactions, tokens_split, nb_log(alpha), converted, learn_correct, first_date,
+            threshold, Corrections(), concentration_cut(), observe), True),
+        "damped NB+tok+cut": (lambda threshold, alpha, observe=None: replay(
             transactions, tokens_split, lambda lrn, tok: best_of(damped_log_scores(lrn, tok, alpha)),
-            converted, learn_correct, first_date, threshold, None, concentration_cut()), True),
+            converted, learn_correct, first_date, threshold, None, concentration_cut(), observe), True),
+        "kNN+tok": (lambda threshold, alpha, observe=None: replay_model(
+            NearestNeighbours(history), transactions, first_date, threshold, observe), False),
+        "damped NB+tok+kNN veto": (lambda threshold, alpha, observe=None: replay_model(
+            NaiveBayesAndNeighbours(converted, history, learn_correct, alpha), transactions,
+            first_date, threshold, observe), True),
     }
-    scenarios = {name: run(THRESHOLD, ALPHA) for name, (run, _) in runs.items()}
+    # diagnoses: filled during the replays below, printed after the results
+    if args.diagnose:
+        kinds = payee_kinds(history, transactions)
+        diagnoses = {name: Diagnosis(kinds) for name in runs}
+    scenarios = {name: run(THRESHOLD, ALPHA, diagnoses[name].observe if args.diagnose else None)
+                 for name, (run, _) in runs.items()}
     print_results(scenarios)
+    if args.diagnose:
+        print_diagnoses(diagnoses)
 
     if args.alphas or args.thresholds:
         thresholds = [float(t) for t in args.thresholds.split(",")] if args.thresholds else [THRESHOLD]
