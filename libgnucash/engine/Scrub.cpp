@@ -44,6 +44,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string>
 #include <unordered_set>
 
 #include "Account.h"
@@ -229,6 +230,12 @@ xaccAccountScrubSplits (Account *account)
         xaccSplitScrub (s);
     }
     scrub_depth--;
+}
+
+static std::string
+make_imbalance_account_name (const gnc_commodity* currency)
+{
+    return std::string (_("Imbalance")) + "-" + gnc_commodity_get_mnemonic (currency);
 }
 
 /* if dry_run is true, this function will analyze the split and
@@ -446,7 +453,6 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
                    gnc_commodity *commodity)
 {
     Split *balance_split;
-    gchar *accname;
 
     if (!account ||
         !gnc_commodity_equiv (commodity, xaccAccountGetCommodity(account)))
@@ -461,12 +467,10 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
                 return nullptr;
             }
         }
-        accname = g_strconcat (_("Imbalance"), "-",
-                               gnc_commodity_get_mnemonic (commodity), nullptr);
+        auto accname = make_imbalance_account_name (commodity);
         account = xaccScrubUtilityGetOrMakeAccount (root, commodity,
-                                                    accname, ACCT_TYPE_BANK,
+                                                    accname.c_str(), ACCT_TYPE_BANK,
                                                     FALSE, TRUE);
-        g_free (accname);
         if (!account)
         {
             PERR ("Can't get balancing account");
