@@ -44,6 +44,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string>
 #include <unordered_set>
 
 #include "Account.h"
@@ -231,6 +232,12 @@ xaccAccountScrubSplits (Account *account)
     scrub_depth--;
 }
 
+static std::string
+make_imbalance_account_name (const gnc_commodity* currency)
+{
+    return std::string (_("Imbalance")) + "-" + gnc_commodity_get_mnemonic (currency);
+}
+
 /* if dry_run is true, this function will analyze the split and
    return true if the split will be modified during the actual scrub. */
 static bool
@@ -315,6 +322,21 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     {
         LEAVE ("(split=%p) inequiv currency", split);
         return false;
+    }
+
+    auto null_or_empty = [](const char* str) -> bool { return !str || !*str; };
+    if (xaccTransStillHasSplit (trans, split) &&
+        gnc_numeric_zero_p (value) &&
+        gnc_numeric_zero_p (amount) &&
+        null_or_empty (xaccSplitGetMemo (split)) &&
+        null_or_empty (xaccSplitGetAction (split)) &&
+        xaccAccountGetType (account) == ACCT_TYPE_BANK &&
+        make_imbalance_account_name (currency) == xaccAccountGetName (account))
+    {
+        if (!dry_run)
+            xaccSplitDestroy (split);
+        LEAVE ("(split=%p) zero imbalance", split);
+        return true;
     }
 
     scu = MIN (xaccAccountGetCommoditySCU (account),
@@ -446,7 +468,6 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
                    gnc_commodity *commodity)
 {
     Split *balance_split;
-    gchar *accname;
 
     if (!account ||
         !gnc_commodity_equiv (commodity, xaccAccountGetCommodity(account)))
@@ -461,12 +482,10 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
                 return nullptr;
             }
         }
-        accname = g_strconcat (_("Imbalance"), "-",
-                               gnc_commodity_get_mnemonic (commodity), nullptr);
+        auto accname = make_imbalance_account_name (commodity);
         account = xaccScrubUtilityGetOrMakeAccount (root, commodity,
-                                                    accname, ACCT_TYPE_BANK,
+                                                    accname.c_str(), ACCT_TYPE_BANK,
                                                     FALSE, TRUE);
-        g_free (accname);
         if (!account)
         {
             PERR ("Can't get balancing account");
