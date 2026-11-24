@@ -196,7 +196,8 @@ squash_extra_whitespace (char* text)
     {
         if (isspace (text[spot]) && isspace (text[spot - 1]))
         {
-            memmove (text + spot, text + spot + 1, length - spot + 1);
+            /* Move the rest of the string, including its terminator. */
+            memmove (text + spot, text + spot + 1, length - spot);
             length--;
         }
         else
