@@ -184,3 +184,59 @@ TEST_F (ExampleAccountTest, unreadable_template_is_skipped)
 
     fs::remove_all (tmp_dir);
 }
+
+/* Write a template with the given title and descriptions and read it. */
+static GncExampleAccount*
+read_template_with_descriptions (const fs::path& dir, const std::string& title,
+                                 const std::string& short_description,
+                                 const std::string& long_description)
+{
+    auto file = dir / "acctchrt_test.gnucash-xea";
+    {
+        std::ofstream out {file};
+        out << R"(<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act">
+<gnc-act:title>)" << title << R"(</gnc-act:title>
+<gnc-act:short-description>)" << short_description << R"(</gnc-act:short-description>
+<gnc-act:long-description>)" << long_description << R"(</gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+</gnc-account-example>
+)";
+    }
+    return gnc_read_example_account (file.string ().c_str ());
+}
+
+/* The title and the descriptions are stripped, and every run of whitespace
+ * in them is reduced to its first character.
+ */
+TEST_F (ExampleAccountTest, whitespace_in_descriptions_is_squashed)
+{
+    auto tmp_name = g_dir_make_tmp ("gnc-example-accounts-XXXXXX", nullptr);
+    ASSERT_NE (tmp_name, nullptr);
+    fs::path tmp_dir {tmp_name};
+    g_free (tmp_name);
+
+    auto example = read_template_with_descriptions (
+        tmp_dir,
+        "Two  spaces,   three spaces,    four spaces",
+        "\n  Surrounded by whitespace\n",
+        "First line.\n    Second line.  Next sentence åäö.\n\n    New paragraph.");
+    ASSERT_NE (example, nullptr);
+
+    EXPECT_STREQ (example->title, "Two spaces, three spaces, four spaces");
+    EXPECT_STREQ (example->short_description, "Surrounded by whitespace");
+    EXPECT_STREQ (example->long_description,
+                  "First line.\nSecond line. Next sentence åäö.\nNew paragraph.");
+
+    gnc_destroy_example_account (example);
+    fs::remove_all (tmp_dir);
+}

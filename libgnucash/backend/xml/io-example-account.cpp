@@ -185,25 +185,21 @@ generic_callback (const char* tag, gpointer globaldata, gpointer data)
     return TRUE;
 }
 
+/* Reduce every run of whitespace in text to its first character. */
 static char*
 squash_extra_whitespace (char* text)
 {
-    int spot;
-    int length = strlen (text);
+    auto dest = text;
+    auto previous_is_space = false;
 
-    for (spot = 1; spot < length; spot++)
+    for (auto src = text; *src; ++src)
     {
-        if (g_ascii_isspace (text[spot]) && g_ascii_isspace (text[spot - 1]))
-        {
-            /* Move the rest of the string, including its terminator. */
-            memmove (text + spot, text + spot + 1, length - spot);
-            length--;
-        }
-        else
-        {
-            spot++;
-        }
+        auto is_space = g_ascii_isspace (*src) != 0;
+        if (!(is_space && previous_is_space))
+            *dest++ = *src;
+        previous_is_space = is_space;
     }
+    *dest = '\0';
     return text;
 }
 
