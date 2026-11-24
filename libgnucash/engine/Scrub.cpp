@@ -267,7 +267,10 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     if (!account)
     {
         if (dry_run)
+        {
+            LEAVE ("(split=%p) no account. must scrub orphans.", split);
             return true;
+        }
         else
             xaccTransScrubOrphans (trans);
         account = xaccSplitGetAccount (split);
@@ -290,7 +293,10 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     {
         value = gnc_numeric_zero();
         if (dry_run)
+        {
+            LEAVE ("(split=%p) invalid value, reset to zero", split);
             return true;
+        }
         else
             xaccSplitSetValue (split, value);
     }
@@ -300,7 +306,10 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     {
         amount = gnc_numeric_zero();
         if (dry_run)
+        {
+            LEAVE ("(split=%p) invalid amount, reset to zero", split);
             return true;
+        }
         else
             xaccSplitSetAmount (split, amount);
     }
@@ -314,7 +323,10 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     if (!acc_commodity)
     {
         if (dry_run)
+        {
+            LEAVE ("(split=%p) account without commodity", split);
             return true;
+        }
         else
             xaccAccountScrubCommodity (account);
     }
@@ -349,7 +361,10 @@ split_scrub_or_dry_run (Split *split, bool dry_run)
     }
 
     if (dry_run)
+    {
+        LEAVE("(split=%p) trans->currency == split->account->currency but amount != value, reset to value", split);
         return true;
+    }
 
     /*
      * This will be hit every time you answer yes to the dialog "The
