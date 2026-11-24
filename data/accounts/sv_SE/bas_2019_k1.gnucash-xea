@@ -2062,7 +2062,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5620 Lastbilskostnader</act:name>
-  <act:id type="new">bb05957c-bf30-47c0-b06f-ddad995d</act:id>
+  <act:id type="new">f5febfa53c3148c9b45d6e5e8f671fa5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
