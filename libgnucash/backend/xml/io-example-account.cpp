@@ -33,7 +33,6 @@
 #endif
 
 #include <sys/types.h>
-#include <ctype.h>
 #ifdef HAVE_DIRENT_H
 # include <dirent.h>
 #endif
@@ -194,7 +193,7 @@ squash_extra_whitespace (char* text)
 
     for (spot = 1; spot < length; spot++)
     {
-        if (isspace (text[spot]) && isspace (text[spot - 1]))
+        if (g_ascii_isspace (text[spot]) && g_ascii_isspace (text[spot - 1]))
         {
             /* Move the rest of the string, including its terminator. */
             memmove (text + spot, text + spot + 1, length - spot);
