@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -159,4 +160,27 @@ TEST_F (ExampleAccountTest, load_example_account_list)
         EXPECT_EQ (g_slist_length (list), files.size ());
         gnc_free_example_account_list (list);
     }
+}
+
+/* Bug 568659: a template that can't be read must not hide the other
+ * templates in its directory.
+ */
+TEST_F (ExampleAccountTest, unreadable_template_is_skipped)
+{
+    auto tmp_name = g_dir_make_tmp ("gnc-example-accounts-XXXXXX", nullptr);
+    ASSERT_NE (tmp_name, nullptr);
+    fs::path tmp_dir {tmp_name};
+    g_free (tmp_name);
+
+    auto good_templates = template_files (m_accounts_dir / "C");
+    ASSERT_FALSE (good_templates.empty ());
+    fs::copy_file (good_templates.front (), tmp_dir / good_templates.front ().filename ());
+    /* An empty file isn't a valid template. */
+    std::ofstream {tmp_dir / "acctchrt_broken.gnucash-xea"};
+
+    auto list = gnc_load_example_account_list (tmp_dir.string ().c_str ());
+    EXPECT_EQ (g_slist_length (list), 1u);
+    gnc_free_example_account_list (list);
+
+    fs::remove_all (tmp_dir);
 }
