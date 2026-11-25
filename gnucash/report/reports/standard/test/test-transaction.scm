@@ -105,6 +105,7 @@
   ;; This function will perform implementation testing on the transaction report.
   (let* ((env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
+         (asset (cdr (assoc "Asset" account-alist)))
          (bank (cdr (assoc "Bank" account-alist)))
          (gbp-bank (cdr (assoc "GBP Bank" account-alist)))
          (usd-bank (cdr (assoc "USD Bank" account-alist)))
@@ -131,6 +132,7 @@
       ;; disable indenting. These options will be tested separately as
       ;; the first test group. By default, we'll select the modern dates.
       (let ((options (gnc:make-report-options trep-uuid)))
+        (set-option! options "Accounts" "Include Sub-Accounts" #f)
         (set-option! options "Accounts" "Accounts" (list bank))
         (set-option! options "Sorting" "Add indenting columns" #f)
         (set-option! options "General" "Add options summary" 'always)
@@ -291,9 +293,25 @@
     (test-begin "accounts selectors and filtering")
 
     (let ((options (default-testing-options)))
-      (set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
+
+      ;; Include Sub-Accounts
+      (set-option! options "Accounts" "Accounts" (list asset))
+      (set-option! options "Accounts" "Include Sub-Accounts" #f)
+      (let ((sxml (options->sxml options "accounts excluding sub-accounts")))
+        (test-equal "exclude sub-accounts, Asset has no transactions"
+          '()
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Accounts" "Include Sub-Accounts" #t)
+      (let ((sxml (options->sxml options "accounts including sub-accounts")))
+        (test-equal "include sub-accounts, sum = $1.00"
+          '("$1.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Accounts" "Include Sub-Accounts" #f)
+      (set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
 
       ;; Filter Account Name Filters
       (set-option! options "Filter" "Account Name Filter" "Expenses")
@@ -410,6 +428,25 @@
       (let ((sxml (options->sxml options "bank exclude bank-income accts")))
         (test-equal "filter excludes bank-income, sum = -$28.00"
           '("-$28.00")
+          (get-row-col sxml -1 -1)))
+
+      ;; Test Accounts Filters with Include Sub-Accounts
+      (set! options (default-testing-options))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
+      (set-option! options "Accounts" "Accounts" (list expense))
+      (set-option! options "Accounts" "Include Sub-Accounts" #t)
+      (set-option! options "Accounts" "Filter By…" (list asset))
+      (set-option! options "Accounts" "Filter Type" 'include)
+      (let ((sxml (options->sxml options "including asset descendant expense accts only")))
+        (test-equal "filter includes assets-expense, sum = $20.00"
+          '("$20.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Accounts" "Filter Type" 'exclude)
+      (let ((sxml (options->sxml options "expense exclude asset-expense accts")))
+        (test-equal "filter excludes asset-expense, sum = $11.00"
+          '("$11.00")
           (get-row-col sxml -1 -1)))
 
       ;; Test Void Transaction Filters
