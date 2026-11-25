@@ -166,10 +166,6 @@ gnc_object_references_dialog_response_cb (GtkDialog *dialog,
 void
 gnc_ui_object_references_show (const gchar *explanation_text, GList *objlist)
 {
-    gpointer dialog_class = g_type_class_ref (GNC_TYPE_OBJECT_REFERENCES_DIALOG);
-    g_type_class_unref (dialog_class);
-    if (!template_loaded)
-        return;
     GtkWidget *dialog = g_object_new (GNC_TYPE_OBJECT_REFERENCES_DIALOG,
                                       "explanation", explanation_text,
                                       "object-list", objlist, "modal", TRUE, NULL);
