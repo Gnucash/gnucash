@@ -1938,6 +1938,7 @@ xaccSplitGetLot (const Split *split)
 void
 xaccSplitSetLot(Split* split, GNCLot* lot)
 {
+    g_return_if_fail (split);
     xaccTransBeginEdit (split->parent);
     split->lot = lot;
     qof_instance_set_dirty(QOF_INSTANCE(split));
@@ -2075,6 +2076,7 @@ xaccSplitGetType(Split *s)
 void
 xaccSplitMakeStockSplit(Split *s)
 {
+    g_return_if_fail (s);
     xaccTransBeginEdit (s->parent);
 
     s->value = gnc_numeric_zero();
