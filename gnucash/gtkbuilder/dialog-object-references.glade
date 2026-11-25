@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
-<interface>
+<interface domain="gnucash">
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkDialog" id="object_references_dialog">
+  <template class="GncObjectReferencesDialog" parent="GtkDialog">
     <property name="can-focus">False</property>
     <property name="border-width">5</property>
     <property name="title" translatable="yes">Object references</property>
@@ -83,5 +83,5 @@
     <action-widgets>
       <action-widget response="0">okbutton</action-widget>
     </action-widgets>
-  </object>
+  </template>
 </interface>
