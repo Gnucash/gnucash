@@ -1370,7 +1370,6 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
     const gnc_commodity *commodity;
 
     if (!s) return;
-    xaccTransBeginEdit (s->parent);
 
     if (!s->acc)
     {
@@ -1381,6 +1380,8 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
     currency = xaccTransGetCurrency (s->parent);
     commodity = xaccAccountGetCommodity (s->acc);
 
+    std::optional<gnc_numeric> new_amount, new_value;
+
     /* If the base_currency is the transaction's commodity ('currency'),
      * set the value.  If it's the account commodity, set the
      * amount. If both, set both. */
@@ -1388,18 +1389,18 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
     {
         if (gnc_commodity_equiv(commodity, base_currency))
         {
-            s->amount = gnc_numeric_convert(value,
-                                            get_commodity_denom(s),
-                                            GNC_HOW_RND_ROUND_HALF_UP);
+            new_amount = gnc_numeric_convert (value,
+                                              get_commodity_denom(s),
+                                              GNC_HOW_RND_ROUND_HALF_UP);
         }
-        s->value = gnc_numeric_convert(value,
-                                       get_currency_denom(s),
-                                       GNC_HOW_RND_ROUND_HALF_UP);
+        new_value = gnc_numeric_convert (value,
+                                         get_currency_denom(s),
+                                         GNC_HOW_RND_ROUND_HALF_UP);
     }
     else if (gnc_commodity_equiv(commodity, base_currency))
     {
-        s->amount = gnc_numeric_convert(value, get_commodity_denom(s),
-                                        GNC_HOW_RND_ROUND_HALF_UP);
+        new_amount = gnc_numeric_convert (value, get_commodity_denom(s),
+                                          GNC_HOW_RND_ROUND_HALF_UP);
     }
     else
     {
@@ -1411,6 +1412,9 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
         return;
     }
 
+    xaccTransBeginEdit (s->parent);
+    if (new_amount) s->amount = *new_amount;
+    if (new_value) s->value = *new_value;
     SET_GAINS_A_VDIRTY(s);
     mark_split (s);
     qof_instance_set_dirty(QOF_INSTANCE(s));
