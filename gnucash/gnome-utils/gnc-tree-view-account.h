@@ -262,6 +262,26 @@ void gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
  */
 typedef gboolean (*gnc_tree_view_account_filter_func)(Account *account, gpointer data);
 
+/** Set an optional per-account cell sensitivity predicate and request a redraw.
+ *  This affects appearance only: it neither hides accounts nor prevents their
+ *  selection. Callers must enforce any selection restrictions separately.
+ *  Applies to standard, property, and custom columns without enabling cells
+ *  independently disabled by their renderer or custom source callback.
+ *
+ *  @param view The account tree view.
+ *  @param func A predicate returning TRUE for sensitive (normally rendered)
+ *  accounts and FALSE for insensitive (dimmed) accounts. Unlike a visibility
+ *  filter, FALSE leaves the account in the tree. Called during cell rendering;
+ *  it should be inexpensive. NULL removes the predicate and restores only
+ *  renderer sensitivity changed by this predicate.
+ *  @param data Borrowed context passed to func. The caller must keep it valid
+ *  until the predicate is replaced or removed, or the view is destroyed. The
+ *  view does not free it.
+ */
+void gnc_tree_view_account_set_sensitive_func (GncTreeViewAccount *view,
+                                              gnc_tree_view_account_filter_func func,
+                                              gpointer data);
+
 
 /** This function attaches a filter function to the given account
  *  tree.  This function will be called for each account that the view

@@ -59,7 +59,7 @@ class GncOptionsDialog
     gpointer             m_close_cb_data;
 
     /* Hold onto this for a complete reset */
-    GncOptionDB* m_option_db;
+    GncOptionDB* m_option_db{nullptr};
 
     /* Hold on to this to unregister the right class */
     const char* m_component_class;
@@ -84,6 +84,13 @@ public:
     inline void build_contents(GncOptionDB* odb){
         build_contents(odb, true); }
     void build_contents(GncOptionDB* odb, bool show_dialog);
+    /** Select a page by its untranslated section name, updating tabs and sidebar.
+     * Return false for a null or unknown name without changing the selection.
+     */
+    bool select_page(const char* section);
+    /** Enable Apply and OK only when requested and all noninternal GTK options
+     * are valid. Use Cancel for pending changes, Close otherwise.
+     */
     void set_sensitive(bool sensitive) noexcept;
     void changed() noexcept;
     void set_apply_cb(GncOptionsDialogCallback, void* cb_data) noexcept;

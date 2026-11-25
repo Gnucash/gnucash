@@ -170,6 +170,11 @@ public:
     bool is_dirty() const noexcept;
 /** @returns true if the option value differs from its default value. */
     bool is_changed() const noexcept;
+    /** Preserve this option in saved settings even when it equals its default.
+     * Use for explicit selections whose defaults depend on mutable book data.
+     */
+    void set_always_save(bool value) noexcept { m_always_save = value; }
+    bool always_save() const noexcept { return m_always_save; }
 /** @returns false unless m_option contains a GncOptionMultiselectValue or
  * GncOptionAccountListValue for which multiple selections have been enabled.
  */
@@ -213,6 +218,7 @@ private:
     GncOptionVariantPtr m_option;
     GncOptionUIItemPtr m_ui_item{nullptr};
     std::any m_widget_changed{};
+    bool m_always_save{false};
 };
 
 inline bool

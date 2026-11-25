@@ -22,6 +22,9 @@
 #define GNC_OPTION_UI_HPP_
 
 #include <memory>
+#include <vector>
+#include <cstdint>
+#include <optional>
 #include "gnc-option-uitype.hpp"
 
 class GncOption;
@@ -52,6 +55,9 @@ public:
     virtual void clear_ui_item() = 0;
     virtual void set_ui_item_from_option(GncOption& option) noexcept = 0;
     virtual void set_option_from_ui_item(GncOption& option) noexcept = 0;
+    virtual uint16_t set_choices(GncOption&, const std::vector<uint16_t>&,
+                                 uint16_t selected) { return selected; }
+    virtual std::optional<uint16_t> get_choice() const { return {}; }
 private:
     GncOptionUIType m_type;
     bool m_dirty = false;

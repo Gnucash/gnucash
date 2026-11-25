@@ -41,6 +41,11 @@ GtkWidget * gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report
 // scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
 void       reportWindow(int id, GtkWindow *parent);
 gboolean   gnc_report_edit_options(SCM report, GtkWindow *parent);
+// Open or raise the report's Options dialog and select the named section.
+// A null, empty, or unknown section leaves the selected tab unchanged;
+// custom editors without standard option tabs are opened without navigation.
+// Return FALSE if opening fails, TRUE otherwise, even if no tab was selected.
+gboolean   gnc_report_edit_options_on_page(SCM report, GtkWindow *parent, const char *section);
 
 #ifdef __cplusplus
 }

@@ -48,6 +48,7 @@ set (gnome_utils_SOURCES
   dialog-utils.c
   dialog-filter-invoices.cpp
   gnc-account-sel.c
+  gnc-allocation-categories.cpp
   gnc-amount-edit.c
   gnc-autosave.c
   gnc-cell-renderer-label.c
@@ -111,6 +112,7 @@ set (gnome_utils_SOURCES
 set(gnome_utils_noinst_HEADERS
   dialog-tax-table.h
   dialog-options.hpp
+  gnc-allocation-categories.hpp
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h
