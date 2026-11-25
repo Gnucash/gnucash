@@ -39,6 +39,19 @@
 #include "qofid-p.h"
 #include "qofinstance-p.h"
 
+#include <memory>
+#include <string>
+#include <boost/container/flat_map.hpp>
+
+struct QofCollectionDeleter
+{
+    void operator()(QofCollection* col) const noexcept { qof_collection_destroy (col); }
+};
+
+using QofCollectionPtr = std::unique_ptr<QofCollection, QofCollectionDeleter>;
+using CollectionMap = boost::container::flat_map<std::string, QofCollectionPtr>;
+using QofDataMap = boost::container::flat_map<std::string, gpointer>;
+using QofDataFinMap = boost::container::flat_map<std::string, QofBookFinalCB>;
 
 struct QofBook
 {
@@ -71,15 +84,15 @@ struct QofBook
      * belonging to this book, with their pointers to the respective
      * objects.  This allows a lookup of objects based on their guid.
      */
-    GHashTable * hash_of_collections;
+    CollectionMap hash_of_collections;
 
     /* In order to store arbitrary data, for extensibility, add a table
      * that will be used to hold arbitrary pointers.
      */
-    GHashTable *data_tables;
+    QofDataMap data_tables;
 
     /* Hash table of destroy callbacks for the data table. */
-    GHashTable *data_table_finalizers;
+    QofDataFinMap data_table_finalizers;
 
     /* Boolean indicates whether book is safe to write to (true means
      * that it isn't). The usual reason will be a database version
@@ -133,9 +146,9 @@ typedef struct
     QofBookDirtyCB (*get_dirty_cb)(const QofBook*);
     void (*set_shutting_down)(QofBook*, gboolean);
     gpointer (*get_dirty_data)(const QofBook*);
-    GHashTable* (*get_collections)(const QofBook*);
-    GHashTable* (*get_data_tables)(const QofBook*);
-    GHashTable* (*get_data_table_finalizers)(const QofBook*);
+    const CollectionMap& (*get_collections)(const QofBook*);
+    const QofDataMap& (*get_data_tables)(const QofBook*);
+    const QofDataFinMap& (*get_data_table_finalizers)(const QofBook*);
     char (*get_book_open)(const QofBook*);
     int (*get_version)(const QofBook*);
 } QofBookTestFunctions;
