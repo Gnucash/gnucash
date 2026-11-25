@@ -1217,15 +1217,23 @@ gnc_coll_set_root_account (QofCollection *col, Account *root)
     }
 }
 
+gboolean
+gnc_book_has_root_account(QofBook *book)
+{
+    if (!book)
+        return FALSE;
+    auto col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+    auto root = gnc_coll_get_root_account (col);
+    return root != nullptr;
+}
+
 Account *
 gnc_book_get_root_account (QofBook *book)
 {
-    QofCollection *col;
-    Account *root;
-
-    if (!book) return nullptr;
-    col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
-    root = gnc_coll_get_root_account (col);
+    if (!book)
+        return nullptr;
+    auto col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+    auto root = gnc_coll_get_root_account (col);
     if (root == nullptr && !qof_book_shutting_down(book))
         root = gnc_account_create_root(book);
     return root;

@@ -208,19 +208,24 @@ gnc_get_current_book (void)
     return qof_session_get_book (gnc_get_current_session ());
 }
 
-/* If there is no current session, there is no book and we must be dealing
- * with a new book. When gnucash is started with --nofile, there is
- * initially no session (and no book), but by the time we check, one
- * could have been created (for example, if an empty account tree tab is
- * opened, a session is created which creates a new, but empty, book).
- * A session is created and a book is loaded from a backend when gnucash is
- * started with a file, but selecting 'new file' keeps a session open. So we
- * need to check as well for a book with no accounts (root with no children). */
+/* If there is no current session, there is no book and we must be
+ * dealing with a new book. When gnucash is started with --nofile,
+ * there is initially no session (and no book), but by the time we
+ * check, one could have been created (for example, if an empty
+ * account tree tab is opened, a session is created which creates a
+ * new, but empty, book).  A session is created and a book is loaded
+ * from a backend when gnucash is started with a file, but selecting
+ * 'new file' keeps a session open. So we need to check as well for a
+ * book with no root or no accounts (root with no children).
+ */
 gboolean
 gnc_is_new_book (void)
 {
-    return (!gnc_current_session_exist() ||
-            gnc_account_n_children (gnc_book_get_root_account (gnc_get_current_book ())) == 0);
+    if (!gnc_current_session_exist ())
+        return FALSE;
+    auto book = gnc_get_current_book ();
+    return (!gnc_book_has_root_account (book) ||
+            gnc_account_n_children (gnc_book_get_root_account (book)) == 0);
 }
 
 #define OPTION_TAXUS_NAME "tax_US/name"
@@ -753,7 +758,8 @@ gnc_default_currency_common (char* requested_currency,
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
 
-    if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_ROOT))
+    if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_ROOT) &&
+        !gnc_is_new_book())
         currency = xaccAccountGetCommodity (gnc_get_current_root_account ());
 
     if (gnc_current_session_exist() &&

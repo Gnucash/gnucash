@@ -44,6 +44,7 @@
 #include "qof.h"
 #include "gnc-engine.h"
 #include "policy.h"
+#include "qofinstance.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -242,6 +243,7 @@ typedef enum
     void gnc_set_account_separator (const gchar *separator);
 
     /*@ dependent @*/
+    gboolean gnc_book_has_root_account(QofBook *book);
     Account *gnc_book_get_root_account(QofBook *book);
     void gnc_book_set_root_account(QofBook *book, Account *root);
 
