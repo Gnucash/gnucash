@@ -1254,7 +1254,7 @@ test_xaccSplitOrderDateOnly (Fixture *fixture, gconstpointer pData)
     o_txn->date_posted += 100;
     g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, -1);
     o_txn->date_posted -= 50;
-    g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, -1);
+    g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, 0);
 
     test_destroy (o_split);
     test_destroy (o_txn);

@@ -1623,12 +1623,10 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
 
     ta = sa->parent;
     tb = sb->parent;
-    if ( !ta && !tb ) return 0;
-    if ( !tb ) return -1;
-    if ( !ta ) return +1;
+    if (ta == tb) return 0;
+    if (!tb || tb->date_posted == INT64_MAX) return -1;
+    if (!ta || ta->date_posted == INT64_MAX) return +1;
 
-    if (ta->date_posted == tb->date_posted)
-        return -1; // Keep the same order
     return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
 }
 
