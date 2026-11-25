@@ -193,6 +193,16 @@ set_options(dbi_conn conn, const PairVec& options)
     }
 }
 
+static void
+clear_options(dbi_conn conn, const std::vector<std::string>& options)
+{
+    for (const auto& option : options)
+    {
+        auto opt = option.c_str();
+        dbi_conn_clear_option(conn, opt);
+    }
+}
+
 /**
  * Sets standard db options in a dbi_conn.
  *
@@ -283,34 +293,41 @@ GncDbiBackend<Type>::conn_setup (PairVec& options, UriStrings& uri)
 template <DbType Type>bool
 GncDbiBackend<Type>::create_database(dbi_conn conn, const char* db)
 {
-    const char *dbname;
+    const char *dbname = nullptr;
     const char *dbcreate;
     if (Type == DbType::DBI_MYSQL)
     {
-        dbname = "mysql";
         dbcreate = "CREATE DATABASE %s CHARACTER SET utf8";
+	clear_options(conn, {"dbname"});
     }
     else
     {
         dbname = "postgres";
         dbcreate = "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'";
-    }
-    PairVec options;
-    options.push_back(std::make_pair("dbname", dbname));
-    try
-    {
-        set_options(conn, options);
-    }
-    catch (std::runtime_error& err)
-    {
-        set_error (ERR_BACKEND_SERVER_ERR);
-        return false;
+	PairVec options;
+	options.push_back(std::make_pair("dbname", dbname));
+	try
+	{
+	    set_options(conn, options);
+	}
+	catch (std::runtime_error& err)
+	{
+	    set_error (ERR_BACKEND_SERVER_ERR);
+	    return false;
+	}
     }
 
     auto result = dbi_conn_connect (conn);
     if (result < 0)
     {
-        PERR ("Unable to connect to %s database", dbname);
+        if (dbname)
+        {
+            PERR ("Unable to connect to %s database", dbname);
+        }
+        else
+        {
+            PERR ("Unable to connect to database server");
+        }
         set_error(ERR_BACKEND_SERVER_ERR);
         return false;
     }
@@ -599,26 +616,23 @@ adjust_sql_options (dbi_conn connection)
 template <DbType Type> bool
 drop_database(dbi_conn conn, const UriStrings& uri)
 {
-    const char *root_db;
     if (Type == DbType::DBI_PGSQL)
     {
-        root_db = "template1";
+        // Postgresql can't drop a database it's connected to
+        const char *root_db = "template1";
+	if (dbi_conn_select_db (conn, root_db) == -1)
+        {
+	    PERR ("Failed to switch out of %s, drop will fail.",
+		  uri.quote_dbname(Type).c_str());
+	    LEAVE ("Error");
+	    return false;
+	}
     }
-    else if (Type == DbType::DBI_MYSQL)
+    else if (Type != DbType::DBI_MYSQL)
     {
-        root_db = "mysql";
-    }
-    else
-    {
+        // MySQL can drop a database it's connected to
         PERR ("Unknown database type, can't proceed.");
         LEAVE("Error");
-        return false;
-    }
-    if (dbi_conn_select_db (conn, root_db) == -1)
-    {
-        PERR ("Failed to switch out of %s, drop will fail.",
-              uri.quote_dbname(Type).c_str());
-        LEAVE ("Error");
         return false;
     }
     if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
