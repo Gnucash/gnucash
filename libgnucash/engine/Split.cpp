@@ -783,7 +783,10 @@ xaccFreeSplit (Split *split)
 void mark_split (Split *s)
 {
     if (s->acc)
-        g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, nullptr);
+    {
+        gnc_account_set_sort_dirty (s->acc);
+        gnc_account_set_balance_dirty (s->acc);
+    }
 
     /* set dirty flag on lot too. */
     if (s->lot)
@@ -1053,7 +1056,8 @@ xaccSplitCommitEdit(Split *s)
 
     if (acc)
     {
-        g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, nullptr);
+        gnc_account_set_sort_dirty (acc);
+        gnc_account_set_balance_dirty (acc);
         xaccAccountRecomputeBalance(acc);
     }
 }
