@@ -1618,20 +1618,14 @@ xaccSplitOrder (const Split *sa, const Split *sb)
 gint
 xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
 {
-    Transaction *ta, *tb;
-
     if (sa == sb) return 0;
     /* nothing is always less than something */
     if (!sa) return -1;
     if (!sb) return +1;
 
-    ta = sa->parent;
-    tb = sb->parent;
-    if (ta == tb) return 0;
-    if (!tb || tb->date_posted == INT64_MAX) return -1;
-    if (!ta || ta->date_posted == INT64_MAX) return +1;
-
-    return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
+    const auto da = sa->parent ? sa->parent->date_posted : INT64_MAX;
+    const auto db = sb->parent ? sb->parent->date_posted : INT64_MAX;
+    return da > db ? 1 : da < db ? -1 : 0;
 }
 
 static gboolean
