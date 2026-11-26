@@ -1068,16 +1068,10 @@ typedef enum
      *    account first.*/
 #define xaccAccountInsertSplit(acc, s)  xaccSplitSetAccount((s), (acc))
 
-    /** The xaccAccountGetSplitList() routine returns a pointer to a GList of
-     *    the splits in the account.
-     * @note This GList is the account's internal
-     *    data structure: do not delete it when done; treat it as a read-only
-     *    structure.  Note that some routines (such as xaccAccountRemoveSplit())
-     *    modify this list directly, and could leave you with a corrupted
-     *    pointer.
-     * @note This should be changed so that the returned value is a copy
-     * of the list. No other part of the code should have access to the
-     * internal data structure used by this object.
+    /** The xaccAccountGetSplitList() routine returns a GList of the splits
+     *    in the account.
+     * @return A newly allocated copy of the list. The caller must free it
+     *    with g_list_free() but not the splits it points to.
      */
     SplitList* xaccAccountGetSplitList (const Account *account);
 

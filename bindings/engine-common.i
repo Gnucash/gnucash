@@ -36,6 +36,12 @@ static const GncGUID * gncAccountGetGUID(Account *x)
 
 %typemap(freearg) AccountList * "g_list_free($1);"
 
+/* These must come before the declarations in the headers included below. */
+%newobject gnc_account_get_full_name;
+%newobject xaccTransGetAPARAcctSplitList;
+%newobject xaccTransGetPaymentAcctSplitList;
+%newobject xaccAccountGetSplitList;
+
 %include <Split.h>
 
 %newobject gnc_account_get_children;
