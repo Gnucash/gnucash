@@ -980,7 +980,7 @@ add_groups_for_each (Account *toadd, gpointer data)
     auto dadata{static_cast<struct add_group_data_struct*>(data)};
     Account *foundact;
 
-    foundact = gnc_account_lookup_by_name(dadata->to, xaccAccountGetName(toadd));
+    foundact = gnc_account_merge_find_child(dadata->to, xaccAccountGetName(toadd));
 
     if (!foundact)
     {

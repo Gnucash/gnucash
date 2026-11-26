@@ -86,6 +86,26 @@ gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
     test_autoclear_LIBS
 )
 
+set(test_account_merge_SOURCES
+  gtest-account-merge.cpp
+)
+
+set(test_account_merge_INCLUDE_DIRS
+  ${CMAKE_BINARY_DIR}/common
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine
+)
+
+set(test_account_merge_LIBS
+  gnc-engine
+  gnc-app-utils
+  gtest
+)
+
+gnc_add_test(test-account-merge "${test_account_merge_SOURCES}"
+    test_account_merge_INCLUDE_DIRS
+    test_account_merge_LIBS
+)
+
 set(GUILE_DEPENDS
   scm-test-engine
   scm-app-utils
@@ -105,4 +125,5 @@ set_dist_list(test_app_utils_DIST
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
   ${test_autoclear_SOURCES}
+  ${test_account_merge_SOURCES}
 )
