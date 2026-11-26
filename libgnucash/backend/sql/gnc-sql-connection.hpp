@@ -30,7 +30,7 @@
 #include <vector>
 
 class GncSqlResult;
-using GncSqlResultPtr = GncSqlResult*;
+using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
 class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;

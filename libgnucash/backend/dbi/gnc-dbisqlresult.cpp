@@ -42,6 +42,10 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 GncDbiSqlResult::~GncDbiSqlResult()
 {
+    /* A failed query has no result to free; its error is already set. */
+    if (!m_dbi_result)
+        return;
+
     int status = dbi_result_free (m_dbi_result);
 
     if (status == 0)

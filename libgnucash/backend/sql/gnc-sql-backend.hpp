@@ -44,7 +44,7 @@ class GncSqlConnection;
 class GncSqlStatement;
 using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
 class GncSqlResult;
-using GncSqlResultPtr = GncSqlResult*;
+using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
 using VersionPair = std::pair<const std::string, unsigned int>;
 using VersionVec = std::vector<VersionPair>;
 using uint_t = unsigned int;
