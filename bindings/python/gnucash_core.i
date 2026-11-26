@@ -183,6 +183,7 @@ GNC_ACCEPT_WRAPPER(GncEntry)
 
 /* SWIG doesn't like this macro, so redefine it to simply mean const */
 #define G_CONST_RETURN const
+%newobject guid_to_string;
 %include <guid.h>
 
 /* %include <Transaction.h>
@@ -191,6 +192,7 @@ GNC_ACCEPT_WRAPPER(GncEntry)
 
 //Ignored because it is unimplemented
 %ignore gnc_numeric_convert_with_error;
+%newobject gnc_numeric_to_string;
 %include <gnc-numeric.h>
 
 %include <gnc-commodity.h>
