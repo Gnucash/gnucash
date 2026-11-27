@@ -1976,6 +1976,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     if (payment_lot)
         selected_lots = g_list_prepend (selected_lots, payment_lot);
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
+    g_list_free (selected_lots);
 }
 
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
