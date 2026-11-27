@@ -1652,8 +1652,12 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
     if (!a && b) return -1;
     if (a && !b) return 1;
     g_assert (a && b);  /* Silence a static analysis warning. */
-    if (a->date != b->date) return a->date - b->date;
-    if (a->date_entered != b->date_entered) return a->date_entered - b->date_entered;
+
+    if (a->date != b->date)
+        return a->date < b->date ? -1 : 1;
+
+    if (a->date_entered != b->date_entered)
+        return a->date_entered < b->date_entered ? -1 : 1;
 
     compare = g_strcmp0 (a->desc, b->desc);
     if (compare) return compare;

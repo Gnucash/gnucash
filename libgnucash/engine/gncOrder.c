@@ -520,8 +520,11 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
     compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
 
-    if (a->opened != b->opened) return a->opened - b->opened;
-    if (a->closed != b->closed) return a->closed - b->closed;
+    if (a->opened != b->opened)
+        return a->opened < b->opened ? -1 : 1;
+
+    if (a->closed != b->closed)
+        return a->closed < b->closed ? -1 : 1;
 
     return qof_instance_guid_compare(a, b);
 }

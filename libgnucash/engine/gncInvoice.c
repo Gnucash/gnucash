@@ -2029,8 +2029,13 @@ int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b)
 
     compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
-    if (a->date_opened != b->date_opened) return a->date_opened - b->date_opened;
-    if (a->date_posted != b->date_posted) return a->date_posted - b->date_posted;
+
+    if (a->date_opened != b->date_opened)
+        return a->date_opened < b->date_opened ? -1 : 1;
+
+    if (a->date_posted != b->date_posted)
+        return a->date_posted < b->date_posted ? -1 : 1;
+
     return qof_instance_guid_compare(a, b);
 }
 
