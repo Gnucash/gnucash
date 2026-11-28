@@ -79,8 +79,10 @@
 (export qif-file:add-price!)
 (export qif-file:prices)
 (export qif-file:cats)
+(export qif-file:date-format)
 (export qif-file:path)
 (export qif-file:path-to-accountname)
+(export qif-file:set-date-format!)
 (export qif-file:set-path!)
 (export qif-file:set-xtns!)
 (export qif-file:xtns)
@@ -118,7 +120,9 @@
 (export qif-price:symbol)
 (export qif-price:set-symbol!)
 (export qif-price:date)
+(export qif-price:datestr)
 (export qif-price:set-date!)
+(export qif-price:set-datestr!)
 (export qif-price:share-price)
 (export qif-price:set-share-price!)
 (export qif-ticker-map:add-ticker!)
@@ -129,6 +133,7 @@
 (export qif-xtn:cleared)
 (export qif-xtn:commission)
 (export qif-xtn:date)
+(export qif-xtn:datestr)
 (export qif-xtn:default-split)
 (export qif-xtn:from-acct)
 (export qif-xtn:mark)
@@ -141,6 +146,7 @@
 (export qif-xtn:set-cleared!)
 (export qif-xtn:set-commission!)
 (export qif-xtn:set-date!)
+(export qif-xtn:set-datestr!)
 (export qif-xtn:set-default-split!)
 (export qif-xtn:set-from-acct!)
 (export qif-xtn:set-mark!)
@@ -166,6 +172,7 @@
 ;;  cats         : list of <qif-cat>  
 ;;  classes      : list of <qif-class>  
 ;;  prices       : list of <qif-price>
+;;  date-format  : selected date format symbol, or #f until determined
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-file>
@@ -173,6 +180,7 @@
    'qif-file 
    '(path                 ;; where file was loaded 
      y2k-threshold
+     date-format          ;; date format used for this file
      xtns                
      accounts 
      cats
@@ -190,6 +198,12 @@
 
 (define qif-file:y2k-threshold 
   (record-accessor <qif-file> 'y2k-threshold))
+
+(define qif-file:date-format
+  (record-accessor <qif-file> 'date-format))
+
+(define qif-file:set-date-format!
+  (record-modifier <qif-file> 'date-format))
 
 (define qif-file:set-y2k-threshold!
   (record-modifier <qif-file> 'y2k-threshold))
@@ -227,6 +241,7 @@
 (define (make-qif-file) 
   (let ((self (construct <qif-file>)))
     (qif-file:set-y2k-threshold! self 50)
+    (qif-file:set-date-format! self #f)
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
     (qif-file:set-cats! self '())
@@ -329,7 +344,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-xtn class 
-;;  [D] date       : parsed. 
+;;  [D] date       : parsed list (day, month, year).
+;;      datestr    : original raw QIF date text.
 ;;  [P] payee      : string 
 ;;  [N] number (check number, sell, or buy)
 ;;  [C] cleared    : parsed (x/X/*) ;
@@ -345,7 +361,7 @@
 (define <qif-xtn>
   (make-record-type
    'qif-xtn
-   '(date payee address number action cleared  
+   '(date datestr payee address number action cleared
           from-acct share-price num-shares security-name commission 
           default-split splits mark)))
 
@@ -355,8 +371,14 @@
 (define qif-xtn:date
   (record-accessor <qif-xtn> 'date))
 
+(define qif-xtn:datestr
+  (record-accessor <qif-xtn> 'datestr))
+
 (define qif-xtn:set-date! 
   (record-modifier <qif-xtn> 'date))
+
+(define qif-xtn:set-datestr!
+  (record-modifier <qif-xtn> 'datestr))
 
 (define qif-xtn:payee
   (record-accessor <qif-xtn> 'payee))
@@ -811,13 +833,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <qif-price>
-;;  Symbol,shares,date
+;;  Symbol,share-price,date
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-price>
   (make-record-type
    'qif-price
-   '(symbol share-price date)))
+   '(symbol share-price date datestr)))
 
 (define qif-price:symbol
   (record-accessor <qif-price> 'symbol))
@@ -834,8 +856,14 @@
 (define qif-price:date
   (record-accessor <qif-price> 'date))
 
+(define qif-price:datestr
+  (record-accessor <qif-price> 'datestr))
+
 (define qif-price:set-date!
   (record-modifier <qif-price> 'date))
+
+(define qif-price:set-datestr!
+  (record-modifier <qif-price> 'datestr))
 
 (define (qif-price:print self)
   (write self))
@@ -844,7 +872,7 @@
   (let ((retval (construct <qif-price>)))
     (qif-price:set-symbol! retval "")
     (qif-price:set-share-price! retval "")
-    (qif-price:set-date! retval "")
+    (qif-price:set-datestr! retval "")
     retval))
 
 (define <qif-ticker-map>
