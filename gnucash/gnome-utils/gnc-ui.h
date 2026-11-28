@@ -81,6 +81,7 @@ extern "C" {
 #define DL_USAGE_CUSTOMREP   "report-saving"
 #define DL_IMPORT_BC         "busnss-imp-bills-invoices"
 #define DL_IMPORT_CUST       "busnss-imp-customer-vendor"
+#define DL_REPORT_OPTIONS    "report-config"
 
 /* GTK Windows - Common Response Codes */
 
