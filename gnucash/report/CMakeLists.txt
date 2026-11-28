@@ -72,6 +72,7 @@ set (report_SCHEME_1
     report-core.scm
     report-utilities.scm
     report-register-hooks.scm
+    saved-report-sandbox.scm
     trep-engine.scm
 )
 
