@@ -1225,24 +1225,56 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     g_object_unref (G_OBJECT(builder));
 }
 
+struct BudgetNoteData
+{
+    QofBook *book;
+    GncGUID budget_guid;
+    GncGUID account_guid;
+    guint period;
+    GtkTextView *note;
+};
+
+static void
+budget_note_response_cb (GtkDialog *dialog, gint response, BudgetNoteData *data)
+{
+    if (response == GTK_RESPONSE_OK)
+    {
+        // Engine events can still remove the original cell's objects while the dialog is open.
+        auto budget = gnc_budget_lookup (&data->budget_guid, data->book);
+        auto account = xaccAccountLookup (&data->account_guid, data->book);
+        if (budget && account)
+        {
+            g_autofree gchar *text = xxxgtk_textview_get_text (data->note);
+            gnc_budget_set_account_period_note (budget, account, data->period,
+                                                (text && *text) ? text : nullptr);
+        }
+    }
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+budget_note_message (GtkWindow *parent, GtkMessageType type, const gchar *message)
+{
+    auto dialog = gtk_message_dialog_new (parent,
+        static_cast<GtkDialogFlags> (GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
+        type, GTK_BUTTONS_CLOSE, "%s", message);
+    g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), dialog);
+    gtk_window_present (GTK_WINDOW (dialog));
+}
+
 static void
 gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
                                         GVariant *parameter,
                                         gpointer user_data)
 {
     auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
-    GncPluginPageBudgetPrivate *priv;
-    GtkWidget *dialog, *note;
-    gint result;
-    GtkBuilder *builder;
-    gchar *txt;
     GtkTreeViewColumn *col = NULL;
     GtkTreePath *path = NULL;
     guint period_num = 0;
     Account *acc = NULL;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
     gtk_tree_view_get_cursor(
         GTK_TREE_VIEW(gnc_budget_view_get_account_tree_view(priv->budget_view)),
         &path, &col);
@@ -1257,47 +1289,45 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
         gtk_tree_path_free(path);
     }
 
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     if (!acc)
     {
-        dialog = gtk_message_dialog_new(
-            GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
-            (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
-            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
-            _("You must select one budget cell to edit."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        budget_note_message (parent, GTK_MESSAGE_INFO,
+                             _("You must select one budget cell to edit."));
         return;
     }
 
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.glade",
-                              "budget_note_dialog");
-
-    dialog = GTK_WIDGET(gtk_builder_get_object(builder, "budget_note_dialog"));
-
-    gtk_window_set_transient_for(
-        GTK_WINDOW(dialog),
-        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
-
-    note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
-    xxxgtk_textview_set_text(GTK_TEXT_VIEW(note),
-                             gnc_budget_get_account_period_note(priv->budget, acc, period_num));
-
-    gtk_widget_show_all(dialog);
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    switch (result)
+    g_autoptr (GtkBuilder) builder = gtk_builder_new ();
+    gboolean loaded = gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade",
+                                                 "budget_note_dialog");
+    auto dialog = gtk_builder_get_object (builder, "budget_note_dialog");
+    auto note = gtk_builder_get_object (builder, "BudgetNote");
+    if (!loaded || !GTK_IS_DIALOG (dialog) || !GTK_IS_TEXT_VIEW (note))
     {
-    case GTK_RESPONSE_OK:
-        txt = xxxgtk_textview_get_text(GTK_TEXT_VIEW(note));
-        gnc_budget_set_account_period_note (priv->budget, acc, period_num,
-                                            (txt && *txt) ? txt : NULL);
-        g_free (txt);
-        break;
-    default:
-        break;
+        if (loaded)
+            PWARN ("Budget note dialog or text view missing from builder");
+        if (GTK_IS_WIDGET (dialog))
+            gtk_widget_destroy (GTK_WIDGET (dialog));
+        budget_note_message (parent, GTK_MESSAGE_ERROR,
+                             _("The budget note editor could not be opened."));
+        return;
     }
-    gtk_widget_destroy(dialog);
-    g_object_unref(G_OBJECT(builder));
+
+    xxxgtk_textview_set_text (GTK_TEXT_VIEW (note),
+                             gnc_budget_get_account_period_note (priv->budget, acc, period_num));
+    auto data = new BudgetNoteData {qof_instance_get_book (QOF_INSTANCE (priv->budget)),
+                                    priv->key, *xaccAccountGetGUID (acc), period_num,
+                                    GTK_TEXT_VIEW (note)};
+    g_signal_connect_data (dialog, "response", G_CALLBACK (budget_note_response_cb), data,
+                           +[](gpointer data, GClosure *) { delete static_cast<BudgetNoteData *> (data); },
+                           G_CONNECT_DEFAULT);
+
+    // Closing the budget page also ends any edit of that budget.
+    g_signal_connect_object (priv->budget_view, "destroy", G_CALLBACK (gtk_widget_destroy),
+                             dialog, G_CONNECT_SWAPPED);
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static gboolean
