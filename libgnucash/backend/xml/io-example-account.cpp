@@ -196,7 +196,8 @@ squash_extra_whitespace (char* text)
     {
         if (isspace (text[spot]) && isspace (text[spot - 1]))
         {
-            memmove (text + spot, text + spot + 1, length - spot + 1);
+            /* Move the rest of the string, including its terminator. */
+            memmove (text + spot, text + spot + 1, length - spot);
             length--;
         }
         else
@@ -483,15 +484,12 @@ gnc_load_example_account_list (const char* dirname)
         {
             gea = gnc_read_example_account (filename);
 
+            /* Skip a file that can't be read so that it doesn't hide the
+             * other templates in the directory. */
             if (gea == NULL)
-            {
-                g_free (filename);
-                gnc_free_example_account_list (ret);
-                g_dir_close (dir);
-                return NULL;
-            }
-
-            ret = g_slist_append (ret, gea);
+                PWARN ("Skipping unreadable account template %s", filename);
+            else
+                ret = g_slist_append (ret, gea);
         }
 
         g_free (filename);

@@ -103,7 +103,7 @@
     <cmdty:id>SEK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>1039</act:code>
+  <act:code>1009</act:code>
   <act:parent type="new">239a89c8081087a789d3e787d68e8d7f</act:parent>
 </gnc:account>
 
@@ -1525,7 +1525,7 @@
     <cmdty:id>SEK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>3000</act:code>
+  <act:code>3300</act:code>
   <act:parent type="new">fef105cdfcaba2396588c82ecf5ebf45</act:parent>
 </gnc:account>
 
@@ -2062,7 +2062,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5620 Lastbilskostnader</act:name>
-  <act:id type="new">bb05957c-bf30-47c0-b06f-ddad995d</act:id>
+  <act:id type="new">f5febfa53c3148c9b45d6e5e8f671fa5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>

@@ -36,7 +36,7 @@ set_local_dist(test_backend_xml_DIST_local
   test-file-stuff.h
   test-kvp-frames.cpp
   test-load-backend.cpp
-  test-load-example-account.cpp
+  gtest-load-example-account.cpp
   gtest-load-save-files.cpp
   gtest-xml-contents.cpp
   test-load-xml2.cpp
@@ -62,11 +62,9 @@ add_xml_test(test-load-xml2 test-load-xml2.cpp
 #  GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 #)
 
-add_xml_test(test-load-example-account
-  "test-load-example-account.cpp"
-  GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/data/accounts/C
+add_xml_gtest(test-load-example-account gtest-load-example-account.cpp
+  GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/data/accounts
 )
-target_compile_options(test-load-example-account PRIVATE -DU_SHOW_CPLUSPLUS_API=0)
 add_xml_gtest(test-load-save-files gtest-load-save-files.cpp
   GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/load-save
 )
