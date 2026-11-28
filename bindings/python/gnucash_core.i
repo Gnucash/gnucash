@@ -44,6 +44,29 @@
 %feature("autodoc", "1");
 %module(package="gnucash") gnucash_core_c
 
+%typemap(in) QofPercentageFunc {
+  if ($input == Py_None) {
+    $1 = (QofPercentageFunc)0;
+  } else {
+    $1 = (QofPercentageFunc)PyLong_AsVoidPtr($input);
+  }
+}
+
+%pythoncode
+%{
+import ctypes
+
+QofPercentageFunc = ctypes.CFUNCTYPE(None, ctypes.c_char_p, ctypes.c_double)
+
+def qof_percentage_func(py_callback):
+    if py_callback == None:
+        f_ptr = None
+    else:
+        f = QofPercentageFunc(py_callback)
+        f_ptr = ctypes.cast(f, ctypes.c_void_p).value
+    return f_ptr
+%}
+
 %{
 #include <config.h>
 #include <datetime.h>
