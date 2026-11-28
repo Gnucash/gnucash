@@ -151,6 +151,11 @@ GncDbiSqlConnection::lock_database (bool break_lock)
         dbi_result_free (result);
         result = nullptr;
     }
+    else if (result)
+    {
+        dbi_result_free (result);
+        result = nullptr;
+    }
     /* Add an entry and commit the transaction */
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
@@ -218,6 +223,8 @@ GncDbiSqlConnection::unlock_database ()
             commit_transaction();
             return;
         }
+        if (result)
+            dbi_result_free (result);
         rollback_transaction();
         PWARN ("There was no lock entry in the Lock table");
         return;
@@ -277,7 +284,7 @@ GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
             m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
     }
     gnc_pop_locale (LC_NUMERIC, locale);
-    return GncSqlResultPtr(new GncDbiSqlResult (this, result));
+    return std::make_unique<GncDbiSqlResult>(this, result);
 }
 
 int

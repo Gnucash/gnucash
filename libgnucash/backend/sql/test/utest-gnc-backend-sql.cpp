@@ -95,7 +95,7 @@ class GncMockSqlConnection : public GncSqlConnection
 {
 public:
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
-        noexcept override { return &m_result; }
+        noexcept override { return std::make_unique<GncMockSqlResult>(); }
     int execute_nonselect_statement (const GncSqlStatementPtr&)
         noexcept override { return 1; }
     GncSqlStatementPtr create_statement_from_sql (const std::string&)
@@ -119,7 +119,6 @@ public:
     bool verify() noexcept override { return true; }
     bool retry_connection(const char* msg) noexcept override { return true; }
 private:
-    GncMockSqlResult m_result;
 };
 
 /* gnc_sql_init

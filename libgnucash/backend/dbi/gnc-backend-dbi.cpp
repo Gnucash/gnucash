@@ -323,11 +323,12 @@ GncDbiBackend<Type>::create_database(dbi_conn conn, const char* db)
         set_error (ERR_BACKEND_SERVER_ERR);
         return false;
     }
+    dbi_result_free (dresult);
     if (Type == DbType::DBI_PGSQL)
     {
         const char *alterdb = "ALTER DATABASE %s SET "
             "standard_conforming_strings TO on";
-        dbi_conn_queryf (conn, alterdb, db);
+        dbi_result_free (dbi_conn_queryf (conn, alterdb, db));
     }
     dbi_conn_close(conn);
     conn = nullptr;
@@ -621,8 +622,9 @@ drop_database(dbi_conn conn, const UriStrings& uri)
         LEAVE ("Error");
         return false;
     }
-    if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
-                          uri.quote_dbname(Type).c_str()))
+    auto result = dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                   uri.quote_dbname(Type).c_str());
+    if (!result)
     {
         PERR ("Failed to drop database %s prior to recreating it."
               "Proceeding would combine old and new data.",
@@ -630,6 +632,7 @@ drop_database(dbi_conn conn, const UriStrings& uri)
         LEAVE ("Error");
         return false;
     }
+    dbi_result_free (result);
     return true;
 }
 
@@ -748,8 +751,8 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
         {
             if (Type == DbType::DBI_PGSQL)
                 dbi_conn_select_db (conn, "template1");
-            dbi_conn_queryf (conn, "DROP DATABASE %s",
-                                uri.quote_dbname(Type).c_str());
+            dbi_result_free (dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                              uri.quote_dbname(Type).c_str()));
             dbi_conn_close(conn);
             return;
         }
@@ -1270,7 +1273,8 @@ dbi_library_test (dbi_conn conn)
         dbi_conn_error (conn, &errmsg);
         PWARN ("Test_DBI_Library: Failed to retrieve test row into table: %s",
                errmsg);
-        dbi_conn_query (conn, "DROP TABLE numtest");
+        dbi_result_free (result);
+        dbi_result_free (dbi_conn_query (conn, "DROP TABLE numtest"));
         gnc_pop_locale (LC_NUMERIC, locale);
         return GNC_DBI_FAIL_SETUP;
     }
@@ -1286,7 +1290,8 @@ dbi_library_test (dbi_conn conn)
         if (!resultdouble)
             log_failed_field(result, "test_double");
     }
-    dbi_conn_query (conn, "DROP TABLE numtest");
+    dbi_result_free (result);
+    dbi_result_free (dbi_conn_query (conn, "DROP TABLE numtest"));
     gnc_pop_locale (LC_NUMERIC, locale);
     if (testlonglong != resultlonglong)
     {

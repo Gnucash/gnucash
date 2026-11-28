@@ -756,7 +756,6 @@ slots_load_info (slot_info_t* pInfo)
         auto result = pInfo->be->execute_select_statement (stmt);
         for (auto row : *result)
             load_slot (pInfo, row);
-        delete result;
     }
 }
 
@@ -828,7 +827,6 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* sql_be,
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
         load_slot_for_book_object (sql_be, row, lookup_fn);
-    delete result;
 }
 
 /* ================================================================= */

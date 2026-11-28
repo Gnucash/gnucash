@@ -243,7 +243,6 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
     {
         load_single_billterm (sql_be, row, l_billterms_needing_parents);
     }
-    delete result;
     std::string pkey(col_table[0]->name());
     sql = "SELECT DISTINCT ";
     sql += pkey + " FROM " TABLE_NAME;
