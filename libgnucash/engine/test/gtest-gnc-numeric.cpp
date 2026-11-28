@@ -244,6 +244,12 @@ TEST(gncnumeric_constructors, test_string_constructor)
     GncNumeric too_big_denom(".1234567890123456789");
     EXPECT_EQ(123456789012345678, too_big_denom.num());
     EXPECT_EQ(1000000000000000000, too_big_denom.denom());
+    GncNumeric too_big_with_integer("1.1234567890123456789");
+    EXPECT_EQ(1123456789012345678, too_big_with_integer.num());
+    EXPECT_EQ(1000000000000000000, too_big_with_integer.denom());
+    GncNumeric neg_too_big_with_integer("-1.12345678901234567890");
+    EXPECT_EQ(-1123456789012345678, neg_too_big_with_integer.num());
+    EXPECT_EQ(1000000000000000000, neg_too_big_with_integer.denom());
 }
 
 TEST(gncnumeric_output, string_output)

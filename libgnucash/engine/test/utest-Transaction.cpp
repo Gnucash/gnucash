@@ -35,6 +35,8 @@
 #include "../gnc-event.h"
 #include "../cap-gains.h"
 #include "../policy.h"
+#include "../gnc-pricedb.h"
+#include "../gnc-pricedb-p.h"
 #include <qof.h>
 
 #if defined(__clang__)
@@ -2059,6 +2061,49 @@ test_xaccTransScrubGainsDate_gains_dirty (GainsFixture *fixture,
                      ==, 0);
 }
 
+/* xaccTransSetDate
+void
+xaccTransSetDate (Transaction *trans, int day, int mon, int year)
+*/
+static void
+test_xaccTransSetDate_out_of_range (Fixture *fixture, gconstpointer pData)
+{
+    /* 257 truncates to day 1 and 67537 truncates to year 2001. */
+    const struct { int day, mon, year; } cases[] =
+        {
+            {257, 1, 2001},   /* would truncate to day 1 */
+            {1, 1, 67537},    /* would truncate to year 2001 */
+            {1, 0, 2001},
+            {1, 13, 2001},
+            {1, 257, 2001},   /* outside the range of GDateMonth */
+            {1, -1, 2001},
+        };
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING |
+                                                G_LOG_FLAG_FATAL);
+    GDate today;
+    g_date_clear (&today, 1);
+    gnc_gdate_set_today (&today);
+
+    xaccTransBeginEdit (fixture->txn);
+    for (const auto& c : cases)
+    {
+        auto msg = g_strdup_printf ("[xaccTransSetDate()] Attempted to set "
+                                    "invalid date %d-%d-%d; set today's date "
+                                    "instead.", c.year, c.mon, c.day);
+        auto check = test_error_struct_new ("gnc.engine", loglevel, msg);
+        g_free (msg);
+        fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
+                         (GLogFunc)test_checked_handler);
+
+        xaccTransSetDate (fixture->txn, c.day, c.mon, c.year);
+
+        auto posted = xaccTransGetDatePostedGDate (fixture->txn);
+        g_assert_cmpint (g_date_compare (&today, &posted), ==, 0);
+        g_assert_cmpint (check->hits, ==, 1);
+    }
+    xaccTransRollbackEdit (fixture->txn);
+}
+
 /* xaccSplitComputeCapGains marker/source switch-over regression.
  *
  * When a lot is scrubbed, every split in the lot is passed to
@@ -2212,6 +2257,66 @@ test_xaccSplitComputeCapGains_unresolved_source (void)
  */
 
 
+/* xaccTransRecordPrice
+void
+xaccTransRecordPrice (Transaction *trans, PriceSource source)
+*/
+static void
+test_xaccTransRecordPrice_large_fraction (void)
+{
+    gnc_pricedb_register ();
+    auto book = qof_book_new ();
+    /* A currency with six decimal places makes the price denominator
+     * 10^10, which doesn't fit in an int. */
+    auto gold = gnc_commodity_new (book, "Gold", "CURRENCY", "XAU", "", 1000000);
+    auto curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY", "GNR", "", 100);
+    auto bullion = xaccMallocAccount (book);
+    auto cash = xaccMallocAccount (book);
+    xaccAccountBeginEdit (bullion);
+    xaccAccountSetType (bullion, ACCT_TYPE_ASSET);
+    xaccAccountSetCommodity (bullion, gold);
+    xaccAccountCommitEdit (bullion);
+    xaccAccountBeginEdit (cash);
+    xaccAccountSetType (cash, ACCT_TYPE_CURRENCY);
+    xaccAccountSetCommodity (cash, curr);
+    xaccAccountCommitEdit (cash);
+
+    auto txn = xaccMallocTransaction (book);
+    auto split1 = xaccMallocSplit (book);
+    auto split2 = xaccMallocSplit (book);
+    xaccTransBeginEdit (txn);
+    {
+        xaccTransSetCurrency (txn, gold);
+        xaccTransSetDatePostedSecs (txn, gnc_dmy2time64 (1, 6, 2026));
+        xaccSplitSetParent (split1, txn);
+        xaccSplitSetAccount (split1, cash);
+        xaccSplitSetAmount (split1, gnc_numeric_create (700000, 100));
+        xaccSplitSetValue (split1, gnc_numeric_create (1000000, 1000000));
+        xaccSplitSetParent (split2, txn);
+        xaccSplitSetAccount (split2, bullion);
+        xaccSplitSetAmount (split2, gnc_numeric_create (-1000000, 1000000));
+        xaccSplitSetValue (split2, gnc_numeric_create (-1000000, 1000000));
+    }
+    xaccTransCommitEdit (txn);
+
+    xaccTransRecordPrice (txn, PRICE_SOURCE_SPLIT_REG);
+
+    auto price = gnc_pricedb_lookup_day_t64 (gnc_pricedb_get_db (book),
+                                             curr, gold, xaccTransGetDate (txn));
+    g_assert_nonnull (price);
+    auto value = gnc_price_get_value (price);
+    g_assert_cmpint (value.num, ==, INT64_C(1428571));
+    g_assert_cmpint (value.denom, ==, INT64_C(10000000000));
+    gnc_price_unref (price);
+
+    test_destroy (txn);
+    test_destroy (bullion);
+    test_destroy (cash);
+    test_destroy (gold);
+    test_destroy (curr);
+    qof_book_destroy (book);
+}
+
 void
 test_suite_transaction (void)
 {
@@ -2262,9 +2367,11 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransSetNotes", Fixture, NULL, setup, test_xaccTransSetNotes, teardown);
     GNC_TEST_ADD (suitename, "xaccTransVoid", Fixture, NULL, setup, test_xaccTransVoid, teardown);
     GNC_TEST_ADD (suitename, "xaccTransReverse", Fixture, NULL, setup, test_xaccTransReverse, teardown);
+    GNC_TEST_ADD (suitename, "xaccTransSetDate out of range", Fixture, NULL, setup, test_xaccTransSetDate_out_of_range, teardown);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_no_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_no_dirty, teardown_with_gains);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_base_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_base_dirty, teardown_with_gains);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_gains_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_gains_dirty, teardown_with_gains);
     GNC_TEST_ADD_FUNC (suitename, "xaccSplitComputeCapGains unresolved source", test_xaccSplitComputeCapGains_unresolved_source);
+    GNC_TEST_ADD_FUNC (suitename, "xaccTransRecordPrice large fraction", test_xaccTransRecordPrice_large_fraction);
 
 }
