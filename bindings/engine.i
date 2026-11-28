@@ -115,15 +115,6 @@ VECTOR_HELPER_INOUT(AccountVec, SWIGTYPE_p_Account, Account);
 
 %typemap(newfree) char * "g_free($1);"
 
-/* These need to be here so that they are *before* the function
-declarations in the header files, some of which are included by
-engine-common.i */
-
-%newobject gnc_account_get_full_name;
-%newobject xaccTransGetAPARAcctSplitList;
-%newobject xaccTransGetPaymentAcctSplitList;
-%newobject xaccAccountGetSplitList;
-
 %newobject gnc_date_interval_format;
 gchar* gnc_date_interval_format (time64 from_date, time64 to_date);
 
