@@ -365,7 +365,7 @@ counter (const GncXmlDataType_t& data, file_backend* be_data)
 
 static gboolean
 gnc_counter_end_handler (gpointer data_for_children,
-                         GSList* data_from_children, GSList* sibling_data,
+                         const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                          gpointer parent_data, gpointer global_data,
                          gpointer* result, const gchar* tag)
 {
