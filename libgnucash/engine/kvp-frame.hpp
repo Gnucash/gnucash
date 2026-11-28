@@ -84,8 +84,8 @@
 #ifndef GNC_KVP_FRAME_TYPE
 #define GNC_KVP_FRAME_TYPE
 
+#include <boost/container/flat_map.hpp>
 #include "kvp-value.hpp"
-#include <map>
 #include <string>
 #include <vector>
 #include <cstring>
@@ -112,13 +112,10 @@ struct KvpFrameImpl
     {
     public:
 	/* Returns true if one is less than two. */
-	bool operator()(const char * one, const char * two) const
-	    {
-		auto ret = std::strcmp(one, two) < 0;
-		return ret;
-	    }
+	bool operator()(const char * one, const char * two) const noexcept
+	    { return g_strcmp0 (one, two) < 0; }
     };
-    using map_type = std::map<const char *, KvpValue*, cstring_comparer>;
+    using map_type = boost::container::flat_map<const char *, KvpValue*, cstring_comparer>;
 
     public:
     KvpFrameImpl() noexcept {};
