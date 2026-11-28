@@ -159,17 +159,10 @@ numeric_from_decimal_match(const std::string& integer, const std::string& decima
     GncInt128 high((neg && integer.length() > 1) || (!neg && !integer.empty())
                    ? stoll(integer)
                    : 0);
-    GncInt128 low{ decimal.empty() ? 0 : stoll(decimal)};
-    auto exp10 = decimal.length();
-    int64_t d = powten(exp10);
+    auto digits{decimal.substr(0, max_leg_digits)};
+    GncInt128 low{ digits.empty() ? 0 : stoll(digits)};
+    int64_t d = powten(digits.length());
     GncInt128 n = high * d + (neg ? -low : low);
-    while (exp10 > max_leg_digits) {
-        /* If the arg to powten is bigger than max_leg_digits
-           it returns 10**max_leg_digits so reduce exp10 by
-           that amount */
-        n = n / powten(exp10 - max_leg_digits);
-        exp10 -= max_leg_digits;
-    }
     return std::make_pair(n, d);
 }
 
