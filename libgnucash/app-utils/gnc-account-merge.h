@@ -40,6 +40,18 @@ typedef struct _merge_error
     GncAccountMergeDisposition disposition;
 } GncAccountMergeError;
 
+/** Find the child of parent with the given name.
+ *
+ *  Only the immediate children are searched, not deeper descendants. This is
+ *  the rule that determine_merge_disposition() applies level by level, so
+ *  account_trees_merge() and the hierarchy assistant use it to match accounts.
+ *
+ *  @param parent The account whose children are searched. May be NULL.
+ *  @param name The account name to look for.
+ *  @return The first child with that name, or NULL if there is none.
+ */
+Account *gnc_account_merge_find_child(const Account *parent, const char *name);
+
 GncAccountMergeDisposition determine_account_merge_disposition(Account *existing_acct, Account *new_acct);
 GncAccountMergeDisposition determine_merge_disposition(Account *existing_root, Account *new_acct);
 

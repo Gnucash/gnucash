@@ -22,6 +22,29 @@
 #include "gnc-account-merge.h"
 #include "Account.h"
 
+Account *
+gnc_account_merge_find_child(const Account *parent, const char *name)
+{
+    Account *found = NULL;
+    GList *children, *node;
+
+    if (parent == NULL || name == NULL)
+        return NULL;
+
+    children = gnc_account_get_children(parent);
+    for (node = children; node; node = g_list_next(node))
+    {
+        Account *child = (Account*)node->data;
+        if (g_strcmp0(xaccAccountGetName(child), name) == 0)
+        {
+            found = child;
+            break;
+        }
+    }
+    g_list_free(children);
+    return found;
+}
+
 GncAccountMergeDisposition
 determine_account_merge_disposition(Account *existing_acct, Account *new_acct)
 {
@@ -64,7 +87,7 @@ account_trees_merge(Account *existing_root, Account *new_accts_root)
 
         new_acct = (Account*)node->data;
         name = xaccAccountGetName(new_acct);
-        existing_named = gnc_account_lookup_by_name(existing_root, name);
+        existing_named = gnc_account_merge_find_child(existing_root, name);
         switch (determine_account_merge_disposition(existing_named, new_acct))
         {
         case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
