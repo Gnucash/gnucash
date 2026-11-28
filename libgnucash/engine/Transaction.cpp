@@ -1939,7 +1939,10 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
     if (!trans) return;
     GDate date;
     g_date_clear (&date, 1);
-    if (g_date_valid_dmy (day, static_cast<GDateMonth>(mon), year))
+    if (day >= 0 && day <= G_MAXUINT8 &&
+        mon >= G_DATE_JANUARY && mon <= G_DATE_DECEMBER &&
+        year >= 0 && year <= G_MAXUINT16 &&
+        g_date_valid_dmy (day, static_cast<GDateMonth>(mon), year))
         g_date_set_dmy (&date, day, static_cast<GDateMonth>(mon), year);
     else
     {
