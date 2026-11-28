@@ -136,7 +136,10 @@ TEST(GncUnicode, test_german_ss_decorated_accented_nocap)
 
 TEST (GncUnicode, test_simple_identical)
 {
-    EXPECT_EQ (gnc_unicode_compare_identical ("alice", "alice"), 0);
-    EXPECT_EQ (gnc_unicode_compare_identical ("alice", "bob"), -1);
-    EXPECT_EQ (gnc_unicode_compare_identical ("bob", "alice"), 1);
+    for (int i = 0; i < 5000000; ++i)
+    {
+        EXPECT_EQ (gnc_unicode_compare_identical ("alice", "alice"), 0);
+        EXPECT_EQ (gnc_unicode_compare_identical ("alice", "bob"), -1);
+        EXPECT_EQ (gnc_unicode_compare_identical ("bob", "alice"), 1);
+    }
 }
