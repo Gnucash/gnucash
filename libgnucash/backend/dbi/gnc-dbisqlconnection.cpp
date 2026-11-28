@@ -486,7 +486,7 @@ create_index_ddl (const GncSqlConnection* conn, const std::string& index_name,
     {
         if (table_row != *col_table.begin())
         {
-            ddl =+ ", ";
+            ddl += ", ";
         }
         ddl += table_row->name();
     }
