@@ -2212,6 +2212,66 @@ test_xaccSplitComputeCapGains_unresolved_source (void)
  */
 
 
+/* xaccTransRecordPrice
+void
+xaccTransRecordPrice (Transaction *trans, PriceSource source)
+*/
+static void
+test_xaccTransRecordPrice_large_fraction (void)
+{
+    gnc_pricedb_register ();
+    auto book = qof_book_new ();
+    /* A currency with six decimal places makes the price denominator
+     * 10^10, which doesn't fit in an int. */
+    auto gold = gnc_commodity_new (book, "Gold", "CURRENCY", "XAU", "", 1000000);
+    auto curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY", "GNR", "", 100);
+    auto bullion = xaccMallocAccount (book);
+    auto cash = xaccMallocAccount (book);
+    xaccAccountBeginEdit (bullion);
+    xaccAccountSetType (bullion, ACCT_TYPE_ASSET);
+    xaccAccountSetCommodity (bullion, gold);
+    xaccAccountCommitEdit (bullion);
+    xaccAccountBeginEdit (cash);
+    xaccAccountSetType (cash, ACCT_TYPE_CURRENCY);
+    xaccAccountSetCommodity (cash, curr);
+    xaccAccountCommitEdit (cash);
+
+    auto txn = xaccMallocTransaction (book);
+    auto split1 = xaccMallocSplit (book);
+    auto split2 = xaccMallocSplit (book);
+    xaccTransBeginEdit (txn);
+    {
+        xaccTransSetCurrency (txn, gold);
+        xaccTransSetDatePostedSecs (txn, gnc_dmy2time64 (1, 6, 2026));
+        xaccSplitSetParent (split1, txn);
+        xaccSplitSetAccount (split1, cash);
+        xaccSplitSetAmount (split1, gnc_numeric_create (700000, 100));
+        xaccSplitSetValue (split1, gnc_numeric_create (1000000, 1000000));
+        xaccSplitSetParent (split2, txn);
+        xaccSplitSetAccount (split2, bullion);
+        xaccSplitSetAmount (split2, gnc_numeric_create (-1000000, 1000000));
+        xaccSplitSetValue (split2, gnc_numeric_create (-1000000, 1000000));
+    }
+    xaccTransCommitEdit (txn);
+
+    xaccTransRecordPrice (txn, PRICE_SOURCE_SPLIT_REG);
+
+    auto price = gnc_pricedb_lookup_day_t64 (gnc_pricedb_get_db (book),
+                                             curr, gold, xaccTransGetDate (txn));
+    g_assert_nonnull (price);
+    auto value = gnc_price_get_value (price);
+    g_assert_cmpint (value.num, ==, INT64_C(1428571));
+    g_assert_cmpint (value.denom, ==, INT64_C(10000000000));
+    gnc_price_unref (price);
+
+    test_destroy (txn);
+    test_destroy (bullion);
+    test_destroy (cash);
+    test_destroy (gold);
+    test_destroy (curr);
+    qof_book_destroy (book);
+}
+
 void
 test_suite_transaction (void)
 {
@@ -2266,5 +2326,6 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_base_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_base_dirty, teardown_with_gains);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_gains_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_gains_dirty, teardown_with_gains);
     GNC_TEST_ADD_FUNC (suitename, "xaccSplitComputeCapGains unresolved source", test_xaccSplitComputeCapGains_unresolved_source);
+    GNC_TEST_ADD_FUNC (suitename, "xaccTransRecordPrice large fraction", test_xaccTransRecordPrice_large_fraction);
 
 }

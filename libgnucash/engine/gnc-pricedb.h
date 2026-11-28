@@ -283,7 +283,7 @@ void gnc_price_print(GNCPrice *db, FILE *f, int indent);
  * SCU * 10000.
  */
 #define CURRENCY_DENOM 10000
-#define COMMODITY_DENOM_MULT 10000
+#define COMMODITY_DENOM_MULT INT64_C(10000)
 
 /* ================================================================ */
 /** @name GNCPrice lists
