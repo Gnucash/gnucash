@@ -36,6 +36,7 @@
 
 (load-and-reexport (gnucash html)
                    (gnucash report html-style-sheet)
+                   (gnucash report gnc-qrencode)
                    (gnucash report report-register-hooks)
                    (gnucash report html-utilities)
                    (gnucash report commodity-utilities)
