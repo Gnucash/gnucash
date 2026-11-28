@@ -295,42 +295,53 @@ typedef char gchar;
     MonetaryList *, PriceList *, EntryList * {
     gpointer data;
     GList *l;
+    swig_type_info *type;
+    PyObject *item;
     PyObject *list = PyList_New(0);
     for (l = $1; l != NULL; l = l->next)
     {
         data = l->data;
         if (GNC_IS_ACCOUNT(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Account, 0));
+            type = SWIGTYPE_p_Account;
         else if (GNC_IS_SPLIT(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Split, 0));
+            type = SWIGTYPE_p_Split;
         else if (GNC_IS_TRANSACTION(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Transaction, 0));
+            type = SWIGTYPE_p_Transaction;
         else if (GNC_IS_COMMODITY(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity, 0));
+            type = SWIGTYPE_p_gnc_commodity;
         else if (GNC_IS_COMMODITY_NAMESPACE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity_namespace, 0));
+            type = SWIGTYPE_p_gnc_commodity_namespace;
         else if (GNC_IS_LOT(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
+            type = SWIGTYPE_p_GNCLot;
         else if (GNC_IS_PRICE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCPrice, 0));
+            type = SWIGTYPE_p_GNCPrice;
         else if (GNC_IS_INVOICE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncInvoice, 0));
+            type = SWIGTYPE_p__gncInvoice;
         else if (GNC_IS_ENTRY(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
+            type = SWIGTYPE_p__gncEntry;
         else if (GNC_IS_CUSTOMER(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCustomer, 0));
+            type = SWIGTYPE_p__gncCustomer;
         else if (GNC_IS_VENDOR(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncVendor, 0));
+            type = SWIGTYPE_p__gncVendor;
         else if (GNC_IS_EMPLOYEE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEmployee, 0));
+            type = SWIGTYPE_p__gncEmployee;
         else if (GNC_IS_JOB(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncJob, 0));
+            type = SWIGTYPE_p__gncJob;
         else if (GNC_IS_TAXTABLE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncTaxTable, 0));
+            type = SWIGTYPE_p__gncTaxTable;
         else if ($1_descriptor == $descriptor(MonetaryList *))
-            PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
+            type = $descriptor(gnc_monetary *);
         else
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_void, 0));
+            type = SWIGTYPE_p_void;
+        /* PyList_Append takes its own reference to item. */
+        item = SWIG_NewPointerObj(data, type, 0);
+        if (!item || PyList_Append(list, item) < 0)
+        {
+            Py_XDECREF(item); /* NULL if SWIG_NewPointerObj failed */
+            Py_CLEAR(list);
+            break;
+        }
+        Py_DECREF(item);
     }
     $result = list;
 }
