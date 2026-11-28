@@ -92,7 +92,6 @@ load_single_sx (GncSqlBackend* sql_be, GncSqlRow& row)
     const GncGUID* guid;
     SchedXaction* pSx;
     GList* schedule;
-    GDate start_date;
 
     g_return_val_if_fail (sql_be != NULL, NULL);
 
@@ -106,8 +105,6 @@ load_single_sx (GncSqlBackend* sql_be, GncSqlRow& row)
     gnc_sx_set_schedule (pSx, schedule);
     gnc_sx_commit_edit (pSx);
     gnc_sql_transaction_load_tx_for_account (sql_be, pSx->template_acct);
-
-    g_object_get (pSx, "start-date", &start_date, NULL);
 
     return pSx;
 }

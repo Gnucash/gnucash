@@ -152,7 +152,9 @@ GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(QofIdTypeConst obj_name,
         stream << s;
         vec.emplace_back (std::make_pair (std::string{m_col_name},
                                           quote_string(stream.str())));
-        return;
+        /* g_object_get returns a copy; a getter returns the object's own string. */
+        if (m_gobj_param_name != nullptr)
+            g_free (s);
     }
 }
 
@@ -359,7 +361,8 @@ GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(QofIdTypeConst obj_name,
         gchar *guid_s = guid_to_string(s);
         vec.emplace_back (std::make_pair (std::string{m_col_name}, quote_string(guid_s)));
         g_free(guid_s);
-        return;
+        if (m_gobj_param_name != nullptr)
+            g_boxed_free (GNC_TYPE_GUID, s);
     }
 }
 /* ----------------------------------------------------------------- */
@@ -434,6 +437,7 @@ GncSqlColumnTableEntryImpl<CT_TIME>::add_to_query(QofIdTypeConst obj_name,
         Time64* t;
         g_object_get (pObject, m_gobj_param_name, &t, nullptr);
         t64 = t->t;
+        g_boxed_free (GNC_TYPE_TIME64, t);
     }
     else
     {
@@ -524,8 +528,9 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(QofIdTypeConst obj_name,
             std::setw (2) << static_cast<int>(g_date_get_day (date));
         vec.emplace_back (std::make_pair (std::string{m_col_name},
                                           quote_string(buf.str())));
-        return;
     }
+    if (date && m_gobj_param_name != nullptr)
+        g_boxed_free (G_TYPE_DATE, date);
 }
 
 /* ----------------------------------------------------------------- */
@@ -607,6 +612,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(QofIdTypeConst obj_name,
         gnc_numeric* s;
         g_object_get (pObject, m_gobj_param_name, &s, NULL);
         n = *s;
+        g_boxed_free (GNC_TYPE_NUMERIC, s);
     }
     else
     {

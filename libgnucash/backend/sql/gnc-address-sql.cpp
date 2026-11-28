@@ -128,6 +128,8 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(QofIdTypeConst obj_name,
             continue;
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
         vec.emplace_back(make_pair(buf, quote_string(s)));
+        if (subtable_row->m_gobj_param_name != nullptr)
+            g_free (s);
     }
 }
 /* ========================== END OF FILE ===================== */
